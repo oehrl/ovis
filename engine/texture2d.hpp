@@ -28,8 +28,15 @@ public:
         const Texture2DDescription& description,
         const void* pixels = nullptr
     );
+    
+    inline const Texture2DDescription& description() const
+    {
+        return m_description;
+    }
 
 private:
+    Texture2DDescription m_description;
+
     virtual void Bind(Uint32 texture_unit) override;
 };
 
