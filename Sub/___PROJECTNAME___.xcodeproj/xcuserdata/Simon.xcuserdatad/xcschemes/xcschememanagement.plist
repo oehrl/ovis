@@ -9,10 +9,22 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>turbobadger.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>1D6058900D05DD3D006BFB54</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F4D009F31E3E5C78000F3ADE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
