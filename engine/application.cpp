@@ -135,24 +135,21 @@ Application::Application(const std::string& name) :
         name.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        320,
-        568,
+        0,
+        0,
         SDL_WINDOW_OPENGL
     );
     SDL_assert(
         m_window != nullptr
     );
     
+    int window_width;
+    int window_height;
+    SDL_GetWindowSize(m_window, &window_width, &window_height);
+    m_window_width = window_width;
+    m_window_height = window_height;
+    
     m_graphics_device = std::make_unique<GraphicsDevice>(m_window);
-
-//    m_renderer = SDL_CreateRenderer(
-//        m_window,
-//        -1,
-//        SDL_RENDERER_ACCELERATED
-//    );
-//    SDL_assert(
-//        m_renderer != nullptr
-//    );
 }
 
 bool Application::ProcessEvents()

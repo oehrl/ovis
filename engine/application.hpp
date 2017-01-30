@@ -31,6 +31,16 @@ public:
         return resource_path() + resource_name;
     }
     
+    inline Uint32 window_width()
+    {
+        return m_window_width;
+    }
+    
+    inline Uint32 window_height()
+    {
+        return m_window_height;
+    }
+    
     void PushScene(Scene* scene);
     void ReplaceScene(Scene* scene);
     void PopScene();
@@ -44,6 +54,8 @@ private:
 	bool ProcessEvents();
 
 	SDL_Window* m_window;
+    Uint32 m_window_width;
+    Uint32 m_window_height;
 	//SDL_Renderer* m_renderer;
     std::unique_ptr<GraphicsDevice> m_graphics_device;
 	bool m_quit;
@@ -55,7 +67,13 @@ private:
 void InitApp(const std::string& name);
 void QuitApp();
 Application* app();
+
 inline GraphicsDevice* graphics_device()
 {
     return app()->graphics_device();
+}
+    
+inline std::string GetFullResourcePath(const std::string& resource_name)
+{
+    return app()->resource_path() + resource_name;
 }
