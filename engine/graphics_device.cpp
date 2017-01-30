@@ -61,6 +61,23 @@ void GraphicsDevice::Draw
     {
         DisableAlphaBlending();
     }
+    
+    switch (draw_item.depth_buffer_state)
+    {
+        case DepthBufferState::ENABLED:
+            EnableDepthTest();
+            EnableDepthWrites();
+            break;
+            
+        case DepthBufferState::READONLY:
+            EnableDepthTest();
+            DisableDepthWrites();
+            break;
+            
+        case DepthBufferState::DISABLED:
+            DisableDepthTest();
+            break;
+    }
 
     draw_item.shader_program->Bind();
     draw_item.vertex_source->Bind();

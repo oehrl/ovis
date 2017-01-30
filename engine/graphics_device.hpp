@@ -25,6 +25,13 @@ enum class PrimitiveTopology
     TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
 };
 
+enum class DepthBufferState
+{
+    ENABLED,
+    READONLY,
+    DISABLED
+};
+
 struct DrawItem
 {
     ShaderProgram* shader_program;
@@ -33,6 +40,7 @@ struct DrawItem
     PrimitiveTopology primitive_topology;
     Uint32 start;
     Uint32 count;
+    DepthBufferState depth_buffer_state;
     bool alpha_blending_enabled;
 };
 
@@ -72,8 +80,46 @@ private:
     GLuint m_bound_program;
     GLuint m_active_texture_unit;
     bool m_alpha_blending_enabled;
+    bool m_depth_test_enabled;
+    bool m_depth_writes_enabled;
     std::vector<bool> m_vertex_attrib_array_states;
     std::vector<GLuint> m_bound_textures;
+    
+    inline void EnableDepthTest()
+    {
+        if (!m_depth_test_enabled)
+        {
+            glEnable(GL_DEPTH_TEST);
+            m_depth_test_enabled = true;
+        }
+    }
+    
+    inline void DisableDepthTest()
+    {
+        if (m_depth_test_enabled)
+        {
+            glDisable(GL_DEPTH_TEST);
+            m_depth_test_enabled = false;
+        }
+    }
+    
+    inline void EnableDepthWrites()
+    {
+        if (!m_depth_writes_enabled)
+        {
+            glDepthMask(GL_TRUE);
+            m_depth_writes_enabled = true;
+        }
+    }
+    
+    inline void DisableDepthWrites()
+    {
+        if (m_depth_writes_enabled)
+        {
+            glDepthMask(GL_FALSE);
+            m_depth_writes_enabled = false;
+        }
+    }
     
     inline void EnableAlphaBlending()
     {
