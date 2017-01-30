@@ -11,7 +11,11 @@ GraphicsDevice::GraphicsDevice(SDL_Window* window) :
     m_context(nullptr),
     m_bound_array_buffer(0),
     m_bound_element_array_buffer(0),
-    m_bound_program(0)
+    m_bound_program(0),
+    m_active_texture_unit(0),
+    m_alpha_blending_enabled(false),
+    m_depth_test_enabled(false),
+    m_depth_writes_enabled(true)
 {
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -24,8 +28,6 @@ GraphicsDevice::GraphicsDevice(SDL_Window* window) :
     int window_height = 0;
     SDL_GetWindowSize(window, &window_width, &window_height);
     glViewport(0, 0, window_width, window_height);
-    
-    glEnable(GL_DEPTH_TEST);
 
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_caps.max_vertex_attribs);
     SDL_assert(m_caps.max_vertex_attribs >= 8);
