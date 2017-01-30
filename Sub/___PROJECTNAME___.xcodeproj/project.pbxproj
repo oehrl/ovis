@@ -45,6 +45,12 @@
 		F4548A091E3E3C4C009C2DA5 /* rock2.bmp in Resources */ = {isa = PBXBuildFile; fileRef = F4548A081E3E3C4C009C2DA5 /* rock2.bmp */; };
 		F468D3891E3358780097DAE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F468D3881E3358780097DAE1 /* AVFoundation.framework */; };
 		F468D3A01E335FCA0097DAE1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F468D3941E335FCA0097DAE1 /* main.cpp */; };
+		F48325911E3E8F14008281FE /* gui_shader.vert in Resources */ = {isa = PBXBuildFile; fileRef = F48325901E3E8F14008281FE /* gui_shader.vert */; };
+		F48325931E3E8FCC008281FE /* gui_shader.frag in Resources */ = {isa = PBXBuildFile; fileRef = F48325921E3E8FCC008281FE /* gui_shader.frag */; };
+		F48325971E3E9305008281FE /* default_skin in Resources */ = {isa = PBXBuildFile; fileRef = F48325951E3E9305008281FE /* default_skin */; };
+		F48325981E3E9305008281FE /* vera.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F48325961E3E9305008281FE /* vera.ttf */; };
+		F483259A1E3E9527008281FE /* layout.txt in Resources */ = {isa = PBXBuildFile; fileRef = F48325991E3E9527008281FE /* layout.txt */; };
+		F483259C1E3E9F06008281FE /* test_ui.tb.txt in Resources */ = {isa = PBXBuildFile; fileRef = F483259B1E3E9F06008281FE /* test_ui.tb.txt */; };
 		F4D00AA11E3E7022000F3ADE /* gui_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */; };
 		F4D00AA41E3E7495000F3ADE /* gui_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */; };
 		F4D00B251E3E758A000F3ADE /* tb_bitmap_fragment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00ABD1E3E7589000F3ADE /* tb_bitmap_fragment.cpp */; };
@@ -181,6 +187,12 @@
 		F468D3861E3357EC0097DAE1 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = SDL/lib/libSDL2.a; sourceTree = "<group>"; };
 		F468D3881E3358780097DAE1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F468D3941E335FCA0097DAE1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
+		F48325901E3E8F14008281FE /* gui_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gui_shader.vert; path = resource/gui_shader.vert; sourceTree = "<group>"; };
+		F48325921E3E8FCC008281FE /* gui_shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gui_shader.frag; path = resource/gui_shader.frag; sourceTree = "<group>"; };
+		F48325951E3E9305008281FE /* default_skin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = default_skin; path = resource/default_skin; sourceTree = "<group>"; };
+		F48325961E3E9305008281FE /* vera.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = vera.ttf; path = resource/vera.ttf; sourceTree = "<group>"; };
+		F48325991E3E9527008281FE /* layout.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = layout.txt; path = resource/layout.txt; sourceTree = "<group>"; };
+		F483259B1E3E9F06008281FE /* test_ui.tb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test_ui.tb.txt; path = resource/test_ui.tb.txt; sourceTree = "<group>"; };
 		F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_controller.cpp; path = src/gui_controller.cpp; sourceTree = "<group>"; };
 		F4D00AA01E3E7022000F3ADE /* gui_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_controller.hpp; path = src/gui_controller.hpp; sourceTree = "<group>"; };
 		F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_renderer.cpp; path = src/gui_renderer.cpp; sourceTree = "<group>"; };
@@ -380,6 +392,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F48325941E3E92F9008281FE /* GUI */,
 				F4548A071E3E1E79009C2DA5 /* Textures */,
 				F4079F111E3A134900F41B51 /* Shaders */,
 				FD77A07E0E26BDA900F39101 /* Default.png */,
@@ -416,6 +429,8 @@
 				F4079F5A1E3CB77200F41B51 /* cave.vert */,
 				F4079F0C1E393F6200F41B51 /* heightmap.frag */,
 				F4079F0D1E393F6200F41B51 /* heightmap.vert */,
+				F48325901E3E8F14008281FE /* gui_shader.vert */,
+				F48325921E3E8FCC008281FE /* gui_shader.frag */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -472,6 +487,17 @@
 				F4079F501E3B5E4700F41B51 /* texture2d.hpp */,
 			);
 			name = Engine;
+			sourceTree = "<group>";
+		};
+		F48325941E3E92F9008281FE /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				F48325951E3E9305008281FE /* default_skin */,
+				F48325961E3E9305008281FE /* vera.ttf */,
+				F483259B1E3E9F06008281FE /* test_ui.tb.txt */,
+				F48325991E3E9527008281FE /* layout.txt */,
+			);
+			name = GUI;
 			sourceTree = "<group>";
 		};
 		F4D009F51E3E5C78000F3ADE /* turbobadger */ = {
@@ -654,19 +680,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F48325931E3E8FCC008281FE /* gui_shader.frag in Resources */,
 				F4548A061E3E1E6E009C2DA5 /* rock.bmp in Resources */,
 				FD77A07D0E26BD8C00F39101 /* Icon.png in Resources */,
+				F48325981E3E9305008281FE /* vera.ttf in Resources */,
 				F4079F531E3B960A00F41B51 /* sand.bmp in Resources */,
 				F4548A091E3E3C4C009C2DA5 /* rock2.bmp in Resources */,
+				F48325971E3E9305008281FE /* default_skin in Resources */,
 				FD77A07F0E26BDA900F39101 /* Default.png in Resources */,
 				F4079F5C1E3CB77200F41B51 /* cave.vert in Resources */,
 				945C4F53195AF17F00DBBF61 /* Default-568h@2x.png in Resources */,
+				F483259A1E3E9527008281FE /* layout.txt in Resources */,
 				F4079F481E3A570200F41B51 /* heightmap.bmp in Resources */,
 				F4079F0F1E393F6200F41B51 /* heightmap.vert in Resources */,
 				F4079F551E3BD85300F41B51 /* sand2.bmp in Resources */,
 				F4548A051E3E1E6E009C2DA5 /* rock_norm.bmp in Resources */,
 				F4079F5B1E3CB77200F41B51 /* cave.frag in Resources */,
+				F483259C1E3E9F06008281FE /* test_ui.tb.txt in Resources */,
 				F4079F0E1E393F6200F41B51 /* heightmap.frag in Resources */,
+				F48325911E3E8F14008281FE /* gui_shader.vert in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

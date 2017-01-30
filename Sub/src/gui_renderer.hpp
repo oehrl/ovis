@@ -1,14 +1,18 @@
-//
-//  gui_renderer.hpp
-//  ___PROJECTNAME___
-//
-//  Created by Simon Oehrl on 29/01/17.
-//
-//
+#pragma once
 
-#ifndef gui_renderer_hpp
-#define gui_renderer_hpp
+#include "scene_renderer.hpp"
 
-#include <stdio.h>
+class GuiRenderer :
+    public SceneRenderer
+{
+    friend class GuiController;
 
-#endif /* gui_renderer_hpp */
+public:
+    GuiRenderer(Scene* scene);
+    
+    virtual void Render() override;
+    
+private:
+    static bool tb_initialized();
+    static void InitTB();
+};

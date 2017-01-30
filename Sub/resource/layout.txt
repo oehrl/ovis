@@ -1,0 +1,6 @@
+TBLayout: axis: y, distribution-position: top right
+	TBWidget:
+		lp: height: 10dp
+	TBButton:
+		text: "Imba Button"
+		lp: width: 20dp, height: 20dp

@@ -3,6 +3,8 @@
 #include "level_renderer.hpp"
 #include "camera_controller.hpp"
 #include "perlin_noise.hpp"
+#include "gui_renderer.hpp"
+#include "gui_controller.hpp"
 
 #include <iostream>
 
@@ -14,6 +16,8 @@ extern "C" int main(int /*argc*/, char* /*argv*/[])
         Scene test_scene("TestScene");
         LevelRenderer level_renderer(&test_scene);
         CameraController camera_controller(&test_scene);
+        GuiController gui_controller(&test_scene, GetFullResourcePath("layout.txt"));
+        GuiRenderer gui_renderer(&test_scene);
         
         app()->PushScene(&test_scene);
 
