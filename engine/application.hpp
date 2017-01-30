@@ -41,6 +41,11 @@ public:
         return m_window_height;
     }
     
+    inline double fps()
+    {
+        return m_frames_per_second;
+    }
+    
     void PushScene(Scene* scene);
     void ReplaceScene(Scene* scene);
     void PopScene();
@@ -60,6 +65,7 @@ private:
     std::unique_ptr<GraphicsDevice> m_graphics_device;
 	bool m_quit;
     std::string m_resource_path;
+    double m_frames_per_second;
 
     std::vector<Scene*> m_scene_stack;
 };

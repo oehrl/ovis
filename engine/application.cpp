@@ -52,6 +52,8 @@ void Application::PopScene()
 void Application::Run()
 {
     Uint32 last_time = SDL_GetTicks();
+    Uint32 last_frame_time = last_time;
+    Uint32 frame_count = 0;
 
     while (ProcessEvents())
     {
@@ -81,6 +83,13 @@ void Application::Run()
         //         m_scene_stack.back()->Update(m_update_interval);
         //     }
         // }
+        
+        while (current_time - last_frame_time >= 1000)
+        {
+            last_frame_time += 1000;
+            m_frames_per_second = 1.0 * frame_count;
+            frame_count = 0;
+        }
 
         if (m_scene_stack.size() == 0)
         {
@@ -114,6 +123,7 @@ void Application::Run()
             }
             
             SDL_GL_SwapWindow(m_window);
+            ++frame_count;
         }
 
         last_time = current_time;
