@@ -8,11 +8,16 @@
 #include "index_buffer.hpp"
 
 GraphicsDevice::GraphicsDevice(SDL_Window* window) :
-    m_context(SDL_GL_CreateContext(window)),
+    m_context(nullptr),
     m_bound_array_buffer(0),
     m_bound_element_array_buffer(0),
     m_bound_program(0)
 {
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    m_context = SDL_GL_CreateContext(window);
+    SDL_assert(m_context != nullptr);
     SDL_GL_MakeCurrent(window, m_context);
     
     int window_width = 0;
