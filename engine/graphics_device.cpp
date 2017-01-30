@@ -32,6 +32,8 @@ GraphicsDevice::GraphicsDevice(SDL_Window* window) :
     
 
     glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_caps.num_vertex_texture_units);
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 GraphicsDevice::~GraphicsDevice()
@@ -44,6 +46,17 @@ void GraphicsDevice::Draw
     const DrawItem& draw_item
 )
 {
+    SDL_assert(draw_item.shader_program != nullptr);
+    SDL_assert(draw_item.vertex_source != nullptr);
+    
+    if (draw_item.alpha_blending_enabled)
+    {
+        EnableAlphaBlending();
+    } else
+    {
+        DisableAlphaBlending();
+    }
+
     draw_item.shader_program->Bind();
     draw_item.vertex_source->Bind();
 

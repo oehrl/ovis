@@ -33,6 +33,7 @@ struct DrawItem
     PrimitiveTopology primitive_topology;
     Uint32 start;
     Uint32 count;
+    bool alpha_blending_enabled;
 };
 
 class GraphicsDevice final
@@ -70,8 +71,27 @@ private:
     GLuint m_bound_element_array_buffer;
     GLuint m_bound_program;
     GLuint m_active_texture_unit;
+    bool m_alpha_blending_enabled;
     std::vector<bool> m_vertex_attrib_array_states;
     std::vector<GLuint> m_bound_textures;
+    
+    inline void EnableAlphaBlending()
+    {
+        if (!m_alpha_blending_enabled)
+        {
+            glEnable(GL_BLEND);
+            m_alpha_blending_enabled = true;
+        }
+    }
+    
+    inline void DisableAlphaBlending()
+    {
+        if (m_alpha_blending_enabled)
+        {
+            glDisable(GL_BLEND);
+            m_alpha_blending_enabled = false;
+        }
+    }
     
     inline void BindArrayBuffer(GLuint array_buffer_name)
     {

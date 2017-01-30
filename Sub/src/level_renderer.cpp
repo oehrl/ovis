@@ -340,6 +340,7 @@ void LevelRenderer::Render()
         draw_item.primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
         draw_item.start = 0;
         draw_item.count = (m_width - 1) * (m_height - 1) * 2 * 3;
+        draw_item.alpha_blending_enabled = false;
         graphics_device()->Draw(draw_item);
     }
 
@@ -358,6 +359,7 @@ void LevelRenderer::Render()
         draw_item.primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
         draw_item.start = 0;
         draw_item.count = INDEX_COUNT;
+        draw_item.alpha_blending_enabled = false;
         graphics_device()->Draw(draw_item);
     }
 }
