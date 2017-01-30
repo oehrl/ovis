@@ -19,6 +19,7 @@ public:
     virtual ~GuiController() override;
     
     virtual void Update(Uint32 delta_time) override;
+    virtual bool ProcessEvent(const SDL_Event& event) override;
     
 private:
     class RootWidget;

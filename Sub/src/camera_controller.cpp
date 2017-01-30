@@ -29,13 +29,18 @@ bool CameraController::ProcessEvent(const SDL_Event& event)
         m_forward.z = std::cos(m_pitch) * std::cos(-m_yaw);
         
         return true;
-    } else if (event.type == SDL_FINGERDOWN)
+    }
+    else if (event.type == SDL_FINGERDOWN)
     {
         m_moving = 1.0f;
-    } else if (event.type == SDL_FINGERUP)
+        return true;
+    }
+    else if (event.type == SDL_FINGERUP)
     {
         m_moving = 0.0f;
-    } else
+        return true;
+    }
+    else
     {
         return false;
     }
