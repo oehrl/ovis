@@ -1,5 +1,4 @@
 #include <tb_widgets.h>
-#include <tb_font_renderer_freetype.cpp>
 #include <renderers/tb_renderer_batcher.h>
 
 #include "application.hpp"
@@ -78,6 +77,7 @@ namespace
             m_draw_item.index_buffer = nullptr;
             m_draw_item.primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
             m_draw_item.start = 0;
+            m_draw_item.depth_buffer_state = DepthBufferState::DISABLED;
             m_draw_item.alpha_blending_enabled = true;
         }
     
@@ -170,6 +170,8 @@ bool GuiRenderer::tb_initialized()
     return g_internal_renderer != nullptr;
 }
 
+void register_freetype_font_renderer();
+
 void GuiRenderer::InitTB()
 {
     if (!tb_initialized())
@@ -177,5 +179,6 @@ void GuiRenderer::InitTB()
         g_internal_renderer = std::make_unique<InternalRenderer>();
         SDL_assert_release(tb::tb_core_init(g_internal_renderer.get()));
         SDL_assert_release(tb::g_tb_skin->Load(GetFullResourcePath("default_skin/skin.tb.txt").c_str()));
+        register_freetype_font_renderer();
     }
 }

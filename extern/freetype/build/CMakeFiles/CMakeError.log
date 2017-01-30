@@ -1,0 +1,154 @@
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_334fb" "-configuration" "Debug"
+=== BUILD TARGET cmTC_334fb OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+
+
+Detecting C [-std=c11] compiler features failed to compile with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_3b797" "-configuration" "Debug"
+=== BUILD TARGET cmTC_3b797 OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+
+
+Detecting CXX compiler ABI info failed to compile with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_c7e1d" "-configuration" "Debug"
+=== BUILD TARGET cmTC_c7e1d OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+
+
+Detecting CXX [-std=c++14] compiler features failed to compile with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_bf328" "-configuration" "Debug"
+=== BUILD TARGET cmTC_bf328 OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+
+
+Determining if the BZ2_bzCompressInit exist failed with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_48d32" "-configuration" "Debug"
+=== BUILD TARGET cmTC_48d32 OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+File /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <bzlib.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef BZ2_bzCompressInit
+  return ((int*)(&BZ2_bzCompressInit))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the include file unistd.h exists failed with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_6cbee" "-configuration" "Debug"
+=== BUILD TARGET cmTC_6cbee OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+
+Determining if the include file fcntl.h exists failed with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_45c40" "-configuration" "Debug"
+=== BUILD TARGET cmTC_45c40 OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+
+Determining if the include file stdint.h exists failed with the following output:
+Change Dir: /Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/xcodebuild" "-project" "CMAKE_TRY_COMPILE.xcodeproj" "build" "-target" "cmTC_a1330" "-configuration" "Debug"
+=== BUILD TARGET cmTC_a1330 OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+
+Check dependencies
+target specifies product type 'com.apple.product-type.tool', but there's no such product type for the 'iphonesimulator' platform
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Check dependencies
+(1 failure)
+
+

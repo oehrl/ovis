@@ -36,13 +36,29 @@ GuiController::GuiController(Scene* scene, const std::string& layout) :
     }
     
     m_root_widget = std::make_unique<RootWidget>(this);
-    m_root_widget->SetFontDescription(tb::g_font_manager->GetDefaultFontDescription());
     m_root_widget->SetRect(tb::TBRect(
         0,
         0,
         app()->window_width(),
         app()->window_height()
     ));
+    
+    
+    
+    tb::g_font_manager->AddFontInfo(GetFullResourcePath("vera.ttf").c_str(), "Vera");
+    
+    tb::TBFontDescription fd;
+    fd.SetID("Vera");
+    fd.SetSize(tb::g_tb_skin->GetDimensionConverter()->DpToPx(12));
+    tb::g_font_manager->SetDefaultFontDescription(fd);
+
+//    tb::TBFontFace *font = tb::g_font_manager->CreateFontFace(tb::g_font_manager->GetDefaultFontDescription());
+//    if (font)
+//    {
+//        font->RenderGlyphs(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~•·åäöÅÄÖ");
+//    }
+    
+    m_root_widget->SetFontDescription(tb::g_font_manager->GetDefaultFontDescription());
     SDL_assert_release(tb::g_widgets_reader->LoadFile(m_root_widget.get(), layout.c_str()));
 }
 
