@@ -1,0 +1,13 @@
+TBLayout: axis: y, distribution: gravity, size: gravity, position: gravity
+	TBWidget:
+		gravity: "all"
+	TBTabContainer:
+		gravity: "all"
+		align right
+		tabs:
+			TBButton: text: "Bla1"
+			TBButton: text: "Bla2"
+			TBButton: text: "Bla3"
+		TBButton: text: "Bla content 1"
+		TBButton: text: "Bla content 2"
+		TB: text: "Bla content 2"

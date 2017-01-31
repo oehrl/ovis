@@ -67,7 +67,7 @@ void GuiController::Update(Uint32 delta_time)
     SDL_assert(gui() != nullptr);
     
     std::string text = std::to_string((int)app()->fps());
-    GetWidgetById("fps")->SetText(text.c_str());
+    //GetWidgetById("fps")->SetText(text.c_str());
 
     tb::TBMessageHandler::ProcessMessages();
     tb::TBAnimationManager::Update();

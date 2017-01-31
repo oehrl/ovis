@@ -1,11 +1,7 @@
 #include "application.hpp"
 #include "game_scene.hpp"
-#include "level_renderer.hpp"
-#include "camera_controller.hpp"
-#include "perlin_noise.hpp"
+#include "editor_scene.hpp"
 #include "gui.hpp"
-#include "gui_renderer.hpp"
-#include "gui_controller.hpp"
 
 #include <iostream>
 
@@ -17,8 +13,8 @@ extern "C" int main(int /*argc*/, char* /*argv*/[])
     gui()->SetDefaultFont("Vera", 4.0f);
     
     {
-        GameScene game_scene;
-        app()->PushScene(&game_scene);
+        EditorScene start_scene;
+        app()->PushScene(&start_scene);
         app()->Run();
     }
 
