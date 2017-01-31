@@ -1,6 +1,0 @@
-/Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/install.dir
-/Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/package.dir
-/Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/dist.dir
-/Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/freetype.dir
-/Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/ALL_BUILD.dir
-/Users/Simon/Documents/ov_project/extern/freetype/build/CMakeFiles/ZERO_CHECK.dir
