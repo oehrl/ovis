@@ -1,8 +1,11 @@
 #include <memory>
 #include <iostream>
 
+#include <tb_widgets.h>
+
 #include "application.hpp"
 #include "graphics_device.hpp"
+#include "gui.hpp"
 #include "scene.hpp"
 
 Application::~Application()
@@ -136,7 +139,12 @@ void Application::Quit()
 }
 
 Application::Application(const std::string& name) :
+    m_name(name),
     m_quit(false)
+{
+}
+
+void Application::Init()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     
@@ -144,7 +152,7 @@ Application::Application(const std::string& name) :
     m_resource_path = "/Users/Simon/Documents/ov_project/Sub/resource/";
     
     m_window =  SDL_CreateWindow(
-        name.c_str(),
+        m_name.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         1280,
@@ -155,7 +163,7 @@ Application::Application(const std::string& name) :
     m_resource_path = SDL_GetBasePath();
     
     m_window =  SDL_CreateWindow(
-        name.c_str(),
+        m_name.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         0,
@@ -175,6 +183,7 @@ Application::Application(const std::string& name) :
     m_window_height = window_height;
     
     m_graphics_device = std::make_unique<GraphicsDevice>(m_window);
+    m_gui = std::make_unique<Gui>();
 }
 
 bool Application::ProcessEvents()
@@ -195,6 +204,11 @@ bool Application::ProcessEvents()
                 break;
             }
         }
+        
+        if (event.type == gui()->event_type())
+        {
+            delete reinterpret_cast<tb::TBWidgetEvent*>(event.user.data1); // Super ugly continued
+        }
     }
     return !m_quit;
 }
@@ -210,6 +224,7 @@ void InitApp(const std::string& name)
         !application
     );
     application.reset(new Application(name));
+    application->Init();
 }
 
 void QuitApp()

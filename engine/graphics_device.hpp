@@ -5,6 +5,7 @@
 
 #include <SDL.h>
 
+#include "application.hpp"
 #include "gl.hpp"
 #include "class.hpp"
 
@@ -206,3 +207,8 @@ private:
         }
     }
 };
+
+inline GraphicsDevice* graphics_device()
+{
+    return app()->graphics_device();
+}

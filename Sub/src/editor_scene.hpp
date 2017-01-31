@@ -9,5 +9,5 @@ public:
     EditorScene();
     
 private:
-    
+    virtual bool BeforeEventProcessing(const SDL_Event& event) override;
 };

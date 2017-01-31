@@ -80,6 +80,11 @@ void Scene::Pause()
 
 bool Scene::ProcessEvent(const SDL_Event& event)
 {
+    if (BeforeEventProcessing(event))
+    {
+        return true;
+    }
+    
     for (const auto& scene_controller : m_controllers)
     {
         if (scene_controller.second->ProcessEvent(event))
@@ -87,7 +92,8 @@ bool Scene::ProcessEvent(const SDL_Event& event)
             return true;
         }
     }
-    return false;
+    
+    return AfterEventProcessing(event);
 }
 
 void Scene::Resume()

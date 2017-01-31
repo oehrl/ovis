@@ -4,7 +4,6 @@
 #include <tb_skin.h>
 #include <renderers/tb_renderer_batcher.h>
 
-#include "application.hpp"
 #include "gui.hpp"
 #include "graphics_device.hpp"
 #include "log.hpp"
@@ -275,13 +274,24 @@ private:
     glm::vec4 m_clip_rect;
 };
 
-std::unique_ptr<Gui> Gui::s_gui;
-
-void register_freetype_font_renderer();
+Gui::Gui() :
+    m_tb_renderer(std::make_unique<InternalRenderer>()),
+    m_event_type(SDL_RegisterEvents(1))
+{
+    SDL_assert_release(tb::tb_core_init(m_tb_renderer.get()));
+    
+    void register_freetype_font_renderer();
+    register_freetype_font_renderer();
+}
 
 Gui::~Gui()
 {
     tb::tb_core_shutdown();
+}
+
+void Gui::LoadSkin(const std::string& skin_filename)
+{
+    SDL_assert_release(tb::g_tb_skin->Load(skin_filename.c_str()));
 }
 
 void Gui::LoadFont(const std::string& font_filename, const std::string& font_name)
@@ -298,25 +308,4 @@ void Gui::SetDefaultFont(const std::string& font_name, float font_size_in_dp)
     fd.SetID(font_name.c_str());
     fd.SetSize(static_cast<Uint32>(font_size_in_px + 0.5f)); // Round to nearest integer
     tb::g_font_manager->SetDefaultFontDescription(fd);
-}
-
-Gui::Gui(const std::string& skin_filename) :
-    m_tb_renderer(std::make_unique<InternalRenderer>()),
-    m_event_type(SDL_RegisterEvents(1))
-{
-    SDL_assert_release(tb::tb_core_init(m_tb_renderer.get()));
-    SDL_assert_release(tb::g_tb_skin->Load(skin_filename.c_str()));
-    register_freetype_font_renderer();
-}
-
-void InitGui(const std::string& skin_filename)
-{
-    SDL_assert(Gui::s_gui.get() == nullptr);
-    Gui::s_gui.reset(new Gui(skin_filename));
-}
-
-void ReleaseGui()
-{
-    SDL_assert(Gui::s_gui.get() != nullptr);
-    Gui::s_gui.reset();
 }

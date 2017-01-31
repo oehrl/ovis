@@ -45,15 +45,17 @@
 		F4548A091E3E3C4C009C2DA5 /* rock2.bmp in Resources */ = {isa = PBXBuildFile; fileRef = F4548A081E3E3C4C009C2DA5 /* rock2.bmp */; };
 		F46392EA1E3F7D6400BDB78F /* gears.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392E91E3F7D6400BDB78F /* gears.png */; };
 		F46392EC1E3F7DE800BDB78F /* gears@288.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392EB1E3F7DE800BDB78F /* gears@288.png */; };
-		F46392EF1E40B84300BDB78F /* gui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392ED1E40B84300BDB78F /* gui.cpp */; };
 		F46392F51E40C7EC00BDB78F /* game_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F31E40C7EC00BDB78F /* game_scene.cpp */; };
-		F46392F81E40C90400BDB78F /* gui_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F61E40C90400BDB78F /* gui_scene.cpp */; };
 		F46393011E40CD1000BDB78F /* editor_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392FF1E40CD1000BDB78F /* editor_scene.cpp */; };
 		F46393031E40CD9C00BDB78F /* editor_layout.tb.txt in Resources */ = {isa = PBXBuildFile; fileRef = F46393021E40CD9C00BDB78F /* editor_layout.tb.txt */; };
 		F46393061E40E3D800BDB78F /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46393041E40E3D800BDB78F /* gl.cpp */; };
 		F468D3891E3358780097DAE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F468D3881E3358780097DAE1 /* AVFoundation.framework */; };
 		F468D3A01E335FCA0097DAE1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F468D3941E335FCA0097DAE1 /* main.cpp */; };
 		F46E58D31E4109EA00E78E07 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46E58D11E4109EA00E78E07 /* log.cpp */; };
+		F46E58DC1E41554100E78E07 /* gui_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46E58D41E41554100E78E07 /* gui_controller.cpp */; };
+		F46E58DD1E41554100E78E07 /* gui_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46E58D61E41554100E78E07 /* gui_renderer.cpp */; };
+		F46E58DE1E41554100E78E07 /* gui_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46E58D81E41554100E78E07 /* gui_scene.cpp */; };
+		F46E58DF1E41554100E78E07 /* gui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46E58DA1E41554100E78E07 /* gui.cpp */; };
 		F46E58E31E4155E000E78E07 /* editor_tab_window.tb.txt in Resources */ = {isa = PBXBuildFile; fileRef = F46E58E21E4155E000E78E07 /* editor_tab_window.tb.txt */; };
 		F48325911E3E8F14008281FE /* gui_shader.vert in Resources */ = {isa = PBXBuildFile; fileRef = F48325901E3E8F14008281FE /* gui_shader.vert */; };
 		F48325931E3E8FCC008281FE /* gui_shader.frag in Resources */ = {isa = PBXBuildFile; fileRef = F48325921E3E8FCC008281FE /* gui_shader.frag */; };
@@ -103,8 +105,6 @@
 		F483292B1E3ECBF6008281FE /* type1.c in Sources */ = {isa = PBXBuildFile; fileRef = F48329011E3ECBF5008281FE /* type1.c */; };
 		F483292C1E3ECBF6008281FE /* type42.c in Sources */ = {isa = PBXBuildFile; fileRef = F48329021E3ECBF5008281FE /* type42.c */; };
 		F483292D1E3ECBF6008281FE /* winfnt.c in Sources */ = {isa = PBXBuildFile; fileRef = F48329031E3ECBF5008281FE /* winfnt.c */; };
-		F4D00AA11E3E7022000F3ADE /* gui_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */; };
-		F4D00AA41E3E7495000F3ADE /* gui_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */; };
 		F4D00B251E3E758A000F3ADE /* tb_bitmap_fragment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00ABD1E3E7589000F3ADE /* tb_bitmap_fragment.cpp */; };
 		F4D00B271E3E758A000F3ADE /* tb_clipboard_dummy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00ABF1E3E7589000F3ADE /* tb_clipboard_dummy.cpp */; };
 		F4D00B291E3E758A000F3ADE /* tb_clipboard_glfw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D00AC01E3E7589000F3ADE /* tb_clipboard_glfw.cpp */; };
@@ -238,12 +238,8 @@
 		F4548A081E3E3C4C009C2DA5 /* rock2.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = rock2.bmp; path = resource/rock2.bmp; sourceTree = "<group>"; };
 		F46392E91E3F7D6400BDB78F /* gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gears.png; path = resource/gears.png; sourceTree = "<group>"; };
 		F46392EB1E3F7DE800BDB78F /* gears@288.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gears@288.png"; path = "resource/gears@288.png"; sourceTree = "<group>"; };
-		F46392ED1E40B84300BDB78F /* gui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui.cpp; path = src/gui.cpp; sourceTree = "<group>"; };
-		F46392EE1E40B84300BDB78F /* gui.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui.hpp; path = src/gui.hpp; sourceTree = "<group>"; };
 		F46392F31E40C7EC00BDB78F /* game_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = game_scene.cpp; path = src/game_scene.cpp; sourceTree = "<group>"; };
 		F46392F41E40C7EC00BDB78F /* game_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = game_scene.hpp; path = src/game_scene.hpp; sourceTree = "<group>"; };
-		F46392F61E40C90400BDB78F /* gui_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_scene.cpp; path = src/gui_scene.cpp; sourceTree = "<group>"; };
-		F46392F71E40C90400BDB78F /* gui_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_scene.hpp; path = src/gui_scene.hpp; sourceTree = "<group>"; };
 		F46392FF1E40CD1000BDB78F /* editor_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = editor_scene.cpp; path = src/editor_scene.cpp; sourceTree = "<group>"; };
 		F46393001E40CD1000BDB78F /* editor_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = editor_scene.hpp; path = src/editor_scene.hpp; sourceTree = "<group>"; };
 		F46393021E40CD9C00BDB78F /* editor_layout.tb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = editor_layout.tb.txt; path = resource/editor_layout.tb.txt; sourceTree = "<group>"; };
@@ -254,6 +250,14 @@
 		F468D3941E335FCA0097DAE1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
 		F46E58D11E4109EA00E78E07 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = ../engine/log.cpp; sourceTree = "<group>"; };
 		F46E58D21E4109EA00E78E07 /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = log.hpp; path = ../engine/log.hpp; sourceTree = "<group>"; };
+		F46E58D41E41554100E78E07 /* gui_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_controller.cpp; path = ../engine/gui_controller.cpp; sourceTree = "<group>"; };
+		F46E58D51E41554100E78E07 /* gui_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_controller.hpp; path = ../engine/gui_controller.hpp; sourceTree = "<group>"; };
+		F46E58D61E41554100E78E07 /* gui_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_renderer.cpp; path = ../engine/gui_renderer.cpp; sourceTree = "<group>"; };
+		F46E58D71E41554100E78E07 /* gui_renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_renderer.hpp; path = ../engine/gui_renderer.hpp; sourceTree = "<group>"; };
+		F46E58D81E41554100E78E07 /* gui_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_scene.cpp; path = ../engine/gui_scene.cpp; sourceTree = "<group>"; };
+		F46E58D91E41554100E78E07 /* gui_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_scene.hpp; path = ../engine/gui_scene.hpp; sourceTree = "<group>"; };
+		F46E58DA1E41554100E78E07 /* gui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui.cpp; path = ../engine/gui.cpp; sourceTree = "<group>"; };
+		F46E58DB1E41554100E78E07 /* gui.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui.hpp; path = ../engine/gui.hpp; sourceTree = "<group>"; };
 		F46E58E21E4155E000E78E07 /* editor_tab_window.tb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = editor_tab_window.tb.txt; path = resource/editor_tab_window.tb.txt; sourceTree = "<group>"; };
 		F48325901E3E8F14008281FE /* gui_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gui_shader.vert; path = resource/gui_shader.vert; sourceTree = "<group>"; };
 		F48325921E3E8FCC008281FE /* gui_shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gui_shader.frag; path = resource/gui_shader.frag; sourceTree = "<group>"; };
@@ -303,10 +307,6 @@
 		F48329011E3ECBF5008281FE /* type1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = type1.c; path = ../extern/freetype/src/type1/type1.c; sourceTree = "<group>"; };
 		F48329021E3ECBF5008281FE /* type42.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = type42.c; path = ../extern/freetype/src/type42/type42.c; sourceTree = "<group>"; };
 		F48329031E3ECBF5008281FE /* winfnt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = winfnt.c; path = ../extern/freetype/src/winfonts/winfnt.c; sourceTree = "<group>"; };
-		F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_controller.cpp; path = src/gui_controller.cpp; sourceTree = "<group>"; };
-		F4D00AA01E3E7022000F3ADE /* gui_controller.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_controller.hpp; path = src/gui_controller.hpp; sourceTree = "<group>"; };
-		F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_renderer.cpp; path = src/gui_renderer.cpp; sourceTree = "<group>"; };
-		F4D00AA31E3E7495000F3ADE /* gui_renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_renderer.hpp; path = src/gui_renderer.hpp; sourceTree = "<group>"; };
 		F4D00ABD1E3E7589000F3ADE /* tb_bitmap_fragment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tb_bitmap_fragment.cpp; path = ../../extern/turbobadger/src/tb/tb_bitmap_fragment.cpp; sourceTree = "<group>"; };
 		F4D00ABE1E3E7589000F3ADE /* tb_bitmap_fragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tb_bitmap_fragment.h; path = ../../extern/turbobadger/src/tb/tb_bitmap_fragment.h; sourceTree = "<group>"; };
 		F4D00ABF1E3E7589000F3ADE /* tb_clipboard_dummy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tb_clipboard_dummy.cpp; path = ../../extern/turbobadger/src/tb/tb_clipboard_dummy.cpp; sourceTree = "<group>"; };
@@ -559,14 +559,6 @@
 				F468D3941E335FCA0097DAE1 /* main.cpp */,
 				F4079F561E3C021300F41B51 /* perlin_noise.cpp */,
 				F4079F571E3C021300F41B51 /* perlin_noise.hpp */,
-				F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */,
-				F4D00AA01E3E7022000F3ADE /* gui_controller.hpp */,
-				F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */,
-				F4D00AA31E3E7495000F3ADE /* gui_renderer.hpp */,
-				F46392ED1E40B84300BDB78F /* gui.cpp */,
-				F46392EE1E40B84300BDB78F /* gui.hpp */,
-				F46392F61E40C90400BDB78F /* gui_scene.cpp */,
-				F46392F71E40C90400BDB78F /* gui_scene.hpp */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -596,6 +588,14 @@
 		F468D3A41E33613B0097DAE1 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				F46E58D41E41554100E78E07 /* gui_controller.cpp */,
+				F46E58D51E41554100E78E07 /* gui_controller.hpp */,
+				F46E58D61E41554100E78E07 /* gui_renderer.cpp */,
+				F46E58D71E41554100E78E07 /* gui_renderer.hpp */,
+				F46E58D81E41554100E78E07 /* gui_scene.cpp */,
+				F46E58D91E41554100E78E07 /* gui_scene.hpp */,
+				F46E58DA1E41554100E78E07 /* gui.cpp */,
+				F46E58DB1E41554100E78E07 /* gui.hpp */,
 				F46E58D11E4109EA00E78E07 /* log.cpp */,
 				F46E58D21E4109EA00E78E07 /* log.hpp */,
 				F4079F171E3A32B700F41B51 /* application.cpp */,
@@ -1040,9 +1040,8 @@
 				F48329191E3ECBF6008281FE /* fttype1.c in Sources */,
 				F4079F461E3A3EA900F41B51 /* index_buffer.cpp in Sources */,
 				F4D00B8B1E3E758A000F3ADE /* tb_widgets_listener.cpp in Sources */,
-				F4D00AA11E3E7022000F3ADE /* gui_controller.cpp in Sources */,
 				F483291B1E3ECBF6008281FE /* bdf.c in Sources */,
-				F4D00AA41E3E7495000F3ADE /* gui_renderer.cpp in Sources */,
+				F46E58DC1E41554100E78E07 /* gui_controller.cpp in Sources */,
 				F4079F4B1E3AAD8200F41B51 /* camera_controller.cpp in Sources */,
 				F483290B1E3ECBF6008281FE /* ftfntfmt.c in Sources */,
 				F48329081E3ECBF6008281FE /* ftbitmap.c in Sources */,

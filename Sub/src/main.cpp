@@ -8,7 +8,8 @@
 extern "C" int main(int /*argc*/, char* /*argv*/[])
 {
 	InitApp("APPLICATION_NAME");
-    InitGui("$resources$/default_skin/skin.tb.txt");
+    
+    gui()->LoadSkin("$resources$/default_skin/skin.tb.txt");
     gui()->LoadFont("$resources$/vera.ttf", "Vera");
     gui()->SetDefaultFont("Vera", 4.0f);
     
@@ -18,7 +19,6 @@ extern "C" int main(int /*argc*/, char* /*argv*/[])
         app()->Run();
     }
 
-    ReleaseGui();
 	QuitApp();
 	return 0;
 }

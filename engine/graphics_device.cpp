@@ -1,4 +1,3 @@
-#include "application.hpp"
 #include "graphics_device.hpp"
 #include "log.hpp"
 #include "range.hpp"

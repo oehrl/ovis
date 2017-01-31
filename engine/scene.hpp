@@ -43,6 +43,8 @@ private:
     virtual void OnUpdate(Uint32 delta_time);
     virtual void OnResume();
     virtual void OnPause();
+    virtual bool BeforeEventProcessing(const SDL_Event& /*event*/) { return false; }
+    virtual bool AfterEventProcessing(const SDL_Event& /*event*/) { return false; }
 
     std::string m_name;
     std::unordered_map<std::string, SceneController*> m_controllers;

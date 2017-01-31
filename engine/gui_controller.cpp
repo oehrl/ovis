@@ -39,7 +39,7 @@ public:
         
         sdl_event.type = gui()->event_type();
         sdl_event.user.code = event.type;
-        sdl_event.user.data1 = const_cast<tb::TBWidgetEvent*>(&event);
+        sdl_event.user.data1 = new tb::TBWidgetEvent(event); // TODO: super ugly, cleanup in Application::ProcessEvents
         
         SDL_PushEvent(&sdl_event);
         
