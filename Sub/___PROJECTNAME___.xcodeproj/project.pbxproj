@@ -47,6 +47,8 @@
 		F46392EC1E3F7DE800BDB78F /* gears@288.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392EB1E3F7DE800BDB78F /* gears@288.png */; };
 		F46392EF1E40B84300BDB78F /* gui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392ED1E40B84300BDB78F /* gui.cpp */; };
 		F46392F21E40BA8D00BDB78F /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F01E40BA8D00BDB78F /* log.cpp */; };
+		F46392F51E40C7EC00BDB78F /* game_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F31E40C7EC00BDB78F /* game_scene.cpp */; };
+		F46392F81E40C90400BDB78F /* gui_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F61E40C90400BDB78F /* gui_scene.cpp */; };
 		F468D3891E3358780097DAE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F468D3881E3358780097DAE1 /* AVFoundation.framework */; };
 		F468D3A01E335FCA0097DAE1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F468D3941E335FCA0097DAE1 /* main.cpp */; };
 		F48325911E3E8F14008281FE /* gui_shader.vert in Resources */ = {isa = PBXBuildFile; fileRef = F48325901E3E8F14008281FE /* gui_shader.vert */; };
@@ -236,6 +238,10 @@
 		F46392EE1E40B84300BDB78F /* gui.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui.hpp; path = src/gui.hpp; sourceTree = "<group>"; };
 		F46392F01E40BA8D00BDB78F /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = src/log.cpp; sourceTree = "<group>"; };
 		F46392F11E40BA8D00BDB78F /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = log.hpp; path = src/log.hpp; sourceTree = "<group>"; };
+		F46392F31E40C7EC00BDB78F /* game_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = game_scene.cpp; path = src/game_scene.cpp; sourceTree = "<group>"; };
+		F46392F41E40C7EC00BDB78F /* game_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = game_scene.hpp; path = src/game_scene.hpp; sourceTree = "<group>"; };
+		F46392F61E40C90400BDB78F /* gui_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_scene.cpp; path = src/gui_scene.cpp; sourceTree = "<group>"; };
+		F46392F71E40C90400BDB78F /* gui_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui_scene.hpp; path = src/gui_scene.hpp; sourceTree = "<group>"; };
 		F468D3861E3357EC0097DAE1 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = SDL/lib/libSDL2.a; sourceTree = "<group>"; };
 		F468D3881E3358780097DAE1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F468D3941E335FCA0097DAE1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
@@ -469,21 +475,7 @@
 			isa = PBXGroup;
 			children = (
 				F468D3A41E33613B0097DAE1 /* Engine */,
-				F468D3941E335FCA0097DAE1 /* main.cpp */,
-				F4079F411E3A350C00F41B51 /* level_renderer.cpp */,
-				F4079F421E3A350C00F41B51 /* level_renderer.hpp */,
-				F4079F491E3AAD8200F41B51 /* camera_controller.cpp */,
-				F4079F4A1E3AAD8200F41B51 /* camera_controller.hpp */,
-				F4079F561E3C021300F41B51 /* perlin_noise.cpp */,
-				F4079F571E3C021300F41B51 /* perlin_noise.hpp */,
-				F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */,
-				F4D00AA01E3E7022000F3ADE /* gui_controller.hpp */,
-				F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */,
-				F4D00AA31E3E7495000F3ADE /* gui_renderer.hpp */,
-				F46392ED1E40B84300BDB78F /* gui.cpp */,
-				F46392EE1E40B84300BDB78F /* gui.hpp */,
-				F46392F01E40BA8D00BDB78F /* log.cpp */,
-				F46392F11E40BA8D00BDB78F /* log.hpp */,
+				F46392F91E40CC6F00BDB78F /* Game */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -547,6 +539,48 @@
 				F4079F471E3A570200F41B51 /* heightmap.bmp */,
 			);
 			name = Textures;
+			sourceTree = "<group>";
+		};
+		F46392F91E40CC6F00BDB78F /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				F46392FA1E40CC8600BDB78F /* GameScene */,
+				F46392FB1E40CC9500BDB78F /* EditorScene */,
+				F468D3941E335FCA0097DAE1 /* main.cpp */,
+				F4079F561E3C021300F41B51 /* perlin_noise.cpp */,
+				F4079F571E3C021300F41B51 /* perlin_noise.hpp */,
+				F4D00A9F1E3E7022000F3ADE /* gui_controller.cpp */,
+				F4D00AA01E3E7022000F3ADE /* gui_controller.hpp */,
+				F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */,
+				F4D00AA31E3E7495000F3ADE /* gui_renderer.hpp */,
+				F46392ED1E40B84300BDB78F /* gui.cpp */,
+				F46392EE1E40B84300BDB78F /* gui.hpp */,
+				F46392F01E40BA8D00BDB78F /* log.cpp */,
+				F46392F11E40BA8D00BDB78F /* log.hpp */,
+				F46392F61E40C90400BDB78F /* gui_scene.cpp */,
+				F46392F71E40C90400BDB78F /* gui_scene.hpp */,
+			);
+			name = Game;
+			sourceTree = "<group>";
+		};
+		F46392FA1E40CC8600BDB78F /* GameScene */ = {
+			isa = PBXGroup;
+			children = (
+				F4079F411E3A350C00F41B51 /* level_renderer.cpp */,
+				F4079F421E3A350C00F41B51 /* level_renderer.hpp */,
+				F4079F491E3AAD8200F41B51 /* camera_controller.cpp */,
+				F4079F4A1E3AAD8200F41B51 /* camera_controller.hpp */,
+				F46392F31E40C7EC00BDB78F /* game_scene.cpp */,
+				F46392F41E40C7EC00BDB78F /* game_scene.hpp */,
+			);
+			name = GameScene;
+			sourceTree = "<group>";
+		};
+		F46392FB1E40CC9500BDB78F /* EditorScene */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = EditorScene;
 			sourceTree = "<group>";
 		};
 		F468D3A41E33613B0097DAE1 /* Engine */ = {
@@ -915,6 +949,7 @@
 				F4D00B451E3E758A000F3ADE /* tb_hashtable.cpp in Sources */,
 				F48329041E3ECBF6008281FE /* autofit.c in Sources */,
 				F4D00BD11E3E75FB000F3ADE /* utf8.cpp in Sources */,
+				F46392F81E40C90400BDB78F /* gui_scene.cpp in Sources */,
 				F4D00BAC1E3E75A8000F3ADE /* tb_renderer_batcher.cpp in Sources */,
 				F4079F3D1E3A32B800F41B51 /* shader_program.cpp in Sources */,
 				F4D00B431E3E758A000F3ADE /* tb_hash.cpp in Sources */,
@@ -937,6 +972,7 @@
 				F4D00B6F1E3E758A000F3ADE /* tb_skin.cpp in Sources */,
 				F4D00B711E3E758A000F3ADE /* tb_str.cpp in Sources */,
 				F4D00B4F1E3E758A000F3ADE /* tb_layout.cpp in Sources */,
+				F46392F51E40C7EC00BDB78F /* game_scene.cpp in Sources */,
 				F4079F401E3A32B800F41B51 /* vertex_source.cpp in Sources */,
 				F4079F341E3A32B700F41B51 /* class.cpp in Sources */,
 				F4D00B271E3E758A000F3ADE /* tb_clipboard_dummy.cpp in Sources */,
