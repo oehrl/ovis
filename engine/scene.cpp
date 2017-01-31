@@ -3,12 +3,15 @@
 //
 
 #include <algorithm>
+#include <map>
+
 #include "scene.hpp"
 #include "scene_controller.hpp"
 #include "scene_renderer.hpp"
 
 Scene::Scene(const std::string& name, bool hide_previous) :
     m_name(name),
+    m_renderers_sorted(false),
     m_is_paused(true),
     m_hides_previous(hide_previous)
 {
@@ -55,9 +58,14 @@ void Scene::Update(Uint32 delta_time)
 
 void Scene::Render()
 {
-    for (auto renderer : m_renderers)
+    if (!m_renderers_sorted)
     {
-        renderer.second->Render();
+        SortRenderers();
+    }
+    
+    for (auto renderer : m_render_order)
+    {
+        renderer->Render();
     }
 }
 
@@ -120,6 +128,7 @@ void Scene::AddRenderer(SceneRenderer* renderer)
         renderer->name(),
         renderer
     ));
+    m_renderers_sorted = false;
 }
 
 void Scene::RemoveRenderer(SceneRenderer* renderer)
@@ -129,6 +138,66 @@ void Scene::RemoveRenderer(SceneRenderer* renderer)
         m_renderers.find(renderer->name())->second == renderer
     );
     m_renderers.erase(m_renderers.find(renderer->name()));
+    m_renderers_sorted = false;
+}
+
+void Scene::SortRenderers()
+{
+    // First depends on second beeing already rendered
+    std::multimap<std::string, std::string> dependencies;
+    std::set<std::string> renderers_left;
+    
+    for (auto name_renderer_pair : m_renderers)
+    {
+        renderers_left.insert(name_renderer_pair.first);
+        
+        for (auto render_before : name_renderer_pair.second->m_render_before_list)
+        {
+            dependencies.insert(std::make_pair(
+                render_before,
+                name_renderer_pair.first
+            ));
+        }
+        
+        for (auto render_after : name_renderer_pair.second->m_render_after_list)
+        {
+            dependencies.insert(std::make_pair(
+                name_renderer_pair.first,
+                render_after
+            ));
+        }
+    }
+    
+    m_render_order.resize(0);
+    m_render_order.reserve(m_renderers.size());
+    while (renderers_left.size() > 0)
+    {
+        auto next = std::find_if(
+            renderers_left.begin(),
+            renderers_left.end(),
+            [&dependencies](const std::string& value)
+        {
+            return dependencies.count(value) == 0;
+        });
+        
+        SDL_assert(next != renderers_left.end());
+        
+        m_render_order.push_back(m_renderers[*next]);
+        for (auto i = dependencies.begin(), e = dependencies.end(); i != e;)
+        {
+            if (i->second == *next)
+            {
+                i = dependencies.erase(i);
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        renderers_left.erase(next);
+    }
+    
+    m_renderers_sorted = true;
 }
 
 void Scene::OnUpdate(Uint32 /*delta_time*/)

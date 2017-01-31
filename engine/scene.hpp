@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "SDL.h"
 
@@ -37,6 +38,7 @@ private:
     void RemoveController(SceneController* controller);
     void AddRenderer(SceneRenderer* renderer);
     void RemoveRenderer(SceneRenderer* renderer);
+    void SortRenderers();
 
     virtual void OnUpdate(Uint32 delta_time);
     virtual void OnResume();
@@ -45,6 +47,8 @@ private:
     std::string m_name;
     std::unordered_map<std::string, SceneController*> m_controllers;
     std::unordered_map<std::string, SceneRenderer*> m_renderers;
+    std::vector<SceneRenderer*> m_render_order;
+    bool m_renderers_sorted;
     bool m_is_paused;
     bool m_hides_previous;
 };

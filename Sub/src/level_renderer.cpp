@@ -29,6 +29,8 @@ LevelRenderer::LevelRenderer(Scene* scene) :
     m_width(100),
     m_height(100)
 {
+    RenderBefore("GuiRenderer");
+
     m_shader_program = LoadShaderProgram(app()->GetFullResourcePath("heightmap"));
     m_cave_shader = LoadShaderProgram(app()->GetFullResourcePath("cave"));
     m_sand_texture = LoadTexture(app()->GetFullResourcePath("sand2.bmp"));
@@ -342,7 +344,7 @@ void LevelRenderer::Render()
         draw_item.count = (m_width - 1) * (m_height - 1) * 2 * 3;
         draw_item.depth_buffer_state = DepthBufferState::ENABLED;
         draw_item.alpha_blending_enabled = false;
-        graphics_device()->Draw(draw_item);
+        //graphics_device()->Draw(draw_item);
     }
 
     {

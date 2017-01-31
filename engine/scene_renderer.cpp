@@ -22,3 +22,15 @@ SceneRenderer::~SceneRenderer()
     scene()->RemoveRenderer(this);
     // Log::Debug("Renderer '", name(), "' removed from scene '", scene()->name(), "'");
 }
+
+void SceneRenderer::RenderBefore(const std::string& renderer_name)
+{
+    m_render_before_list.insert(renderer_name);
+    m_scene->m_renderers_sorted = false;
+}
+
+void SceneRenderer::RenderAfter(const std::string& renderer_name)
+{
+    m_render_after_list.insert(renderer_name);
+    m_scene->m_renderers_sorted = false;
+}
