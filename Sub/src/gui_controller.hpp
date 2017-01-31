@@ -2,12 +2,9 @@
 
 #include <memory>
 
-#include "scene_controller.hpp"
+#include <tb_widgets.h>
 
-namespace tb
-{
-    class TBWidget;
-}
+#include "scene_controller.hpp"
 
 class GuiController :
     public SceneController
@@ -21,10 +18,15 @@ public:
     virtual void Update(Uint32 delta_time) override;
     virtual bool ProcessEvent(const SDL_Event& event) override;
     
+    tb::TBWidget* GetWidgetById(tb::TBID id);
+    
+    inline tb::TBWidget* root_widget() const
+    {
+        return m_root_widget.get();
+    }
+    
 private:
     class RootWidget;
     
-    std::unique_ptr<RootWidget> m_root_widget;
-    
-    tb::TBWidget* root_widget() const;
+    std::unique_ptr<tb::TBWidget> m_root_widget;
 };

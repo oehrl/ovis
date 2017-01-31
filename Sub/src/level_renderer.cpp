@@ -13,7 +13,7 @@
 namespace
 {
     const std::size_t CAVE_LENGTH = 512;
-    const std::size_t VERTICES_PER_RING = 32;
+    const std::size_t VERTICES_PER_RING = 8;
     const std::size_t CAVE_VERTEX_COUNT = CAVE_LENGTH * VERTICES_PER_RING;
     const std::size_t INDICES_PER_RING_SEGMENT = VERTICES_PER_RING * 2 * 3;
     const std::size_t INDEX_COUNT = INDICES_PER_RING_SEGMENT * (CAVE_LENGTH - 1);
@@ -41,10 +41,11 @@ LevelRenderer::LevelRenderer(Scene* scene) :
         std::vector<glm::vec3> positions(CAVE_LENGTH);
         std::vector<glm::vec3> directions(CAVE_LENGTH);
         
+        const double MAX_Z = CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING);
         for (auto i : IndexRange(positions))
         {
             double z = i.index() * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING);
-            i.value().x = 1000.0 * OctavePerlin(0.123, 0.123, 0.8 * z / (CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING)), 3, 0.5);
+            i.value().x = 1000.0 * OctavePerlin(0.123, 0.123, 0.8 * z / MAX_Z, 3, 0.5);
             i.value().y = CAVE_RADIUS + CAVE_RADIUS * OctavePerlin(0.123, 0.123, z / (CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING)), 1, 0.5);
             i.value().z = z;
         }
@@ -111,7 +112,7 @@ LevelRenderer::LevelRenderer(Scene* scene) :
                         get_position(i, j + 1)
                     );
                 get_vertex(i,j).normal = -glm::normalize(glm::cross(va, vb));
-                get_vertex(i,j).tangent = -glm::cross(get_vertex(i,j).normal, directions[i]);
+                //get_vertex(i,j).tangent = -glm::cross(get_vertex(i,j).normal, directions[i]);
             }
         }
         
@@ -129,8 +130,8 @@ LevelRenderer::LevelRenderer(Scene* scene) :
         {
             { "Position",  VertexAttributeType::FLOAT32_VECTOR3, 0,  0 },
             { "Normal",    VertexAttributeType::FLOAT32_VECTOR3, 0, 12 },
-            { "Tangent",   VertexAttributeType::FLOAT32_VECTOR3, 0, 24 },
-            { "TexCoords", VertexAttributeType::FLOAT32_VECTOR2, 0, 36 },
+            //{ "Tangent",   VertexAttributeType::FLOAT32_VECTOR3, 0, 24 },
+            { "TexCoords", VertexAttributeType::FLOAT32_VECTOR2, 0, 24 },
         };
         m_cave_vs = std::make_unique<VertexSource>(graphics_device(), vs_desc);
     }

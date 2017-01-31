@@ -3,6 +3,7 @@
 #include "level_renderer.hpp"
 #include "camera_controller.hpp"
 #include "perlin_noise.hpp"
+#include "gui.hpp"
 #include "gui_renderer.hpp"
 #include "gui_controller.hpp"
 
@@ -11,7 +12,10 @@
 extern "C" int main(int /*argc*/, char* /*argv*/[])
 {
 	InitApp("APPLICATION_NAME");
-
+    InitGui("$resources$/default_skin/skin.tb.txt");
+    gui()->LoadFont("$resources$/vera.ttf", "Vera");
+    gui()->SetDefaultFont("Vera", 4.0f);
+    
     {
         Scene test_scene("TestScene");
         LevelRenderer level_renderer(&test_scene);
@@ -24,6 +28,7 @@ extern "C" int main(int /*argc*/, char* /*argv*/[])
         app()->Run();
     }
 
+    ReleaseGui();
 	QuitApp();
 	return 0;
 }

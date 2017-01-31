@@ -43,6 +43,10 @@
 		F4548A051E3E1E6E009C2DA5 /* rock_norm.bmp in Resources */ = {isa = PBXBuildFile; fileRef = F4548A031E3E1E6E009C2DA5 /* rock_norm.bmp */; };
 		F4548A061E3E1E6E009C2DA5 /* rock.bmp in Resources */ = {isa = PBXBuildFile; fileRef = F4548A041E3E1E6E009C2DA5 /* rock.bmp */; };
 		F4548A091E3E3C4C009C2DA5 /* rock2.bmp in Resources */ = {isa = PBXBuildFile; fileRef = F4548A081E3E3C4C009C2DA5 /* rock2.bmp */; };
+		F46392EA1E3F7D6400BDB78F /* gears.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392E91E3F7D6400BDB78F /* gears.png */; };
+		F46392EC1E3F7DE800BDB78F /* gears@288.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392EB1E3F7DE800BDB78F /* gears@288.png */; };
+		F46392EF1E40B84300BDB78F /* gui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392ED1E40B84300BDB78F /* gui.cpp */; };
+		F46392F21E40BA8D00BDB78F /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F01E40BA8D00BDB78F /* log.cpp */; };
 		F468D3891E3358780097DAE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F468D3881E3358780097DAE1 /* AVFoundation.framework */; };
 		F468D3A01E335FCA0097DAE1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F468D3941E335FCA0097DAE1 /* main.cpp */; };
 		F48325911E3E8F14008281FE /* gui_shader.vert in Resources */ = {isa = PBXBuildFile; fileRef = F48325901E3E8F14008281FE /* gui_shader.vert */; };
@@ -226,6 +230,12 @@
 		F4548A031E3E1E6E009C2DA5 /* rock_norm.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = rock_norm.bmp; path = resource/rock_norm.bmp; sourceTree = "<group>"; };
 		F4548A041E3E1E6E009C2DA5 /* rock.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = rock.bmp; path = resource/rock.bmp; sourceTree = "<group>"; };
 		F4548A081E3E3C4C009C2DA5 /* rock2.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = rock2.bmp; path = resource/rock2.bmp; sourceTree = "<group>"; };
+		F46392E91E3F7D6400BDB78F /* gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gears.png; path = resource/gears.png; sourceTree = "<group>"; };
+		F46392EB1E3F7DE800BDB78F /* gears@288.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gears@288.png"; path = "resource/gears@288.png"; sourceTree = "<group>"; };
+		F46392ED1E40B84300BDB78F /* gui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui.cpp; path = src/gui.cpp; sourceTree = "<group>"; };
+		F46392EE1E40B84300BDB78F /* gui.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui.hpp; path = src/gui.hpp; sourceTree = "<group>"; };
+		F46392F01E40BA8D00BDB78F /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = src/log.cpp; sourceTree = "<group>"; };
+		F46392F11E40BA8D00BDB78F /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = log.hpp; path = src/log.hpp; sourceTree = "<group>"; };
 		F468D3861E3357EC0097DAE1 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = SDL/lib/libSDL2.a; sourceTree = "<group>"; };
 		F468D3881E3358780097DAE1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F468D3941E335FCA0097DAE1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
@@ -470,6 +480,10 @@
 				F4D00AA01E3E7022000F3ADE /* gui_controller.hpp */,
 				F4D00AA21E3E7495000F3ADE /* gui_renderer.cpp */,
 				F4D00AA31E3E7495000F3ADE /* gui_renderer.hpp */,
+				F46392ED1E40B84300BDB78F /* gui.cpp */,
+				F46392EE1E40B84300BDB78F /* gui.hpp */,
+				F46392F01E40BA8D00BDB78F /* log.cpp */,
+				F46392F11E40BA8D00BDB78F /* log.hpp */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -523,6 +537,8 @@
 		F4548A071E3E1E79009C2DA5 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				F46392E91E3F7D6400BDB78F /* gears.png */,
+				F46392EB1E3F7DE800BDB78F /* gears@288.png */,
 				F4548A081E3E3C4C009C2DA5 /* rock2.bmp */,
 				F4548A031E3E1E6E009C2DA5 /* rock_norm.bmp */,
 				F4548A041E3E1E6E009C2DA5 /* rock.bmp */,
@@ -827,11 +843,13 @@
 				F483259A1E3E9527008281FE /* layout.txt in Resources */,
 				F4079F481E3A570200F41B51 /* heightmap.bmp in Resources */,
 				F4079F0F1E393F6200F41B51 /* heightmap.vert in Resources */,
+				F46392EC1E3F7DE800BDB78F /* gears@288.png in Resources */,
 				F4079F551E3BD85300F41B51 /* sand2.bmp in Resources */,
 				F4548A051E3E1E6E009C2DA5 /* rock_norm.bmp in Resources */,
 				F4079F5B1E3CB77200F41B51 /* cave.frag in Resources */,
 				F483259C1E3E9F06008281FE /* test_ui.tb.txt in Resources */,
 				F4079F0E1E393F6200F41B51 /* heightmap.frag in Resources */,
+				F46392EA1E3F7D6400BDB78F /* gears.png in Resources */,
 				F48325911E3E8F14008281FE /* gui_shader.vert in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -843,6 +861,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F46392F21E40BA8D00BDB78F /* log.cpp in Sources */,
 				F48329071E3ECBF6008281FE /* ftbdf.c in Sources */,
 				F4D00B3F1E3E758A000F3ADE /* tb_font_renderer.cpp in Sources */,
 				F48329181E3ECBF6008281FE /* ftsystem.c in Sources */,
@@ -904,6 +923,7 @@
 				F4D00B851E3E758A000F3ADE /* tb_widget_skin_condition_context.cpp in Sources */,
 				F48329151E3ECBF6008281FE /* ftpfr.c in Sources */,
 				F48329141E3ECBF6008281FE /* ftpatent.c in Sources */,
+				F46392EF1E40B84300BDB78F /* gui.cpp in Sources */,
 				F4D00B3D1E3E758A000F3ADE /* tb_font_renderer_tbbf.cpp in Sources */,
 				F48329211E3ECBF6008281FE /* ftlzw.c in Sources */,
 				F4D00B651E3E758A000F3ADE /* tb_scroll_container.cpp in Sources */,
