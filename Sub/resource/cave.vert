@@ -1,3 +1,5 @@
+#version 100
+
 uniform mat4 u_WorldViewMatrix;
 uniform mat4 u_ProjectionMatrix;
 

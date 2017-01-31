@@ -322,7 +322,7 @@ void LevelRenderer::Render()
         500.0f
     );
     
-    CameraController* camera_controller = dynamic_cast<CameraController*>(scene()->GetController("CameraController"));
+    CameraController* camera_controller = static_cast<CameraController*>(scene()->GetController("CameraController"));
     
     glm::mat4 rotation_matrix_pitch = glm::rotate(glm::mat4(), camera_controller->pitch(), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 rotation_matrix_yaw = glm::rotate(glm::mat4(), camera_controller->yaw(), glm::vec3(0.0f, 1.0f, 0.0f));

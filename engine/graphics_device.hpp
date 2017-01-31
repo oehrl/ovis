@@ -3,9 +3,9 @@
 #include <set>
 #include <vector>
 
-#include "SDL.h"
-#include "SDL_opengles2.h"
+#include <SDL.h>
 
+#include "gl.hpp"
 #include "class.hpp"
 
 class GraphicsResource;

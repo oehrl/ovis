@@ -1,7 +1,6 @@
 #pragma once
 
-#include <SDL_opengles2.h>
-
+#include "gl.hpp"
 #include "graphics_resource.hpp"
 
 class Texture :

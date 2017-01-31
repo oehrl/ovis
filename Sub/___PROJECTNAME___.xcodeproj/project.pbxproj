@@ -46,13 +46,14 @@
 		F46392EA1E3F7D6400BDB78F /* gears.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392E91E3F7D6400BDB78F /* gears.png */; };
 		F46392EC1E3F7DE800BDB78F /* gears@288.png in Resources */ = {isa = PBXBuildFile; fileRef = F46392EB1E3F7DE800BDB78F /* gears@288.png */; };
 		F46392EF1E40B84300BDB78F /* gui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392ED1E40B84300BDB78F /* gui.cpp */; };
-		F46392F21E40BA8D00BDB78F /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F01E40BA8D00BDB78F /* log.cpp */; };
 		F46392F51E40C7EC00BDB78F /* game_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F31E40C7EC00BDB78F /* game_scene.cpp */; };
 		F46392F81E40C90400BDB78F /* gui_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392F61E40C90400BDB78F /* gui_scene.cpp */; };
 		F46393011E40CD1000BDB78F /* editor_scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46392FF1E40CD1000BDB78F /* editor_scene.cpp */; };
 		F46393031E40CD9C00BDB78F /* editor_layout.tb.txt in Resources */ = {isa = PBXBuildFile; fileRef = F46393021E40CD9C00BDB78F /* editor_layout.tb.txt */; };
+		F46393061E40E3D800BDB78F /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46393041E40E3D800BDB78F /* gl.cpp */; };
 		F468D3891E3358780097DAE1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F468D3881E3358780097DAE1 /* AVFoundation.framework */; };
 		F468D3A01E335FCA0097DAE1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F468D3941E335FCA0097DAE1 /* main.cpp */; };
+		F46E58D31E4109EA00E78E07 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F46E58D11E4109EA00E78E07 /* log.cpp */; };
 		F48325911E3E8F14008281FE /* gui_shader.vert in Resources */ = {isa = PBXBuildFile; fileRef = F48325901E3E8F14008281FE /* gui_shader.vert */; };
 		F48325931E3E8FCC008281FE /* gui_shader.frag in Resources */ = {isa = PBXBuildFile; fileRef = F48325921E3E8FCC008281FE /* gui_shader.frag */; };
 		F48325971E3E9305008281FE /* default_skin in Resources */ = {isa = PBXBuildFile; fileRef = F48325951E3E9305008281FE /* default_skin */; };
@@ -238,8 +239,6 @@
 		F46392EB1E3F7DE800BDB78F /* gears@288.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gears@288.png"; path = "resource/gears@288.png"; sourceTree = "<group>"; };
 		F46392ED1E40B84300BDB78F /* gui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui.cpp; path = src/gui.cpp; sourceTree = "<group>"; };
 		F46392EE1E40B84300BDB78F /* gui.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gui.hpp; path = src/gui.hpp; sourceTree = "<group>"; };
-		F46392F01E40BA8D00BDB78F /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = src/log.cpp; sourceTree = "<group>"; };
-		F46392F11E40BA8D00BDB78F /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = log.hpp; path = src/log.hpp; sourceTree = "<group>"; };
 		F46392F31E40C7EC00BDB78F /* game_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = game_scene.cpp; path = src/game_scene.cpp; sourceTree = "<group>"; };
 		F46392F41E40C7EC00BDB78F /* game_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = game_scene.hpp; path = src/game_scene.hpp; sourceTree = "<group>"; };
 		F46392F61E40C90400BDB78F /* gui_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gui_scene.cpp; path = src/gui_scene.cpp; sourceTree = "<group>"; };
@@ -247,9 +246,13 @@
 		F46392FF1E40CD1000BDB78F /* editor_scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = editor_scene.cpp; path = src/editor_scene.cpp; sourceTree = "<group>"; };
 		F46393001E40CD1000BDB78F /* editor_scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = editor_scene.hpp; path = src/editor_scene.hpp; sourceTree = "<group>"; };
 		F46393021E40CD9C00BDB78F /* editor_layout.tb.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = editor_layout.tb.txt; path = resource/editor_layout.tb.txt; sourceTree = "<group>"; };
+		F46393041E40E3D800BDB78F /* gl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl.cpp; path = ../engine/gl.cpp; sourceTree = "<group>"; };
+		F46393051E40E3D800BDB78F /* gl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gl.hpp; path = ../engine/gl.hpp; sourceTree = "<group>"; };
 		F468D3861E3357EC0097DAE1 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = SDL/lib/libSDL2.a; sourceTree = "<group>"; };
 		F468D3881E3358780097DAE1 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F468D3941E335FCA0097DAE1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
+		F46E58D11E4109EA00E78E07 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = log.cpp; path = ../engine/log.cpp; sourceTree = "<group>"; };
+		F46E58D21E4109EA00E78E07 /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = log.hpp; path = ../engine/log.hpp; sourceTree = "<group>"; };
 		F48325901E3E8F14008281FE /* gui_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gui_shader.vert; path = resource/gui_shader.vert; sourceTree = "<group>"; };
 		F48325921E3E8FCC008281FE /* gui_shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gui_shader.frag; path = resource/gui_shader.frag; sourceTree = "<group>"; };
 		F48325951E3E9305008281FE /* default_skin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = default_skin; path = resource/default_skin; sourceTree = "<group>"; };
@@ -560,8 +563,6 @@
 				F4D00AA31E3E7495000F3ADE /* gui_renderer.hpp */,
 				F46392ED1E40B84300BDB78F /* gui.cpp */,
 				F46392EE1E40B84300BDB78F /* gui.hpp */,
-				F46392F01E40BA8D00BDB78F /* log.cpp */,
-				F46392F11E40BA8D00BDB78F /* log.hpp */,
 				F46392F61E40C90400BDB78F /* gui_scene.cpp */,
 				F46392F71E40C90400BDB78F /* gui_scene.hpp */,
 			);
@@ -593,6 +594,8 @@
 		F468D3A41E33613B0097DAE1 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				F46E58D11E4109EA00E78E07 /* log.cpp */,
+				F46E58D21E4109EA00E78E07 /* log.hpp */,
 				F4079F171E3A32B700F41B51 /* application.cpp */,
 				F4079F181E3A32B700F41B51 /* application.hpp */,
 				F4079F191E3A32B700F41B51 /* class.cpp */,
@@ -627,6 +630,8 @@
 				F4079F4D1E3B5CCE00F41B51 /* texture.hpp */,
 				F4079F4F1E3B5E4700F41B51 /* texture2d.cpp */,
 				F4079F501E3B5E4700F41B51 /* texture2d.hpp */,
+				F46393041E40E3D800BDB78F /* gl.cpp */,
+				F46393051E40E3D800BDB78F /* gl.hpp */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -904,7 +909,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46392F21E40BA8D00BDB78F /* log.cpp in Sources */,
 				F48329071E3ECBF6008281FE /* ftbdf.c in Sources */,
 				F4D00B3F1E3E758A000F3ADE /* tb_font_renderer.cpp in Sources */,
 				F48329181E3ECBF6008281FE /* ftsystem.c in Sources */,
@@ -990,6 +994,7 @@
 				F4D00B891E3E758A000F3ADE /* tb_widgets_common.cpp in Sources */,
 				F48329111E3ECBF6008281FE /* ftlcdfil.c in Sources */,
 				F483291D1E3ECBF6008281FE /* ftcache.c in Sources */,
+				F46393061E40E3D800BDB78F /* gl.cpp in Sources */,
 				F4D00B371E3E758A000F3ADE /* tb_file_posix.cpp in Sources */,
 				F4D00B791E3E758A000F3ADE /* tb_system_linux.cpp in Sources */,
 				F48329171E3ECBF6008281FE /* ftsynth.c in Sources */,
@@ -997,6 +1002,7 @@
 				F4D00B871E3E758A000F3ADE /* tb_widget_value.cpp in Sources */,
 				F4D00B831E3E758A000F3ADE /* tb_value.cpp in Sources */,
 				F48329251E3ECBF6008281FE /* pshinter.c in Sources */,
+				F46E58D31E4109EA00E78E07 /* log.cpp in Sources */,
 				F4079F3A1E3A32B700F41B51 /* scene_controller.cpp in Sources */,
 				F4D00B531E3E758A000F3ADE /* tb_list.cpp in Sources */,
 				F4079F4E1E3B5CCE00F41B51 /* texture.cpp in Sources */,

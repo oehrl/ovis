@@ -1,3 +1,5 @@
+#version 100
+
 uniform vec2 u_ViewportSize;
 uniform vec4 u_ClipRect;
 

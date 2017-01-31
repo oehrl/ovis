@@ -155,5 +155,5 @@ std::unique_ptr<Texture2D> LoadTexture(const std::string& filename)
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(surface);
     
-    return std::move(texture);
+    return texture;
 }

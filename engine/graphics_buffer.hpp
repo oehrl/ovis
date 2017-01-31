@@ -1,8 +1,7 @@
 #pragma once
 
-#include "SDL_opengles2.h"
-
 #include "graphics_resource.hpp"
+#include "gl.hpp"
 
 class GraphicsBuffer :
     public GraphicsResource

@@ -136,19 +136,34 @@ void Application::Quit()
 }
 
 Application::Application(const std::string& name) :
-    m_quit(false),
-    m_resource_path(SDL_GetBasePath())
+    m_quit(false)
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+    
+#ifndef __IPHONEOS__
+    m_resource_path = "/Users/Simon/Documents/ov_project/Sub/resource/";
     
     m_window =  SDL_CreateWindow(
         name.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        640,
-        1136,
+        1280,
+        720,
+        SDL_WINDOW_OPENGL
+    );
+#else
+    m_resource_path = SDL_GetBasePath();
+    
+    m_window =  SDL_CreateWindow(
+        name.c_str(),
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        0,
+        0,
         SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN
     );
+#endif
+
     SDL_assert(
         m_window != nullptr
     );

@@ -107,7 +107,7 @@
 #define TB_FILE_POSIX
 #define TB_TARGET_MACOSX
 #define TB_SYSTEM_LINUX
-#define TB_CLIPBOARD_GLFW
+#define TB_CLIPBOARD_DUMMY
 #elif defined(_WIN32) || defined(__WIN32__) || defined(__WINDOWS__)
 #define TB_FILE_POSIX
 #define TB_TARGET_WINDOWS

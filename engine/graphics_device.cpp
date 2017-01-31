@@ -1,5 +1,6 @@
 #include "application.hpp"
 #include "graphics_device.hpp"
+#include "log.hpp"
 #include "range.hpp"
 #include "uniform_buffer.hpp"
 #include "shader_program.hpp"
@@ -20,9 +21,18 @@ GraphicsDevice::GraphicsDevice(SDL_Window* window) :
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    
+#ifndef __IPHONEOS__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#endif
+    
     m_context = SDL_GL_CreateContext(window);
     SDL_assert(m_context != nullptr);
     SDL_GL_MakeCurrent(window, m_context);
+    
+    LogI("OpenGL version: ", glGetString(GL_VERSION));
     
     int window_width = 0;
     int window_height = 0;
@@ -41,6 +51,12 @@ GraphicsDevice::GraphicsDevice(SDL_Window* window) :
     glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_caps.num_vertex_texture_units);
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+#ifndef __IPHONEOS__
+    GLuint vertex_array;
+    glGenVertexArrays(1, &vertex_array);
+    glBindVertexArray(vertex_array);
+#endif
 }
 
 GraphicsDevice::~GraphicsDevice()

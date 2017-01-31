@@ -4,9 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "SDL_opengles2.h"
-
 #include "graphics_resource.hpp"
+#include "gl.hpp"
 #include "uniform_buffer.hpp"
 
 struct ShaderProgramDescription
