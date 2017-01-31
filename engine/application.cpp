@@ -145,9 +145,9 @@ Application::Application(const std::string& name) :
         name.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        0,
-        0,
-        SDL_WINDOW_OPENGL
+        640,
+        1136,
+        SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN
     );
     SDL_assert(
         m_window != nullptr
