@@ -279,6 +279,11 @@ std::unique_ptr<Gui> Gui::s_gui;
 
 void register_freetype_font_renderer();
 
+Gui::~Gui()
+{
+    tb::tb_core_shutdown();
+}
+
 void Gui::LoadFont(const std::string& font_filename, const std::string& font_name)
 {
     tb::g_font_manager->AddFontInfo(font_filename.c_str(), font_name.c_str());

@@ -12,6 +12,8 @@ class Gui
     friend Gui* gui();
     
 public:
+    ~Gui();
+
     inline Uint32 event_type() const
     {
         return m_event_type;
