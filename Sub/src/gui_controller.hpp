@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <map>
 
 #include <tb_widgets.h>
+#include <tb_window.h>
 
 #include "scene_controller.hpp"
 
@@ -18,6 +20,10 @@ public:
     virtual void Update(Uint32 delta_time) override;
     virtual bool ProcessEvent(const SDL_Event& event) override;
     
+    tb::TBWindow* CreateWindow(
+        const std::string& window_name,
+        const std::string& content_layout_filename
+    );
     tb::TBWidget* GetWidgetById(tb::TBID id);
     
     inline tb::TBWidget* root_widget() const
@@ -29,4 +35,5 @@ private:
     class RootWidget;
     
     std::unique_ptr<tb::TBWidget> m_root_widget;
+    std::map<std::string, tb::TBWindow*> m_windows;
 };

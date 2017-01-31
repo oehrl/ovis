@@ -1,0 +1,49 @@
+TBTabContainer:
+	gravity all
+	align left
+	tabs:
+		TBButton
+			text Options
+	TBLayout
+		axis y
+		distribution-position top
+		TBLayout
+			axis x
+			distribution gravity
+			TBTextField
+				text-align left
+				gravity all
+				text Map Length:
+			TBEditField
+				gravity all
+				text 512
+		TBLayout
+			axis x
+			distribution gravity
+			TBTextField
+				text-align left
+				gravity all
+				text Map Width:
+			TBEditField
+				gravity all
+				text 128
+		TBLayout
+			axis x
+			distribution gravity
+			TBTextField
+				text-align left
+				gravity all
+				text Perlin Start:
+			TBEditField
+				gravity all
+				text: "5 3 1"
+		TBLayout
+			axis x
+			distribution gravity
+			TBTextField
+				text-align left
+				gravity all
+				text Perlin End:
+			TBEditField
+				gravity all
+				text: "9 1 3"

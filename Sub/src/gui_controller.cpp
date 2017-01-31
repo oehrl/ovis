@@ -27,14 +27,27 @@ class GuiController::RootWidget :
     public tb::TBWidget
 {
 public:
-    RootWidget(GuiController* gui_controller)
+    RootWidget(GuiController* /*gui_controller*/)/* :
+        m_gui_controller(gui_controller)*/
     {
     }
     
     virtual bool OnEvent(const tb::TBWidgetEvent& event) override
     {
+        SDL_Event sdl_event;
+        SDL_zero(sdl_event);
+        
+        sdl_event.type = gui()->event_type();
+        sdl_event.user.code = event.type;
+        sdl_event.user.data1 = const_cast<tb::TBWidgetEvent*>(&event);
+        
+        SDL_PushEvent(&sdl_event);
+        
         return false;
     }
+    
+private:
+    //GuiController* m_gui_controller;
 };
 
 GuiController::GuiController(Scene* scene, const std::string& layout) :
@@ -62,7 +75,7 @@ GuiController::~GuiController()
 {
 }
 
-void GuiController::Update(Uint32 delta_time)
+void GuiController::Update(Uint32 /*delta_time*/)
 {
     SDL_assert(gui() != nullptr);
     
@@ -77,27 +90,27 @@ void GuiController::Update(Uint32 delta_time)
 
 bool GuiController::ProcessEvent(const SDL_Event& event)
 {
-    if (event.type == SDL_FINGERMOTION)
+    if (event.type == SDL_MOUSEMOTION)
     {
         m_root_widget->InvokePointerMove(
-            event.tfinger.x * app()->window_width(),
-            event.tfinger.y * app()->window_height(),
+            event.motion.x,
+            event.motion.y,
             tb::TB_MODIFIER_NONE,
-            true
+            event.motion.which == SDL_TOUCH_MOUSEID
         );
         
         return false;
     }
-    else if (event.type == SDL_FINGERDOWN)
+    else if (event.type == SDL_MOUSEBUTTONDOWN)
     {
-        int x = event.tfinger.x * app()->window_width();
-        int y = event.tfinger.y * app()->window_height();
+        int x = event.button.x;
+        int y = event.button.y;
         m_root_widget->InvokePointerDown(
             x,
             y,
-            1,
+            event.button.clicks,
             tb::TB_MODIFIER_NONE,
-            true
+            event.button.which == SDL_TOUCH_MOUSEID
         );
         
         tb::TBWidget* hit_widget = m_root_widget->GetWidgetAt(x, y, true);
@@ -105,16 +118,16 @@ bool GuiController::ProcessEvent(const SDL_Event& event)
             hit_widget != nullptr &&
             IGNORED_GUI_CLASSES.count(hit_widget->GetClassName()) == 0;
     }
-    else if (event.type == SDL_FINGERUP)
+    else if (event.type == SDL_MOUSEBUTTONUP)
     {
-        int x = event.tfinger.x * app()->window_width();
-        int y = event.tfinger.y * app()->window_height();
+        int x = event.button.x;
+        int y = event.button.y;
         
         m_root_widget->InvokePointerUp(
             x,
             y,
             tb::TB_MODIFIER_NONE,
-            true
+            event.button.which == SDL_TOUCH_MOUSEID
         );
         
         tb::TBWidget* hit_widget = m_root_widget->GetWidgetAt(x, y, true);
@@ -126,6 +139,21 @@ bool GuiController::ProcessEvent(const SDL_Event& event)
     {
         return false;
     }
+}
+
+tb::TBWindow* GuiController::CreateWindow(
+    const std::string& window_name,
+    const std::string& content_layout_filename
+)
+{
+    SDL_assert(m_windows.count(window_name) == 0);
+    auto& window = m_windows[window_name] = new tb::TBWindow();
+    SDL_assert_release(tb::g_widgets_reader->LoadFile(
+        window,
+        content_layout_filename.c_str()
+    ));
+    m_root_widget->AddChild(window);
+    return window;
 }
 
 tb::TBWidget* GuiController::GetWidgetById(tb::TBID id)
