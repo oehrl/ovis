@@ -26,6 +26,11 @@ bool EditorScene::BeforeEventProcessing(const SDL_Event& event)
             case tb::EVENT_TYPE_CLICK:
                 LogV("EVENT_TYPE_CLICK");
                 break;
+            
+            case tb::EVENT_TYPE_CHANGED:
+                LogV("EVENT_TYPE_CHANGED");
+                LogV("[", tb_event->target->GetID(), "]=\"", tb_event->target->GetText().CStr(), "\"");
+                break;
 
             default:
                 break;
