@@ -7,22 +7,10 @@ TBLayout
 		align left
 		tabs:
 			TBButton
-				text 
-				font
-					name FontAwesome
-					size 10dp
-			TBButton
-				text 
-				font
-					name FontAwesome
-					size 10dp
+				text Options
 		TBLayout
 			axis y
 			distribution-position top
-			TBButton
-				id add-node
-				text Add
-				toggle-mode 1
 			TBLayout
 				axis x
 				distribution gravity
@@ -44,9 +32,6 @@ TBLayout
 				TBEditField
 					gravity all
 					text 128
-		TBLayout
-			axis y
-			distribution-position top
 			TBLayout
 				axis x
 				distribution gravity

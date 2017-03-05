@@ -60,7 +60,7 @@ inline void Log(LogLevel level, T&&... args)
 }
 
 template <typename... T> inline void LogV(T&&... args) { Log(LogLevel::VERBOSE, std::forward<T>(args)...); }
-#ifdef DEBUG
+#ifndef NDEBUG
 template <typename... T> inline void LogD(T&&... args) { Log(LogLevel::DEBUG,   std::forward<T>(args)...); }
 #else
 template <typename... T> inline void LogD(T&&...     ) { }

@@ -6,6 +6,7 @@
 #include "application.hpp"
 #include "graphics_device.hpp"
 #include "gui.hpp"
+#include "log.hpp"
 #include "scene.hpp"
 
 Application::~Application()
@@ -13,6 +14,54 @@ Application::~Application()
     //SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
     SDL_Quit();
+}
+
+std::string Application::ParseString(const std::string& string)
+{
+    std::string result;
+    result.reserve(string.length());
+    
+    std::string current_variable_name;
+    
+    std::string* current_string = &result;
+    for (auto c : string)
+    {
+        if (c == '$')
+        {
+            if (current_string == &current_variable_name)
+            {
+                if (current_variable_name.size() == 0)
+                {
+                    result.append(1, '$');
+                }
+                else
+                {
+                    auto value = m_variables.find(current_variable_name);
+                    if (value == m_variables.end())
+                    {
+                        LogW("Unknown variable: \"", current_variable_name, "\"");
+                    }
+                    else
+                    {
+                        result.append(value->second);
+                    }
+                }
+            
+                current_variable_name.clear();
+                current_string = &result;
+            }
+            else
+            {
+                current_string = &current_variable_name;
+            }
+        }
+        else
+        {
+            current_string->append(1, c);
+        }
+    }
+    
+    return result;
 }
 
 void Application::PushScene(Scene* scene)
@@ -138,8 +187,9 @@ void Application::Quit()
     m_quit = true;
 }
 
-Application::Application(const std::string& name) :
+Application::Application(const std::string& name, const std::string& organization) :
     m_name(name),
+    m_organization(organization),
     m_quit(false)
 {
 }
@@ -148,6 +198,8 @@ void Application::Init()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     
+    m_data_path = SDL_GetPrefPath(m_organization.c_str(), m_name.c_str());
+    
 #ifndef __IPHONEOS__
     m_resource_path = "/Users/Simon/Documents/ov_project/Sub/resource/";
     
@@ -155,8 +207,8 @@ void Application::Init()
         m_name.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        1280,
-        720,
+        960,
+        540,
         SDL_WINDOW_OPENGL
     );
 #else
@@ -184,6 +236,10 @@ void Application::Init()
     
     m_graphics_device = std::make_unique<GraphicsDevice>(m_window);
     m_gui = std::make_unique<Gui>();
+    
+    m_variables["resources"] = m_resource_path;
+    m_variables["resource_path"] = m_resource_path;
+    m_variables["data_path"] = m_data_path;
 }
 
 bool Application::ProcessEvents()
@@ -218,12 +274,12 @@ namespace
     std::unique_ptr<Application> application;
 }
 
-void InitApp(const std::string& name)
+void InitApp(const std::string& name, const std::string& organization)
 {
     SDL_assert(
         !application
     );
-    application.reset(new Application(name));
+    application.reset(new Application(name, organization));
     application->Init();
 }
 

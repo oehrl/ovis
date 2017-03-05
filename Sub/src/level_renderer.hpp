@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <glm/vec3.hpp>
 
 #include "scene_renderer.hpp"
@@ -9,6 +11,14 @@
 #include "shader_program.hpp"
 #include "texture2d.hpp"
 
+struct LevelDescription
+{
+    std::vector<glm::vec3> path;
+    std::vector<float> vertex_offsets;
+    unsigned int texture_tiling;
+    float texture_scaling;
+};
+
 class LevelRenderer final :
     public SceneRenderer
 {
@@ -16,6 +26,8 @@ public:
     LevelRenderer(Scene* scene);
     
     virtual void Render() override;
+    
+    void SetLevelDescription(const LevelDescription& level_description);
     
 private:
     struct Vertex
@@ -48,4 +60,5 @@ private:
     std::unique_ptr<ShaderProgram> m_cave_shader;
     std::unique_ptr<Texture2D> m_rock_texture;
     std::unique_ptr<Texture2D> m_rock_normal_map;
+    std::size_t m_index_count;
 };

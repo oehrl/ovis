@@ -47,13 +47,17 @@ namespace tb
     int tb::TBSystem::GetDPI()
     {
     //    SDL_assert(SDL_GetNumVideoDisplays() == 1);
-    //    float hdpi;
-    //    float vdpi;
-    //    SDL_GetDisplayDPI(0, nullptr, &hdpi, &vdpi);
     //    SDL_assert(hdpi == vdpi);
     //    SDL_assert(static_cast<int>(hdpi) == vdpi);
         // SDL_GetDisplayDPI seems broken
+#ifdef __IPHONEOS__
         return static_cast<int>(326);
+#else
+        float hdpi;
+        float vdpi;
+        SDL_GetDisplayDPI(0, nullptr, &hdpi, &vdpi);
+        return static_cast<int>(hdpi);
+#endif
     }
 
     /** Empty the contents of the clipboard. */

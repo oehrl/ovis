@@ -10,7 +10,8 @@ class GuiScene :
 public:
     GuiScene(
         const std::string& scene_name,
-        const std::string& gui_layout_filename
+        const std::string& gui_layout_filename,
+        bool hide_previous = true
     );
     
     inline GuiController* gui_controller()

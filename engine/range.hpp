@@ -253,3 +253,11 @@ IndexedRange<T, I> IndexRange(
 {
     return { container.begin(), container.end() };
 }
+
+template <typename I = std::size_t, typename C, typename T = decltype(std::declval<C>().begin())>
+IndexedRange<T, I> IndexRange(
+    C&& container
+)
+{
+    return { container.begin(), container.end() };
+}

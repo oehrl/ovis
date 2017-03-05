@@ -20,7 +20,7 @@ public:
     inline Scene* scene() const { return m_scene; }
     inline std::string name() const { return m_name; }
 
-    virtual void Update(Uint32 delta_time) = 0;
+    virtual void Update(Uint32 delta_time_in_milliseconds) = 0;
     virtual bool ProcessEvent(const SDL_Event& event);
 
 private:

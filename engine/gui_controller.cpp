@@ -69,7 +69,7 @@ GuiController::GuiController(Scene* scene, const std::string& layout) :
     ));
     
     m_root_widget->SetFontDescription(tb::g_font_manager->GetDefaultFontDescription());
-    SDL_assert_release(tb::g_widgets_reader->LoadFile(m_root_widget.get(), layout.c_str()));
+    SDL_assert_release(tb::g_widgets_reader->LoadFile(m_root_widget.get(), app()->ParseString(layout).c_str()));
 }
 
 GuiController::~GuiController()
@@ -78,11 +78,6 @@ GuiController::~GuiController()
 
 void GuiController::Update(Uint32 /*delta_time*/)
 {
-    SDL_assert(gui() != nullptr);
-    
-    std::string text = std::to_string((int)app()->fps());
-    //GetWidgetById("fps")->SetText(text.c_str());
-
     tb::TBMessageHandler::ProcessMessages();
     tb::TBAnimationManager::Update();
     m_root_widget->InvokeProcessStates();

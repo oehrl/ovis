@@ -145,6 +145,7 @@ std::unique_ptr<Texture2D> LoadTexture(const std::string& filename)
     tex_desc.height = surface->h;
     tex_desc.mip_map_count = 1;
     tex_desc.format = TextureFormat::RGB_UINT8;
+    tex_desc.filter = TextureFilter::BILINEAR;
     
     std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(
         graphics_device(),

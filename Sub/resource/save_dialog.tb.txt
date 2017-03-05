@@ -1,0 +1,12 @@
+TBLayout
+	axis y
+	distribution gravity
+
+	TBTextField
+
+	TBLayout
+		axis x
+
+		TBButton
+			text Save
+			text Cancel

@@ -1,11 +1,12 @@
 #include <fstream>
 #include <vector>
 
+#include "application.hpp"
 #include "file.hpp"
 
 std::string LoadTextFile(const std::string& filename)
 {
-    std::ifstream file(filename);
+    std::ifstream file(app()->ParseString(filename));
     file.seekg(0, std::ios::end);
     
     std::vector<char> buffer(file.tellg());

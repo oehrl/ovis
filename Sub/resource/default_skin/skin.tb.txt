@@ -211,7 +211,7 @@ elements
 		cut 12
 		expand 6
 		padding 6 3 6 6
-		min-width 50
+		min-width 20
 		overrides
 			element TBTabContainer.tab_left.pressed
 				state pressed

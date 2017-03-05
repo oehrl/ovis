@@ -1,1 +1,11 @@
+TBLayout
+	axis y
+	distribution-position top
+	TBLayout
+		axis x
+		distribution-position right
+		TBTextField
+			id fps
+		TBTextField
+			text FPS
 

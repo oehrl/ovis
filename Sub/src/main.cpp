@@ -7,14 +7,19 @@
 
 extern "C" int main(int /*argc*/, char* /*argv*/[])
 {
-	InitApp("APPLICATION_NAME");
+	InitApp("Sub", "Ovis");
     
     gui()->LoadSkin("$resources$/default_skin/skin.tb.txt");
     gui()->LoadFont("$resources$/vera.ttf", "Vera");
-    gui()->SetDefaultFont("Vera", 4.0f);
+    gui()->LoadFont("$resources$/fontawesome-webfont.ttf", "FontAwesome");
+    gui()->SetDefaultFont("Vera", 10.0f);
     
     {
+#ifdef __IPHONE_OS__
+        GameScene start_scene;
+#else
         EditorScene start_scene;
+#endif
         app()->PushScene(&start_scene);
         app()->Run();
     }

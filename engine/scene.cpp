@@ -21,32 +21,6 @@ Scene::~Scene()
 {
 }
 
-SceneController* Scene::GetController(const std::string& controller_name) const
-{
-    auto controller = m_controllers.find(controller_name);
-    if (controller == m_controllers.end())
-    {
-        return nullptr;
-    }
-    else
-    {
-        return controller->second;
-    }
-}
-
-SceneRenderer* Scene::GetRenderer(const std::string& renderer_name) const
-{
-    auto renderer = m_renderers.find(renderer_name);
-    if (renderer == m_renderers.end())
-    {
-        return nullptr;
-    }
-    else
-    {
-        return renderer->second;
-    }
-}
-
 void Scene::Update(Uint32 delta_time)
 {
     OnUpdate(delta_time);
@@ -204,6 +178,32 @@ void Scene::SortRenderers()
     }
     
     m_renderers_sorted = true;
+}
+
+SceneController* Scene::GetControllerInternal(const std::string& controller_name) const
+{
+    auto controller = m_controllers.find(controller_name);
+    if (controller == m_controllers.end())
+    {
+        return nullptr;
+    }
+    else
+    {
+        return controller->second;
+    }
+}
+
+SceneRenderer* Scene::GetRendererInternal(const std::string& renderer_name) const
+{
+    auto renderer = m_renderers.find(renderer_name);
+    if (renderer == m_renderers.end())
+    {
+        return nullptr;
+    }
+    else
+    {
+        return renderer->second;
+    }
 }
 
 void Scene::OnUpdate(Uint32 /*delta_time*/)
