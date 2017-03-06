@@ -9,6 +9,7 @@
 #include "log.hpp"
 #include "spline.hpp"
 #include "file_dialogs.hpp"
+#include "path_editing_mode.hpp"
 
 EditorScene::EditorScene() :
     GuiScene("EditorScene", "$resources$/editor_layout.tb.txt"),
@@ -16,17 +17,21 @@ EditorScene::EditorScene() :
     m_level_renderer(this),
     m_camera_movement_controller(this)
 {
-    tb::TBWindow* window = gui_controller()->CreateWindow(
-        "TabWindow",
-        "$resources$/editor_tab_window.tb.txt"
-    );
-    auto parent_rect = gui_controller()->root_widget()->GetRect();
-    window->SetSize(parent_rect.w * 0.2, parent_rect.h);
-    window->SetSettings(tb::WINDOW_SETTINGS_NONE);
+    // tb::TBWindow* window = gui_controller()->CreateWindow(
+    //     "TabWindow",
+    //     "$resources$/editor_tab_window.tb.txt"
+    // );
+    // auto parent_rect = gui_controller()->root_widget()->GetRect();
+    // window->SetSize(parent_rect.w * 0.2, parent_rect.h);
+    // window->SetSettings(tb::WINDOW_SETTINGS_NONE);
     
     m_camera_controller.SetProjectionType(ProjectionType::ORTHOGRAPHIC);
     m_camera_controller.Move({ 10.0f, 500.0f, 0.0f });
     m_camera_controller.SetPitch(glm::radians(90.0f));
+
+    m_level_description.radius = 10.0f;
+    m_level_description.num_segments = 10;
+    m_mode = std::make_unique<PathEditingMode>(this);
 }
 
 bool EditorScene::BeforeEventProcessing(const SDL_Event& event)
@@ -88,6 +93,9 @@ bool EditorScene::AfterEventProcessing(const SDL_Event& event)
                 {
                 });
                 return true;
+            }
+            else if (event.key.keysym.sym == SDLK_p)
+            {
             }
             break;
     

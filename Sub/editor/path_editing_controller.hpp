@@ -11,6 +11,7 @@ public:
     PathEditingController(Scene* scene);
     
     virtual void Update(Uint32 delta_time) override;
+    virtual bool ProcessEvent(const SDL_Event& event) override;
     
     inline const std::vector<glm::vec3>& path() const
     {
@@ -37,4 +38,7 @@ public:
 private:
     std::vector<glm::vec3> m_path;
     int m_selection;
+    bool m_attached_to_cursor;
+
+    void UpdatePath();
 };

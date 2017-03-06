@@ -390,15 +390,16 @@ void LevelRenderer::Render()
 void LevelRenderer::SetLevelDescription(const LevelDescription& level_description)
 {
     const std::size_t num_rings = level_description.path.size();
-    const std::size_t num_distinct_positions_per_ring = level_description.vertex_offsets.size() / num_rings;
+    const std::size_t num_distinct_positions_per_ring = level_description.num_segments;
     const std::size_t num_vertices_per_ring = 1 + num_distinct_positions_per_ring;
     const std::size_t num_vertices = num_rings * num_vertices_per_ring;
     
     const std::vector<glm::vec3>& path = level_description.path;
-    const std::vector<float>& vertex_offsets = level_description.vertex_offsets;
+    //const std::vector<float>& vertex_offsets = level_description.vertex_offsets;
+    float radius = level_description.radius;
     const std::vector<glm::vec3> normals = CalculatePlaneNormals(path);
     
-    SDL_assert(vertex_offsets.size() % path.size() == 0);
+    //SDL_assert(vertex_offsets.size() % path.size() == 0);
     SDL_assert(num_vertices < std::numeric_limits<Uint16>::max() + 1);
     SDL_assert(num_vertices < MAX_VERTICES);
     
@@ -426,7 +427,7 @@ void LevelRenderer::SetLevelDescription(const LevelDescription& level_descriptio
                 j % num_distinct_positions_per_ring;
             
             const glm::vec3 inverse_normal = std::sin(angle) * right + std::cos(angle) * up;
-            const glm::vec3 position = path[i] + inverse_normal * vertex_offsets[vertex_offset_index];
+            const glm::vec3 position = path[i] + inverse_normal * radius;
             
             vertices[vertex_index].position = position;
             vertices[vertex_index].normal = -inverse_normal;

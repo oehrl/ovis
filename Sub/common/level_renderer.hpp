@@ -14,7 +14,8 @@
 struct LevelDescription
 {
     std::vector<glm::vec3> path;
-    std::vector<float> vertex_offsets;
+    unsigned int num_segments;
+    float radius;
     unsigned int texture_tiling;
     float texture_scaling;
 };
