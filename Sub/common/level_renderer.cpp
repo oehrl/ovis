@@ -67,88 +67,88 @@ LevelRenderer::LevelRenderer(Scene* scene) :
     m_rock_normal_map = LoadTexture(app()->GetFullResourcePath("rock_norm.bmp"));
     
     {
-        std::vector<glm::vec3> positions(CAVE_LENGTH);
-        std::vector<glm::vec3> directions(CAVE_LENGTH);
+        // std::vector<glm::vec3> positions(CAVE_LENGTH);
+        // std::vector<glm::vec3> directions(CAVE_LENGTH);
         
-        const double MAX_Z = CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING);
-        for (auto i : IndexRange(positions))
-        {
-            double z = i.index() * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING);
-            i.value().x = 1000.0 * OctavePerlin(0.123, 0.123, 0.8 * z / MAX_Z, 3, 0.5);
-            i.value().y = CAVE_RADIUS + CAVE_RADIUS * OctavePerlin(0.123, 0.123, z / (CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING)), 1, 0.5);
-            i.value().z = z;
-        }
+        // const double MAX_Z = CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING);
+        // for (auto i : IndexRange(positions))
+        // {
+        //     double z = i.index() * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING);
+        //     i.value().x = 1000.0 * OctavePerlin(0.123, 0.123, 0.8 * z / MAX_Z, 3, 0.5);
+        //     i.value().y = CAVE_RADIUS + CAVE_RADIUS * OctavePerlin(0.123, 0.123, z / (CAVE_LENGTH * (CAVE_CIRCUMFERENCE / VERTICES_PER_RING)), 1, 0.5);
+        //     i.value().z = z;
+        // }
         
-        directions.front() = positions[1] - positions[0];
-        directions.back() = positions[CAVE_LENGTH - 1] - positions[CAVE_LENGTH - 2];
-        for (auto i : IRange<std::size_t>(1, CAVE_LENGTH - 1))
-        {
-            directions[i] = positions[i + 1] - positions[i - 1];
-        }
+        // directions.front() = positions[1] - positions[0];
+        // directions.back() = positions[CAVE_LENGTH - 1] - positions[CAVE_LENGTH - 2];
+        // for (auto i : IRange<std::size_t>(1, CAVE_LENGTH - 1))
+        // {
+        //     directions[i] = positions[i + 1] - positions[i - 1];
+        // }
         
-        std::vector<CaveVertex> vertices(CAVE_VERTEX_COUNT);
-        static const glm::vec3 offset(0.3234, 0.234234, 0.234234);
-        static const float frequency = 0.142;
-        static const float amplitude = CAVE_RADIUS * 0.5f;
+        // std::vector<CaveVertex> vertices(CAVE_VERTEX_COUNT);
+        // static const glm::vec3 offset(0.3234, 0.234234, 0.234234);
+        // static const float frequency = 0.142;
+        // static const float amplitude = CAVE_RADIUS * 0.5f;
         
-        const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
-        for (auto i : IRange(CAVE_LENGTH))
-        {
-            const auto base_index = i * VERTICES_PER_RING;
-            const glm::vec3 right = glm::normalize(glm::cross(directions[i], UP));
-            const glm::vec3 up = glm::normalize(glm::cross(directions[i], right));
+        // const glm::vec3 UP = glm::vec3(0.0f, 1.0f, 0.0f);
+        // for (auto i : IRange(CAVE_LENGTH))
+        // {
+        //     const auto base_index = i * VERTICES_PER_RING;
+        //     const glm::vec3 right = glm::normalize(glm::cross(directions[i], UP));
+        //     const glm::vec3 up = glm::normalize(glm::cross(directions[i], right));
             
-            for (auto j : IRange(VERTICES_PER_RING))
-            {
-                const float angle = (2.0f * glm::pi<float>() * j) / VERTICES_PER_RING;
-                const auto index = base_index + j;
+        //     for (auto j : IRange(VERTICES_PER_RING))
+        //     {
+        //         const float angle = (2.0f * glm::pi<float>() * j) / VERTICES_PER_RING;
+        //         const auto index = base_index + j;
                 
-                const glm::vec3 base_normal = std::sin(angle) * right + std::cos(angle) * up;
-                const glm::vec3 base_position = positions[i] + CAVE_RADIUS * base_normal;
-                const glm::vec3 noise_coord = offset + frequency * base_position;
-                const float noise = OctavePerlin(noise_coord.x, noise_coord.y, noise_coord.z, 20, 0.5f);
+        //         const glm::vec3 base_normal = std::sin(angle) * right + std::cos(angle) * up;
+        //         const glm::vec3 base_position = positions[i] + CAVE_RADIUS * base_normal;
+        //         const glm::vec3 noise_coord = offset + frequency * base_position;
+        //         const float noise = OctavePerlin(noise_coord.x, noise_coord.y, noise_coord.z, 20, 0.5f);
                 
-                vertices[index].normal = -base_normal;
-                vertices[index].position = base_position + base_normal * amplitude * noise;
-                vertices[index].texture_coords.x = TEXTURE_REPEAT_COUNT * static_cast<float>(j) / VERTICES_PER_RING;
-                vertices[index].texture_coords.y = TEXTURE_REPEAT_COUNT * positions[i].z / CAVE_CIRCUMFERENCE;
-            }
-        }
+        //         vertices[index].normal = -base_normal;
+        //         vertices[index].position = base_position + base_normal * amplitude * noise;
+        //         vertices[index].texture_coords.x = TEXTURE_REPEAT_COUNT * static_cast<float>(j) / VERTICES_PER_RING;
+        //         vertices[index].texture_coords.y = TEXTURE_REPEAT_COUNT * positions[i].z / CAVE_CIRCUMFERENCE;
+        //     }
+        // }
         
-        auto get_vertex = [&vertices](std::size_t ring_index, std::size_t vertex_index) -> CaveVertex&
-        {
-            return vertices[ring_index * VERTICES_PER_RING + (vertex_index % VERTICES_PER_RING)];
-        };
+        // auto get_vertex = [&vertices](std::size_t ring_index, std::size_t vertex_index) -> CaveVertex&
+        // {
+        //     return vertices[ring_index * VERTICES_PER_RING + (vertex_index % VERTICES_PER_RING)];
+        // };
         
-        auto get_position = [vertices,get_vertex](std::size_t ring_index, std::size_t vertex_index)
-        {
-            return get_vertex(ring_index, vertex_index).position;
-        };
+        // auto get_position = [vertices,get_vertex](std::size_t ring_index, std::size_t vertex_index)
+        // {
+        //     return get_vertex(ring_index, vertex_index).position;
+        // };
         
-        for (auto i : IRange<size_t>(1, CAVE_LENGTH - 1))
-        {
-            for (auto j : IRange(VERTICES_PER_RING))
-            {
-                const glm::vec3 va =
-                    glm::normalize(
-                        get_position(i - 1, j) -
-                        get_position(i + 1, j)
-                    );
+        // for (auto i : IRange<size_t>(1, CAVE_LENGTH - 1))
+        // {
+        //     for (auto j : IRange(VERTICES_PER_RING))
+        //     {
+        //         const glm::vec3 va =
+        //             glm::normalize(
+        //                 get_position(i - 1, j) -
+        //                 get_position(i + 1, j)
+        //             );
                 
-                const glm::vec3 vb =
-                    glm::normalize(
-                        get_position(i, j - 1) -
-                        get_position(i, j + 1)
-                    );
-                get_vertex(i,j).normal = -glm::normalize(glm::cross(va, vb));
-                //get_vertex(i,j).tangent = -glm::cross(get_vertex(i,j).normal, directions[i]);
-            }
-        }
+        //         const glm::vec3 vb =
+        //             glm::normalize(
+        //                 get_position(i, j - 1) -
+        //                 get_position(i, j + 1)
+        //             );
+        //         get_vertex(i,j).normal = -glm::normalize(glm::cross(va, vb));
+        //         //get_vertex(i,j).tangent = -glm::cross(get_vertex(i,j).normal, directions[i]);
+        //     }
+        // }
         
         VertexBufferDescription vb_desc;
         vb_desc.vertex_size_in_bytes = sizeof(CaveVertex);
         vb_desc.size_in_bytes = sizeof(CaveVertex) * MAX_VERTICES;
-        m_cave_vb = std::make_unique<VertexBuffer>(graphics_device(), vb_desc, vertices.data());
+        m_cave_vb = std::make_unique<VertexBuffer>(graphics_device(), vb_desc, nullptr);
     }
     
     {
