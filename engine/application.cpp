@@ -201,7 +201,7 @@ void Application::Init()
     m_data_path = SDL_GetPrefPath(m_organization.c_str(), m_name.c_str());
     
 #ifndef __IPHONEOS__
-    m_resource_path = "/Users/Simon/Documents/ov_project/Sub/resource/";
+    m_resource_path = "/Users/Simon/Documents/ov_project/Sub/game/resource/";
     
     m_window =  SDL_CreateWindow(
         m_name.c_str(),

@@ -7,3 +7,9 @@
 //
 
 #include "editor_mode.hpp"
+
+EditorMode::EditorMode(EditorScene* editor_scene) :
+    m_editor_scene(editor_scene)
+{
+
+}

@@ -1,5 +1,7 @@
-file(GLOB SOURCE_FILES "src/*.cpp")
-file(GLOB HEADER_FILES "src/*.hpp")
+file(GLOB COMMON_SOURCE_FILES "common/*.cpp")
+file(GLOB COMMON_HEADER_FILES "common/*.hpp")
 
-add_executable(Sub ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(Sub Engine SDL2-static freetype TurboBadgerLib ${OPENGL_LIBRARIES})
+include_directories(common)
+
+add_subdirectory(game)
+add_subdirectory(editor)

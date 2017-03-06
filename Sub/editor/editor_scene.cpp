@@ -87,6 +87,7 @@ bool EditorScene::AfterEventProcessing(const SDL_Event& event)
                 ShowSaveFileDialog([](const std::string& filename)
                 {
                 });
+                return true;
             }
             break;
     
@@ -121,10 +122,8 @@ bool EditorScene::AfterEventProcessing(const SDL_Event& event)
 //                return false;
 //            }
 //        }
-            
-        default:
-            return false;
     }
+    return false;
 }
 
 void EditorScene::OnUpdate(Uint32)
@@ -141,6 +140,7 @@ void EditorScene::StartGame()
 
 void EditorScene::UpdatePath()
 {
+    m_level_renderer.SetLevelDescription(m_level_description);
 //    const int n = m_path.size();
 //    std::vector<float> ts;
 //    ts.reserve(n);

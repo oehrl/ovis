@@ -23,6 +23,18 @@ public:
     {
         return &m_camera_controller;
     }
+
+    inline LevelDescription level_description() const
+    {
+        return m_level_description;
+    }
+
+    inline void SetLevelDescription(const LevelDescription& level_description)
+    {
+        m_level_description = level_description;
+        UpdatePath();
+    }
+
     
 private:
     GameScene m_game_scene;
@@ -30,7 +42,7 @@ private:
     LevelRenderer m_level_renderer;
     CameraMovementController m_camera_movement_controller;
     std::unique_ptr<EditorMode> m_mode;
-    
+    LevelDescription m_level_description;
 
     virtual bool BeforeEventProcessing(const SDL_Event& event) override;
     virtual bool AfterEventProcessing(const SDL_Event& event) override;
