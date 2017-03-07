@@ -8,6 +8,7 @@
 #include "range.hpp"
 #include "graphics_device.hpp"
 #include "scene.hpp"
+#include "spline.hpp"
 #include "camera_controller.hpp"
 #include "perlin_noise.hpp"
 
@@ -389,12 +390,37 @@ void LevelRenderer::Render()
 
 void LevelRenderer::SetLevelDescription(const LevelDescription& level_description)
 {
-    const std::size_t num_rings = level_description.path.size();
+    const std::size_t path_length = level_description.path.size();
+
+    std::vector<float> ts;
+    ts.reserve(path_length);
+    {
+        float current_distance = 0.0f;
+        for (auto i : IRange(path_length - 1))
+        {
+            ts.push_back(current_distance);
+            current_distance += glm::distance(level_description.path[i], level_description.path[i + 1]);
+        }
+        if (current_distance > ts.back())
+        {
+            ts.push_back(current_distance);
+        }
+    }
+
+    const std::size_t num_rings = fmax(2, ts.back() / 20);
     const std::size_t num_distinct_positions_per_ring = level_description.num_segments;
     const std::size_t num_vertices_per_ring = 1 + num_distinct_positions_per_ring;
     const std::size_t num_vertices = num_rings * num_vertices_per_ring;
-    
-    const std::vector<glm::vec3>& path = level_description.path;
+
+    Spline<float, glm::vec3> spline(ts.begin(), ts.end(), level_description.path.begin());
+    std::vector<glm::vec3> path;
+    path.reserve(num_rings);
+    for (auto i : IRange(num_rings))
+    {
+        const float t = ts.back() * i / (num_rings - 1);
+        path.push_back(spline(t));
+    }
+
     //const std::vector<float>& vertex_offsets = level_description.vertex_offsets;
     float radius = level_description.radius;
     const std::vector<glm::vec3> normals = CalculatePlaneNormals(path);

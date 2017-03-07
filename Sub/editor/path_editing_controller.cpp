@@ -74,7 +74,7 @@ bool PathEditingController::ProcessEvent(const SDL_Event& event)
 
 void PathEditingController::UpdatePath()
 {
-    if (m_path.size() > 2)
+    if (m_path.size() > 1)
     {
         LevelDescription level_description = down_cast<EditorScene*>(scene())->level_description();
         level_description.path = m_path;
