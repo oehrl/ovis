@@ -29,6 +29,9 @@ public:
     virtual void Render() override;
     
     void SetLevelDescription(const LevelDescription& level_description);
+
+    void LoadLevel(const std::string& filename);
+    void SaveLevel(const std::string& filename) const;
     
 private:
     struct Vertex
@@ -45,6 +48,8 @@ private:
         glm::vec3 normal;
         glm::vec2 texture_coords;
     };
+
+    LevelDescription m_level_description;
     
     std::size_t m_width;
     std::size_t m_height;

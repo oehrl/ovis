@@ -89,8 +89,18 @@ bool EditorScene::AfterEventProcessing(const SDL_Event& event)
             if (event.key.keysym.sym == SDLK_s &&
                 (event.key.keysym.mod & KMOD_GUI) != 0)
             {
-                ShowSaveFileDialog([](const std::string& filename)
+                ShowSaveFileDialog([this](const std::string& filename)
                 {
+                    m_level_renderer.SaveLevel(filename);
+                });
+                return true;
+            }
+            else if (event.key.keysym.sym == SDLK_o &&
+                (event.key.keysym.mod & KMOD_GUI) != 0)
+            {
+                ShowSaveFileDialog([this](const std::string& filename)
+                {
+                    m_level_renderer.LoadLevel(filename);
                 });
                 return true;
             }

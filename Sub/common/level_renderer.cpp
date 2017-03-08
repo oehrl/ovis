@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
@@ -390,6 +392,8 @@ void LevelRenderer::Render()
 
 void LevelRenderer::SetLevelDescription(const LevelDescription& level_description)
 {
+    m_level_description = level_description;
+
     const std::size_t path_length = level_description.path.size();
 
     std::vector<float> ts;
@@ -499,4 +503,64 @@ void LevelRenderer::SetLevelDescription(const LevelDescription& level_descriptio
     }
     m_cave_ib->Write(0, 2 * indices.size(), indices.data());
     m_index_count = num_indices;
+}
+
+void LevelRenderer::LoadLevel(const std::string& filename)
+{
+
+    struct LevelHeader
+    {
+        Uint32 magic;
+        Uint32 path_length;
+        Uint32 num_segments;
+        float cave_radius;
+        float texture_scaling;
+    };
+
+    std::ifstream file(filename);
+
+    LevelHeader header;
+    file.read(reinterpret_cast<char*>(&header), sizeof(header));
+
+    SDL_assert(memcmp(&header.magic, "SUBL", 4) == 0);
+    LevelDescription level_desc;
+    level_desc.num_segments = header.num_segments;
+    level_desc.radius = header.cave_radius;
+    level_desc.texture_tiling = 1;
+    level_desc.texture_scaling = header.texture_scaling;
+    level_desc.path.resize(header.path_length);
+
+    for (auto& point : level_desc.path)
+    {
+        file.read(reinterpret_cast<char*>(&point), sizeof(point));
+    }
+
+    SetLevelDescription(level_desc);
+}
+
+void LevelRenderer::SaveLevel(const std::string& filename) const
+{
+    struct LevelHeader
+    {
+        Uint32 magic;
+        Uint32 path_length;
+        Uint32 num_segments;
+        float cave_radius;
+        float texture_scaling;
+    };
+
+    std::ofstream file(filename);
+
+    LevelHeader header;
+    memcpy(&header.magic, "SUBL", 4);
+    header.path_length = m_level_description.path.size();
+    header.num_segments = 6;
+    header.cave_radius = 10.0f;
+    header.texture_scaling = 1.0f;
+
+    file.write(reinterpret_cast<const char*>(&header), sizeof(header));
+    for (const auto& point : m_level_description.path)
+    {
+        file.write(reinterpret_cast<const char*>(&point), sizeof(point));
+    }
 }
