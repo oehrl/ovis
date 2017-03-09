@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
+include(CMakeToolsHelpers OPTIONAL)
+
 include_directories(extern/freetype/include)
 add_subdirectory(extern)
 
@@ -27,3 +29,4 @@ include_directories( ${OPENGL_INCLUDE_DIRS} )
 add_subdirectory(engine)
 include_directories(engine)
 add_subdirectory(sub)
+add_subdirectory(gui_editor)
