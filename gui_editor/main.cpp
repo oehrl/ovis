@@ -5,7 +5,10 @@
 
 extern "C" int main(int /*argc*/, char* /*argv*/[])
 {
-    InitApp("Sub", "Ovis");
+    InitApp("GuiEditor", "Ovis");
+
+    SDL_SetWindowResizable(app()->window(), SDL_TRUE);
+    SDL_MaximizeWindow(app()->window());
 
     gui()->LoadSkin("$resources$/default_skin/skin.tb.txt");
     gui()->LoadFont("$resources$/vera.ttf", "Vera");
