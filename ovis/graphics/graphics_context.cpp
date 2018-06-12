@@ -70,13 +70,15 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
   if (draw_item.enable_scissoring != scissoring_enabled_) {
     if (draw_item.enable_scissoring) {
       glEnable(GL_SCISSOR_TEST);
-      glScissor(draw_item.scissor_rect.left, draw_item.scissor_rect.top,
-                draw_item.scissor_rect.width, draw_item.scissor_rect.height);
       scissoring_enabled_ = true;
     } else {
       glDisable(GL_SCISSOR_TEST);
       scissoring_enabled_ = false;
     }
+  }
+  if (draw_item.enable_scissoring) {
+    glScissor(draw_item.scissor_rect.left, draw_item.scissor_rect.top,
+              draw_item.scissor_rect.width, draw_item.scissor_rect.height);
   }
 
   draw_item.shader_program->Bind();
