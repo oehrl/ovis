@@ -15,11 +15,6 @@ GuiRenderer::~GuiRenderer() {
 void GuiRenderer::CreateResources() {
   LogD("Context: ", context());
 
-  VertexBufferDescription vb_desc;
-  vb_desc.size_in_bytes        = 10000 * sizeof(ImDrawVert);
-  vb_desc.vertex_size_in_bytes = sizeof(ImDrawVert);
-  vertices_ = std::make_unique<VertexBuffer>(context(), vb_desc);
-
   ShaderProgramDescription shader_desc;
   shader_desc.vertex_shader_source =
       "in vec2 a_Position;\n"
@@ -47,20 +42,6 @@ void GuiRenderer::CreateResources() {
       "  gl_FragColor = vs_Color * texture2D(u_Texture, vs_TexCoords);\n"
       "}\n";
   shader_ = std::make_unique<ShaderProgram>(context(), shader_desc);
-
-  VertexInputDescription vi_desc;
-  vi_desc.shader_program    = shader_.get();
-  vi_desc.vertex_buffers    = {vertices_.get()};
-  vi_desc.vertex_attributes = {
-      {"Position", VertexAttributeType::FLOAT32_VECTOR2, 0, 0},
-      {"TexCoords", VertexAttributeType::FLOAT32_VECTOR2, 8, 0},
-      {"Color", VertexAttributeType::UINT8_NORM_VECTOR4, 16, 0}};
-  vertex_input_ = std::make_unique<VertexInput>(context(), vi_desc);
-
-  IndexBufferDescription ib_desc;
-  ib_desc.size_in_bytes = 10000;
-  ib_desc.index_format  = IndexFormat::UINT16;
-  indices_              = std::make_unique<IndexBuffer>(context(), ib_desc);
 
   ImGui::GetIO().DisplaySize.x = scene()->size().x;
   ImGui::GetIO().DisplaySize.y = scene()->size().y;
@@ -110,14 +91,15 @@ void GuiRenderer::Render() {
         LogD("User callback: ", draw_command.UserCallback);
         draw_command.UserCallback(draw_list, &draw_command);
       } else {
-        // TODO: set texture
         auto clip_rect = draw_command.ClipRect;
 
-        draw_item.scissor_rect = {
-            static_cast<int>(clip_rect.x),
-            static_cast<int>(scene()->size().y - clip_rect.w),
-            static_cast<int>(clip_rect.z - clip_rect.x),
-            static_cast<int>(clip_rect.w - clip_rect.y)};
+        draw_item.scissor_rect.left = static_cast<int>(clip_rect.x);
+        draw_item.scissor_rect.top =
+            static_cast<int>(scene()->size().y - clip_rect.w);
+        draw_item.scissor_rect.width =
+            static_cast<int>(clip_rect.z - clip_rect.x);
+        draw_item.scissor_rect.height =
+            static_cast<int>(clip_rect.w - clip_rect.y);
         draw_item.count = draw_command.ElemCount;
         draw_item.start = index_offset;
         shader_->SetTexture("Texture",
@@ -135,12 +117,26 @@ void GuiRenderer::Render() {
 void GuiRenderer::UpdateVertexBuffer(const ImVector<ImDrawVert>& vertices) {
   const std::size_t vertices_size_in_bytes =
       vertices.size() * sizeof(ImDrawVert);
-  if (vertices_size_in_bytes > vertices_->description().size_in_bytes) {
-    // TODO: create larger buffer
+  if (!vertices_ ||
+      vertices_size_in_bytes > vertices_->description().size_in_bytes) {
     LogD("Vertex buffer needs resize: actual(",
-         vertices_->description().size_in_bytes, ") needed(",
+         vertices_ ? vertices_->description().size_in_bytes : 0, ") needed(",
          vertices_size_in_bytes, ")");
-    // assert(false);
+
+    VertexBufferDescription vb_desc;
+    vb_desc.size_in_bytes        = vertices_size_in_bytes;
+    vb_desc.vertex_size_in_bytes = sizeof(ImDrawVert);
+    vertices_ =
+        std::make_unique<VertexBuffer>(context(), vb_desc, vertices.Data);
+
+    VertexInputDescription vi_desc;
+    vi_desc.shader_program    = shader_.get();
+    vi_desc.vertex_buffers    = {vertices_.get()};
+    vi_desc.vertex_attributes = {
+        {"Position", VertexAttributeType::FLOAT32_VECTOR2, 0, 0},
+        {"TexCoords", VertexAttributeType::FLOAT32_VECTOR2, 8, 0},
+        {"Color", VertexAttributeType::UINT8_NORM_VECTOR4, 16, 0}};
+    vertex_input_ = std::make_unique<VertexInput>(context(), vi_desc);
   } else {
     vertices_->Write(0, vertices_size_in_bytes, vertices.Data);
   }
@@ -149,12 +145,15 @@ void GuiRenderer::UpdateVertexBuffer(const ImVector<ImDrawVert>& vertices) {
 void GuiRenderer::UpdateIndexBuffer(const ImVector<ImDrawIdx>& indices) {
   static_assert(sizeof(ImDrawIdx) == 2);
   const std::size_t indices_size_in_bytes = indices.size() * sizeof(ImDrawIdx);
-  if (indices_size_in_bytes > indices_->description().size_in_bytes) {
-    // TODO: create larger buffer
+  if (!indices_ ||
+      indices_size_in_bytes > indices_->description().size_in_bytes) {
     LogD("Index buffer needs resize: actual(",
-         indices_->description().size_in_bytes, ") needed(",
+         indices_ ? indices_->description().size_in_bytes : 0, ") needed(",
          indices_size_in_bytes, ")");
-    // assert(false);
+    IndexBufferDescription ib_desc;
+    ib_desc.size_in_bytes = indices_size_in_bytes;
+    ib_desc.index_format  = IndexFormat::UINT16;
+    indices_ = std::make_unique<IndexBuffer>(context(), ib_desc, indices.Data);
   } else {
     indices_->Write(0, indices_size_in_bytes, indices.Data);
   }
