@@ -65,7 +65,30 @@ void ShaderProgram::AttachShader(const std::string& source,
   if (source.length() > 0) {
     GLuint shader = glCreateShader(shader_type);
     SDL_assert(shader != 0);
-    const GLchar* shader_source = source.c_str();
+
+    std::string final_shader_source;
+#if OVIS_EMPSCRIPTEN
+    final_shader_source += "#version 100\n";
+    final_shader_source += "#define OVIS_EMSCRIPTEN 1";
+    if (shader_type == GL_VERTEX_SHADER) {
+      final_shader_source += "#define in attribute\n";
+      final_shader_source += "#define out varying\n";
+    } else if (shader_type == GL_FRAGMENT_SHADER) {
+      final_shader_source += "precision mediump float;\n";
+      final_shader_source += "#define in varying\n";
+    }
+#else
+    final_shader_source += "#version 120\n";
+    if (shader_type == GL_VERTEX_SHADER) {
+      final_shader_source += "#define in attribute\n";
+      final_shader_source += "#define out varying\n";
+    } else if (shader_type == GL_FRAGMENT_SHADER) {
+      final_shader_source += "#define in varying\n";
+    }
+#endif
+    final_shader_source += source;
+
+    const GLchar* shader_source = final_shader_source.c_str();
     glShaderSource(shader, 1, &shader_source, nullptr);
     glCompileShader(shader);
 
