@@ -50,7 +50,11 @@ bool GuiController::ProcessEvent(const SDL_Event& event) {
       return true;
 
     case SDL_MOUSEWHEEL:
-      gui_io.MouseWheel = event.wheel.y;
+      if (event.wheel.y > 0) {
+        gui_io.MouseWheel += 1;
+      } else if (event.wheel.y < 0) {
+        gui_io.MouseWheel -= 1;
+      }
       return true;
   }
   return false;
