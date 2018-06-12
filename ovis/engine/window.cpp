@@ -60,6 +60,7 @@ void Window::Render() {
   if (scene_stack_.size() > 0) {
     scene_stack_.back()->Render(width_, height_);
   }
+  SDL_GL_SwapWindow(sdl_window_);
 }
 
 void Window::PushScene(Scene* scene) {
