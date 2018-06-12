@@ -12,6 +12,7 @@ namespace ovis {
 
 class GraphicsResource;
 class IndexBuffer;
+class RenderTargetConfiguration;
 class ShaderProgram;
 class UniformBuffer;
 class VertexBuffer;
@@ -34,6 +35,7 @@ struct DrawItem {
   Uint32 start                         = 0;
   Uint32 count                         = 3;
   DepthBufferState depth_buffer_state;
+  BlendState blend_state;
 };
 
 class GraphicsContext final {

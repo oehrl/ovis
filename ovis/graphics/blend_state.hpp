@@ -64,4 +64,28 @@ struct BlendState {
 };
 static_assert(sizeof(BlendState) == 32, "Invalid Padding");
 
+inline void ApplyBlendState(BlendState* current_state, BlendState new_state) {
+  if (current_state->enabled != new_state.enabled) {
+    if (new_state.enabled) {
+      glEnable(GL_BLEND);
+    } else {
+      glDisable(GL_BLEND);
+    }
+    current_state->enabled = new_state.enabled;
+  }
+  if (new_state.enabled) {
+    // TODO: Only update necessary states
+    glBlendFuncSeparate(
+        static_cast<GLenum>(new_state.source_color_factor),
+        static_cast<GLenum>(new_state.destination_color_factor),
+        static_cast<GLenum>(new_state.source_alpha_factor),
+        static_cast<GLenum>(new_state.destination_alpha_factor));
+    glBlendEquationSeparate(static_cast<GLenum>(new_state.color_function),
+                            static_cast<GLenum>(new_state.alpha_function));
+    glBlendColor(new_state.constant_color[0], new_state.constant_color[1],
+                 new_state.constant_color[2], new_state.constant_color[3]);
+    *current_state = new_state;
+  }
+}
+
 }  // namespace ovis

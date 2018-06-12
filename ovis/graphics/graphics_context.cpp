@@ -62,7 +62,7 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
   SDL_assert(draw_item.shader_program != nullptr);
   SDL_assert(draw_item.vertex_input != nullptr);
 
-  // TODO: Apply blending
+  ApplyBlendState(&blend_state_, draw_item.blend_state);
   ApplyDepthBufferState(&depth_buffer_state_, draw_item.depth_buffer_state);
 
   draw_item.shader_program->Bind();
