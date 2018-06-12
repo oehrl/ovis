@@ -30,17 +30,19 @@ inline void ApplyDepthBufferState(DepthBufferState* current_state,
   if (current_state->test_enabled != new_state.test_enabled) {
     if (new_state.test_enabled) {
       glEnable(GL_DEPTH_TEST);
-
-      if (current_state->write_enabled != new_state.write_enabled) {
-        glDepthMask(new_state.write_enabled);
-      }
-      if (current_state->function != new_state.function) {
-        glDepthFunc(static_cast<GLenum>(new_state.function));
-      }
     } else {
       glDisable(GL_DEPTH_TEST);
     }
     current_state->test_enabled = new_state.test_enabled;
+  }
+
+  if (new_state.test_enabled) {
+    if (current_state->write_enabled != new_state.write_enabled) {
+      glDepthMask(new_state.write_enabled);
+    }
+    if (current_state->function != new_state.function) {
+      glDepthFunc(static_cast<GLenum>(new_state.function));
+    }
   }
 }
 
