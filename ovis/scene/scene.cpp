@@ -11,9 +11,11 @@
 
 namespace ovis {
 
-Scene::Scene(const std::string& name, bool hide_previous)
+Scene::Scene(const std::string& name, const glm::uvec2& size,
+             bool hide_previous)
     : m_name(name),
       context_(nullptr),
+      size_(size),
       m_renderers_sorted(false),
       m_is_paused(true),
       m_hides_previous(hide_previous) {}

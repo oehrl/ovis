@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <SDL_events.h>
+#include <glm/vec2.hpp>
 #include <ovis/core/down_cast.hpp>
 #include <ovis/scene/camera.hpp>
 
@@ -19,13 +20,16 @@ class Scene {
   friend class SceneRenderer;
 
  public:
-  Scene(const std::string& name, bool hide_previous = true);
+  Scene(const std::string& name, const glm::uvec2& size,
+        bool hide_previous = true);
   virtual ~Scene();
 
   inline const std::string& name() const { return m_name; }
   inline bool is_paused() const { return m_is_paused; }
   inline bool hides_previous() const { return m_hides_previous; }
   inline Camera& camera() { return camera_; }
+  inline void Resize(const glm::uvec2& new_size);
+  inline glm::uvec2 size() const { return size_; }
 
   inline GraphicsContext* context() const { return context_; }
   void SetContext(GraphicsContext* context);
@@ -78,6 +82,7 @@ class Scene {
   std::vector<SceneRenderer*> m_render_order;
   GraphicsContext* context_;
   Camera camera_;
+  glm::uvec2 size_;
   bool m_renderers_sorted;
   bool m_is_paused;
   bool m_hides_previous;
