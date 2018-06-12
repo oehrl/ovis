@@ -3,6 +3,7 @@
 #include <set>
 #include <vector>
 #include <SDL.h>
+#include <ovis/math/rect.hpp>
 #include <ovis/core/class.hpp>
 #include <ovis/graphics/blend_state.hpp>
 #include <ovis/graphics/depth_buffer_state.hpp>
@@ -36,6 +37,8 @@ struct DrawItem {
   Uint32 count                         = 3;
   DepthBufferState depth_buffer_state;
   BlendState blend_state;
+  Rect<int> scissor_rect;
+  bool enable_scissoring = false;
 };
 
 class GraphicsContext final {
@@ -74,6 +77,7 @@ class GraphicsContext final {
   BlendState blend_state_;
   std::vector<bool> m_vertex_attrib_array_states;
   std::vector<GLuint> m_bound_textures;
+  bool scissoring_enabled_;
 
   inline void BindTexture(GLenum texture_type, GLuint texture_name,
                           GLuint texture_unit) {

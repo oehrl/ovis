@@ -93,6 +93,7 @@ void GuiRenderer::Render() {
   draw_item.blend_state.source_color_factor = SourceBlendFactor::SOURCE_ALPHA;
   draw_item.blend_state.destination_color_factor =
       DestinationBlendFactor::ONE_MINUS_SOURCE_ALPHA;
+  draw_item.enable_scissoring = true;
   shader_->SetUniform("InverseViewportSize", 1.0f / glm::vec2(scene()->size()));
 
   for (int i = 0; i < draw_data->CmdListsCount; ++i) {
@@ -110,11 +111,13 @@ void GuiRenderer::Render() {
         draw_command.UserCallback(draw_list, &draw_command);
       } else {
         // TODO: set texture
-        glEnable(GL_SCISSOR_TEST);
         auto clip_rect = draw_command.ClipRect;
-        glScissor((int)clip_rect.x, (int)(scene()->size().y - clip_rect.w),
-                  (int)(clip_rect.z - clip_rect.x),
-                  (int)(clip_rect.w - clip_rect.y));
+
+        draw_item.scissor_rect = {
+            static_cast<int>(clip_rect.x),
+            static_cast<int>(scene()->size().y - clip_rect.w),
+            static_cast<int>(clip_rect.z - clip_rect.x),
+            static_cast<int>(clip_rect.w - clip_rect.y)};
         draw_item.count = draw_command.ElemCount;
         draw_item.start = index_offset;
         shader_->SetTexture("Texture",

@@ -12,7 +12,8 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
       m_bound_array_buffer(0),
       m_bound_element_array_buffer(0),
       m_bound_program(0),
-      m_active_texture_unit(0) {
+      m_active_texture_unit(0),
+      scissoring_enabled_(false) {
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -66,6 +67,18 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
   ApplyBlendState(&blend_state_, draw_item.blend_state);
   ApplyDepthBufferState(&depth_buffer_state_, draw_item.depth_buffer_state);
 
+  if (draw_item.enable_scissoring != scissoring_enabled_) {
+    if (draw_item.enable_scissoring) {
+      glEnable(GL_SCISSOR_TEST);
+      glScissor(draw_item.scissor_rect.left, draw_item.scissor_rect.top,
+                draw_item.scissor_rect.width, draw_item.scissor_rect.height);
+      scissoring_enabled_ = true;
+    } else {
+      glDisable(GL_SCISSOR_TEST);
+      scissoring_enabled_ = false;
+    }
+  }
+
   draw_item.shader_program->Bind();
   draw_item.vertex_input->Bind();
   const GLenum primitive_topology =
@@ -102,6 +115,10 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
 }
 
 void GraphicsContext::Clear() {
+  if (scissoring_enabled_) {
+    glDisable(GL_SCISSOR_TEST);
+    scissoring_enabled_ = false;
+  }
   glClearColor(0.0f, 52.0f / 255.0f, 138.0f / 255.0f, 1.0f);
   glClearDepthf(1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
