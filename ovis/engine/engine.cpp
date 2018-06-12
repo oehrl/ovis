@@ -9,17 +9,23 @@ namespace ovis {
 
 namespace {
 
-void ProcessEvents() {
+bool ProcessEvents() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT) {
+      return false;
+    }
+
     // TODO: only post events to the according window
     for (auto window : Window::all_windows()) {
       window->SendEvent(event);
     }
   }
+
+  return true;
 }
 
-void Update() {
+bool Update() {
   using namespace std::chrono;
   static auto time_point_of_last_update = high_resolution_clock::now();
 
@@ -28,7 +34,9 @@ void Update() {
       duration_cast<microseconds>(now - time_point_of_last_update);
   time_point_of_last_update += delta_time;
 
-  ProcessEvents();
+  if (!ProcessEvents()) {
+    return false;
+  }
 
   for (auto window : Window::all_windows()) {
     window->Update(delta_time);
@@ -36,6 +44,8 @@ void Update() {
   for (auto window : Window::all_windows()) {
     window->Render();
   }
+
+  return true;
 }
 
 }  // namespace
@@ -48,9 +58,8 @@ void Run() {
 #if OVIS_EMSCRIPTEN
   emscripten_set_main_loop(&Update, 0, true);
 #else
-  while (true) {
-    Update();
-  }
+  while (Update())
+    ;
 #endif
 }
 
