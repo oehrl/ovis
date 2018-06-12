@@ -18,6 +18,10 @@ SceneController::~SceneController() {
   LogD("Controller '", name(), "' removed from scene '", scene()->name(), "'");
 }
 
-bool SceneController::ProcessEvent(const SDL_Event& /*event*/) { return false; }
+void SceneController::Update(std::chrono::microseconds /*delta_time*/) {}
+
+bool SceneController::ProcessEvent(const SDL_Event& /*event*/) {
+  return false;
+}
 
 }  // namespace ovis

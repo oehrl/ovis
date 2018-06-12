@@ -19,7 +19,7 @@ class SceneController {
   inline Scene* scene() const { return m_scene; }
   inline std::string name() const { return m_name; }
 
-  virtual void Update(std::chrono::microseconds delta_time) = 0;
+  virtual void Update(std::chrono::microseconds delta_time);
   virtual bool ProcessEvent(const SDL_Event& event);
 
  private:
