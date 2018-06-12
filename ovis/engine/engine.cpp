@@ -1,5 +1,7 @@
 #include <SDL.h>
+#if OVIS_EMSCRIPTEN
 #include <emscripten.h>
+#endif
 #include <ovis/engine/engine.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -43,7 +45,13 @@ void Init() {
 }
 
 void Run() {
+#if OVIS_EMSCRIPTEN
   emscripten_set_main_loop(&Update, 0, true);
+#else
+  while (true) {
+    Update();
+  }
+#endif
 }
 
 void Quit() {
