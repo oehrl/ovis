@@ -50,72 +50,74 @@ void WorldRenderer::Render() {
 }
 
 void WorldRenderer::UpdateVertexBuffer() {
-  struct Vertex {
-    std::int16_t x;
-    std::int16_t y;
-    std::int16_t z;
-    std::uint8_t theta;
-    std::uint8_t phi;
-  };
-  static_assert(sizeof(Vertex) == 8, "");
+  (void)world_;
+  // struct Vertex {
+  //   std::int16_t x;
+  //   std::int16_t y;
+  //   std::int16_t z;
+  //   std::uint8_t theta;
+  //   std::uint8_t phi;
+  // };
+  // static_assert(sizeof(Vertex) == 8, "");
 
-  const auto t2 = std::chrono::high_resolution_clock::now();
+  // const auto t2 = std::chrono::high_resolution_clock::now();
 
-  const auto& triangles   = world_->triangles();
-  const float half_width  = 0.5f * world_->width();
-  const float half_height = 0.5f * world_->height();
-  const float half_depth  = 0.5f * world_->depth();
+  // const auto& triangles   = world_->triangles();
+  // const float half_width  = 0.5f * world_->width();
+  // const float half_height = 0.5f * world_->height();
+  // const float half_depth  = 0.5f * world_->depth();
 
-  std::vector<Vertex> vertices;
-  vertices.reserve(triangles.size() * 3);
-  for (const auto triangle : triangles) {
-    const glm::vec3 normal = ovis::CalculateNormalizedNormal(triangle);
+  // std::vector<Vertex> vertices;
+  // vertices.reserve(triangles.size() * 3);
+  // for (const auto triangle : triangles) {
+  //   const glm::vec3 normal = ovis::CalculateNormalizedNormal(triangle);
 
-    const float theta = std::atan2(normal.z, normal.x) + glm::pi<float>();
-    const float phi   = std::acos(normal.y);
-    assert(theta >= 0 && theta <= 2 * glm::pi<float>());
-    assert(phi >= 0 && phi <= glm::pi<float>());
+  //   const float theta = std::atan2(normal.z, normal.x) + glm::pi<float>();
+  //   const float phi   = std::acos(normal.y);
+  //   assert(theta >= 0 && theta <= 2 * glm::pi<float>());
+  //   assert(phi >= 0 && phi <= glm::pi<float>());
 
-    const std::uint8_t normal_theta =
-        static_cast<std::uint8_t>(255 * 0.5 * theta / glm::pi<float>());
+  //   const std::uint8_t normal_theta =
+  //       static_cast<std::uint8_t>(255 * 0.5 * theta / glm::pi<float>());
 
-    const std::uint8_t normal_phi =
-        static_cast<std::uint8_t>(255 * phi / glm::pi<float>());
+  //   const std::uint8_t normal_phi =
+  //       static_cast<std::uint8_t>(255 * phi / glm::pi<float>());
 
-    for (auto triangle_vertex : triangle.vertices) {
-      vertices.push_back({
-          static_cast<std::int16_t>(32768 * triangle_vertex.x / half_width),
-          static_cast<std::int16_t>(32768 * triangle_vertex.y / half_height),
-          static_cast<std::int16_t>(32768 * triangle_vertex.z / half_depth),
-          normal_theta, normal_phi});
-    }
-  }
+  //   for (auto triangle_vertex : triangle.vertices) {
+  //     vertices.push_back({
+  //         static_cast<std::int16_t>(32768 * triangle_vertex.x / half_width),
+  //         static_cast<std::int16_t>(32768 * triangle_vertex.y / half_height),
+  //         static_cast<std::int16_t>(32768 * triangle_vertex.z / half_depth),
+  //         normal_theta, normal_phi});
+  //   }
+  // }
 
-  const auto t3 = std::chrono::high_resolution_clock::now();
-  ovis::LogI(
-      "Vertex Processing took ",
-      std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count(),
-      "ms");
+  // const auto t3 = std::chrono::high_resolution_clock::now();
+  // ovis::LogI(
+  //     "Vertex Processing took ",
+  //     std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count(),
+  //     "ms");
 
-  ovis::VertexBufferDescription vb_desc;
-  vb_desc.size_in_bytes        = vertices.size() * sizeof(Vertex);
-  vb_desc.vertex_size_in_bytes = sizeof(Vertex);
-  vb_ =
-      std::make_unique<ovis::VertexBuffer>(context(), vb_desc, vertices.data());
+  // ovis::VertexBufferDescription vb_desc;
+  // vb_desc.size_in_bytes        = vertices.size() * sizeof(Vertex);
+  // vb_desc.vertex_size_in_bytes = sizeof(Vertex);
+  // vb_ =
+  //     std::make_unique<ovis::VertexBuffer>(context(), vb_desc,
+  //     vertices.data());
 
-  ovis::VertexInputDescription vi_desc;
-  vi_desc.vertex_attributes = {
-      {"Position", ovis::VertexAttributeType::INT16_NORM_VECTOR3, 0, 0},
-      {"Normal", ovis::VertexAttributeType::UINT8_NORM_VECTOR2, 6, 0}};
-  vi_desc.shader_program = sp_.get();
-  vi_desc.vertex_buffers = {vb_.get()};
+  // ovis::VertexInputDescription vi_desc;
+  // vi_desc.vertex_attributes = {
+  //     {"Position", ovis::VertexAttributeType::INT16_NORM_VECTOR3, 0, 0},
+  //     {"Normal", ovis::VertexAttributeType::UINT8_NORM_VECTOR2, 6, 0}};
+  // vi_desc.shader_program = sp_.get();
+  // vi_desc.vertex_buffers = {vb_.get()};
 
-  vi_ = std::make_unique<ovis::VertexInput>(context(), vi_desc);
+  // vi_ = std::make_unique<ovis::VertexInput>(context(), vi_desc);
 
-  draw_item_.vertex_input = vi_.get();
-  draw_item_.count        = vertices.size();
+  // draw_item_.vertex_input = vi_.get();
+  // draw_item_.count        = vertices.size();
 
-  sp_->SetUniform("Extents", glm::vec3{half_width, half_height, half_depth});
+  // sp_->SetUniform("Extents", glm::vec3{half_width, half_height, half_depth});
 }
 
 }  // namespace rr3d

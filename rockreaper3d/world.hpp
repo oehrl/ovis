@@ -9,7 +9,7 @@ class World {
  public:
   World();
 
-  std::vector<ovis::Triangle> triangles() const;
+  // std::vector<ovis::Triangle> triangles() const;
   inline std::size_t width() const { return width_; }
   inline std::size_t height() const { return height_; }
   inline std::size_t depth() const { return depth_; }

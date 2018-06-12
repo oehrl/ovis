@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SDL_assert.h>
 #include <glm/gtx/string_cast.hpp>
+#include <ovis/gui/gui_controller.hpp>
+#include <ovis/gui/gui_renderer.hpp>
 #include <ovis/math/marching_cubes.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/graphics/graphics_context.hpp>
@@ -61,7 +63,13 @@ class CameraController : public SceneController {
 
   void Update(std::chrono::microseconds) override {
     camera_.Set(&scene()->camera());
+
+    // if (ImGui::Button("Hello")) {
+    //   LogI("Button Clicked!");
+    // }
+    ImGui::ShowDemoWindow();
   }
+
   bool ProcessEvent(const SDL_Event& event) override {
     switch (event.type) {
       case SDL_MOUSEWHEEL:
@@ -69,7 +77,7 @@ class CameraController : public SceneController {
              ", ", event.wheel.y, ")");
         camera_.MoveHorizontally(-event.wheel.x * 0.001f);
         camera_.MoveVertically(-event.wheel.y * 0.001f);
-        return true;
+        return false;
 
       default:
         return false;
@@ -88,23 +96,22 @@ class CameraController : public SceneController {
 
 class ClearRenderer : public SceneRenderer {
  public:
-  ClearRenderer(Scene* scene) : SceneRenderer(scene, "ClearRenderer") {}
+  ClearRenderer(Scene* scene) : SceneRenderer(scene, "ClearRenderer") {
+    RenderBefore("GuiRenderer");
+  }
 
   void CreateResources() override {
-
-    const auto t0        = std::chrono::high_resolution_clock::now();
-    const auto positions = MarchingCubes(level_, 16, 16, 16, 5);
-    const auto t1        = std::chrono::high_resolution_clock::now();
-    LogI("Marching Cubes took ",
-         std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count(),
-         "ms");
-    LogI("Marching Cubes returned ", positions.size(), " vertices");
-
- 
+    // const auto t0        = std::chrono::high_resolution_clock::now();
+    // const auto positions = MarchingCubes(level_, 16, 16, 16, 5);
+    // const auto t1        = std::chrono::high_resolution_clock::now();
+    // LogI("Marching Cubes took ",
+    //      std::chrono::duration_cast<std::chrono::milliseconds>(t1 -
+    //      t0).count(), "ms");
+    // LogI("Marching Cubes returned ", positions.size(), " vertices");
   }
 
   void Render() override {
-    SDL_assert(false);
+    // SDL_assert(false);
     SDL_assert(context() != nullptr);
 
     this->context()->Clear();
@@ -121,18 +128,23 @@ class ClearRenderer : public SceneRenderer {
 class GameScene : public Scene {
  public:
   GameScene()
-      : Scene("GameScene"), camera_controller_(this), clear_renderer_(this) {}
+      : Scene("GameScene", {1280, 720}),
+        camera_controller_(this),
+        clear_renderer_(this),
+        gui_renderer_(this),
+        gui_controller_(this) {}
 
  private:
   CameraController camera_controller_;
   ClearRenderer clear_renderer_;
+  GuiRenderer gui_renderer_;
+  GuiController gui_controller_;
 };
 
 int main() {
   Init();
-  // SDL_SetAssertionHandler(&HandleAssertion, nullptr);
 
-  Window window("RocketReaper3D", 640, 360);
+  Window window("RocketReaper3D", 1280, 720);
   GameScene scene;
   window.PushScene(&scene);
   Run();
