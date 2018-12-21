@@ -2,7 +2,7 @@
 Language:        Cpp
 BasedOnStyle:  Google
 PointerBindsToType: true
-AlignConsecutiveAssignments: true
+AlignConsecutiveAssignments: false
 FixNamespaceComments: true
 Cpp11BracedListStyle: true
 AllowShortFunctionsOnASingleLine: Inline
