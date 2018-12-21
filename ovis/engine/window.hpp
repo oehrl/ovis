@@ -6,6 +6,7 @@
 #include <vector>
 #include <SDL_video.h>
 #include <ovis/core/class.hpp>
+#include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 
 namespace ovis {
@@ -35,6 +36,7 @@ class Window {
   inline Uint32 id() const { return id_; }
   inline bool is_open() const { return is_open_; }
   inline GraphicsContext* context() { return &graphics_context_; }
+  inline ResourceManager* resource_manager() { return &resource_manager_; }
 
   bool SendEvent(const SDL_Event& event);
   void Update(std::chrono::microseconds delta_time);
@@ -52,6 +54,7 @@ class Window {
   int width_;
   int height_;
 
+  ResourceManager resource_manager_;
   GraphicsContext graphics_context_;
 
   std::vector<Scene*> scene_stack_;
