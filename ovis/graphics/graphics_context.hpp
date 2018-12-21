@@ -44,6 +44,7 @@ struct DrawItem {
 class GraphicsContext final {
   friend class GraphicsResource;
   friend class IndexBuffer;
+  friend class RenderTargetConfiguration;
   friend class ShaderProgram;
   friend class Texture2D;
   friend class UniformBuffer;
@@ -69,6 +70,7 @@ class GraphicsContext final {
     GLint num_vertex_texture_units;
   } m_caps;
 
+  GLuint m_bound_frame_buffer;
   GLuint m_bound_array_buffer;
   GLuint m_bound_element_array_buffer;
   GLuint m_bound_program;

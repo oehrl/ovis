@@ -5,6 +5,7 @@
 
 namespace ovis {
 
+// TODO: change to pixel format
 enum class TextureFormat {
   RGB_UINT8,
   RGBA_UINT8,

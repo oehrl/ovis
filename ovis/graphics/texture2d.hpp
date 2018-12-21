@@ -16,6 +16,8 @@ struct Texture2DDescription {
 };
 
 class Texture2D : public Texture {
+  friend class RenderTargetTexture2D;
+
  public:
   Texture2D(GraphicsContext* context, const Texture2DDescription& description,
             const void* pixels = nullptr);
