@@ -48,6 +48,12 @@ bool Update() {
   return true;
 }
 
+#ifdef OVIS_EMSCRIPTEN
+void EmscriptenUpdate() {
+  Update();
+}
+#endif  // OVIS_EMSCRIPTEN
+
 }  // namespace
 
 void Init() {
@@ -56,7 +62,7 @@ void Init() {
 
 void Run() {
 #if OVIS_EMSCRIPTEN
-  emscripten_set_main_loop(&Update, 0, true);
+  emscripten_set_main_loop(&EmscriptenUpdate, 0, true);
 #else
   while (Update())
     ;
