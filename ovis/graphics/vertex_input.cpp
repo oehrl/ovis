@@ -34,218 +34,218 @@ VertexInput::VertexInput(GraphicsContext* context,
 
       switch (vertex_attribute.type) {
         case VertexAttributeType::FLOAT32:
-          attribute.type       = GL_FLOAT;
-          attribute.size       = 1;
+          attribute.type = GL_FLOAT;
+          attribute.size = 1;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::FLOAT32_VECTOR2:
-          attribute.type       = GL_FLOAT;
-          attribute.size       = 2;
+          attribute.type = GL_FLOAT;
+          attribute.size = 2;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::FLOAT32_VECTOR3:
-          attribute.type       = GL_FLOAT;
-          attribute.size       = 3;
+          attribute.type = GL_FLOAT;
+          attribute.size = 3;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::FLOAT32_VECTOR4:
-          attribute.type       = GL_FLOAT;
-          attribute.size       = 4;
+          attribute.type = GL_FLOAT;
+          attribute.size = 4;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT8:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 1;
+          attribute.type = GL_BYTE;
+          attribute.size = 1;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT8_VECTOR2:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 2;
+          attribute.type = GL_BYTE;
+          attribute.size = 2;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT8_VECTOR3:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 3;
+          attribute.type = GL_BYTE;
+          attribute.size = 3;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT8_VECTOR4:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 4;
+          attribute.type = GL_BYTE;
+          attribute.size = 4;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT8:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 1;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 1;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT8_VECTOR2:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 2;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 2;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT8_VECTOR3:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 3;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 3;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT8_VECTOR4:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 4;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 4;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT8_NORM:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 1;
+          attribute.type = GL_BYTE;
+          attribute.size = 1;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT8_NORM_VECTOR2:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 2;
+          attribute.type = GL_BYTE;
+          attribute.size = 2;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT8_NORM_VECTOR3:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 3;
+          attribute.type = GL_BYTE;
+          attribute.size = 3;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT8_NORM_VECTOR4:
-          attribute.type       = GL_BYTE;
-          attribute.size       = 4;
+          attribute.type = GL_BYTE;
+          attribute.size = 4;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT8_NORM:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 1;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 1;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT8_NORM_VECTOR2:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 2;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 2;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT8_NORM_VECTOR3:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 3;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 3;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT8_NORM_VECTOR4:
-          attribute.type       = GL_UNSIGNED_BYTE;
-          attribute.size       = 4;
+          attribute.type = GL_UNSIGNED_BYTE;
+          attribute.size = 4;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT16:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 1;
+          attribute.type = GL_SHORT;
+          attribute.size = 1;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT16_VECTOR2:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 2;
+          attribute.type = GL_SHORT;
+          attribute.size = 2;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT16_VECTOR3:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 3;
+          attribute.type = GL_SHORT;
+          attribute.size = 3;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT16_VECTOR4:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 4;
+          attribute.type = GL_SHORT;
+          attribute.size = 4;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT16:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 1;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 1;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT16_VECTOR2:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 2;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 2;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT16_VECTOR3:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 3;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 3;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::UINT16_VECTOR4:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 4;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 4;
           attribute.normalized = GL_FALSE;
           break;
 
         case VertexAttributeType::INT16_NORM:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 1;
+          attribute.type = GL_SHORT;
+          attribute.size = 1;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT16_NORM_VECTOR2:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 2;
+          attribute.type = GL_SHORT;
+          attribute.size = 2;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT16_NORM_VECTOR3:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 3;
+          attribute.type = GL_SHORT;
+          attribute.size = 3;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::INT16_NORM_VECTOR4:
-          attribute.type       = GL_SHORT;
-          attribute.size       = 4;
+          attribute.type = GL_SHORT;
+          attribute.size = 4;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT16_NORM:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 1;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 1;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT16_NORM_VECTOR2:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 2;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 2;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT16_NORM_VECTOR3:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 3;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 3;
           attribute.normalized = GL_TRUE;
           break;
 
         case VertexAttributeType::UINT16_NORM_VECTOR4:
-          attribute.type       = GL_UNSIGNED_SHORT;
-          attribute.size       = 4;
+          attribute.type = GL_UNSIGNED_SHORT;
+          attribute.size = 4;
           attribute.normalized = GL_TRUE;
           break;
       }

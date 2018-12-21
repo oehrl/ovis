@@ -57,7 +57,7 @@ enum class VertexAttributeType {
   UINT16_NORM_VECTOR4,
 };
 
-struct VertexAttributeDescrition {
+struct VertexAttributeDescription {
   std::string name;
   VertexAttributeType type;
   std::size_t offset_in_bytes;
@@ -67,7 +67,7 @@ struct VertexAttributeDescrition {
 struct VertexInputDescription {
   ShaderProgram* shader_program;
   std::vector<VertexBuffer*> vertex_buffers;
-  std::vector<VertexAttributeDescrition> vertex_attributes;
+  std::vector<VertexAttributeDescription> vertex_attributes;
 };
 
 class VertexInput final : public GraphicsResource {
