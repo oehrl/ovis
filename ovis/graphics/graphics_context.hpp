@@ -21,20 +21,20 @@ class VertexInput;
 class Texture;
 
 enum class PrimitiveTopology {
-  POINTS         = GL_POINTS,
-  LINE_LIST      = GL_LINES,
-  LINE_STRIP     = GL_LINE_STRIP,
-  TRIANGLE_LIST  = GL_TRIANGLES,
+  POINTS = GL_POINTS,
+  LINE_LIST = GL_LINES,
+  LINE_STRIP = GL_LINE_STRIP,
+  TRIANGLE_LIST = GL_TRIANGLES,
   TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
 };
 
 struct DrawItem {
-  ShaderProgram* shader_program        = nullptr;
-  VertexInput* vertex_input            = nullptr;
-  IndexBuffer* index_buffer            = nullptr;
+  ShaderProgram* shader_program = nullptr;
+  VertexInput* vertex_input = nullptr;
+  IndexBuffer* index_buffer = nullptr;
   PrimitiveTopology primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
-  Uint32 start                         = 0;
-  Uint32 count                         = 3;
+  Uint32 start = 0;
+  Uint32 count = 3;
   DepthBufferState depth_buffer_state;
   BlendState blend_state;
   Rect<int> scissor_rect;
@@ -47,6 +47,7 @@ class GraphicsContext final {
   friend class RenderTargetConfiguration;
   friend class ShaderProgram;
   friend class Texture2D;
+  friend class Cubemap;
   friend class UniformBuffer;
   friend class VertexBuffer;
   friend class VertexInput;

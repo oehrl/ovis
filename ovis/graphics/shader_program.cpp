@@ -119,19 +119,20 @@ GLint ShaderProgram::GetAttributeLocation(const std::string& attribute_name) {
   }
 }
 
-// std::unique_ptr<ShaderProgram> LoadShaderProgram(const std::string& path) {
-//   ShaderProgramDescription sp_desc;
-//   sp_desc.vertex_shader_source   = LoadTextFile(path + ".vert");
-//   sp_desc.fragment_shader_source = LoadTextFile(path + ".frag");
-//   return std::make_unique<ShaderProgram>(context(), sp_desc);
-// }
-
 void ShaderProgram::Bind() {
   if (context()->m_bound_program != m_program_name) {
     glUseProgram(m_program_name);
     context()->m_bound_program = m_program_name;
   }
   m_uniform_buffer->Bind();
+}
+
+std::unique_ptr<ShaderProgram> LoadShaderProgram(
+    GraphicsContext* graphics_context, const std::string& path) {
+  ShaderProgramDescription sp_desc;
+  sp_desc.vertex_shader_source = LoadTextFile(path + ".vert");
+  sp_desc.fragment_shader_source = LoadTextFile(path + ".frag");
+  return std::make_unique<ShaderProgram>(graphics_context, sp_desc);
 }
 
 }  // namespace ovis

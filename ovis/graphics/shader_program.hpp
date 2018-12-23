@@ -43,6 +43,10 @@ class ShaderProgram : public GraphicsResource {
     m_uniform_buffer->SetTexture(sampler_name, texture);
   }
 
+  inline void SetTexture(const std::string& sampler_name, Cubemap* texture) {
+    m_uniform_buffer->SetTexture(sampler_name, texture);
+  }
+
  private:
   ShaderProgramDescription m_description;
   GLuint m_program_name;
@@ -55,6 +59,7 @@ class ShaderProgram : public GraphicsResource {
   void Bind();
 };
 
-// std::unique_ptr<ShaderProgram> LoadShaderProgram(const std::string& path);
+std::unique_ptr<ShaderProgram> LoadShaderProgram(
+    GraphicsContext* graphics_context, const std::string& path);
 
 }  // namespace ovis

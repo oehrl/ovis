@@ -97,6 +97,12 @@ class Resource;
 template <typename T>
 class ResourcePointer {
  public:
+  ResourcePointer() = default;
+  ResourcePointer(std::shared_ptr<Resource<T>> resource)
+      : resource_(std::move(resource)) {}
+
+  T* get() { return resource_ ? resource_->get() : nullptr; }
+
  private:
   std::shared_ptr<Resource<T>> resource_;
 };
@@ -131,6 +137,7 @@ class Resource final : public ResourceBase {
   void Create(Args... constructor_arguments) {
     SDL_assert(!is_loaded_);
     new (data_.data()) T(std::forward<Args>(constructor_arguments)...);
+    is_loaded_ = true;
   }
 
   void Delete() {

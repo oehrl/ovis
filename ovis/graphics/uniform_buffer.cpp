@@ -1,3 +1,4 @@
+#include <ovis/core/log.hpp>
 #include <ovis/core/range.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/shader_program.hpp>
@@ -58,7 +59,7 @@ UniformBuffer::UniformBuffer(GraphicsContext* context,
                              const UniformBufferDescription& description)
     : GraphicsResource(context) {
   GLuint program_name = description.shader_program->m_program_name;
-  GLint num_uniforms  = 0;
+  GLint num_uniforms = 0;
   glGetProgramiv(program_name, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
   GLint max_uniform_name_length = 0;
@@ -69,7 +70,7 @@ UniformBuffer::UniformBuffer(GraphicsContext* context,
 
   m_uniform_descriptions.resize(num_uniforms);
   std::size_t current_size = 0;
-  GLint texture_count      = 0;
+  GLint texture_count = 0;
 
   for (auto i : IRange(num_uniforms)) {
     m_uniform_descriptions[i].offset = current_size;
@@ -98,6 +99,7 @@ UniformBuffer::UniformBuffer(GraphicsContext* context,
 
     SDL_assert(uniform_name_buffer[0] == 'u' && uniform_name_buffer[1] == '_');
     m_uniform_indices[uniform_name_buffer.data() + 2] = i;
+    LogD(uniform_name_buffer.data(), " = ", i);
   }
 
   m_uniform_buffer.resize(current_size, 0);
@@ -109,8 +111,8 @@ UniformBuffer::~UniformBuffer() {}
 void UniformBuffer::Bind() {
   for (const auto& uniform_desc : m_uniform_descriptions) {
     const void* const data = GetUniformBufferPointer(uniform_desc.offset);
-    const GLint location   = uniform_desc.location;
-    const GLsizei count    = uniform_desc.size;
+    const GLint location = uniform_desc.location;
+    const GLsizei count = uniform_desc.size;
 
     switch (uniform_desc.type) {
       case GL_FLOAT:

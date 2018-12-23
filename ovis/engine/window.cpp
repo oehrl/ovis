@@ -1,6 +1,7 @@
 #include <cassert>
 #include <algorithm>
 #include <ovis/core/log.hpp>
+#include <ovis/graphics/cubemap.hpp>
 #include <ovis/scene/scene.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -17,6 +18,10 @@ Window::Window(const std::string& title, int width, int height)
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
   SDL_GetWindowSize(sdl_window_, &width_, &height_);
+
+  resource_manager_.RegisterFileLoader(
+      ".cubemap", std::bind(&ovis::LoadCubemap, &graphics_context_,
+                            std::placeholders::_1, std::placeholders::_2));
 }
 
 Window::~Window() {
@@ -36,7 +41,7 @@ bool Window::SendEvent(const SDL_Event& event) {
         break;
 
       case SDL_WINDOWEVENT_RESIZED:
-        width_  = event.window.data1;
+        width_ = event.window.data1;
         height_ = event.window.data2;
         break;
     }
@@ -68,6 +73,8 @@ void Window::PushScene(Scene* scene) {
     scene_stack_.back()->Pause();
   }
   scene_stack_.push_back(scene);
+  scene->SetResourceManager(
+      resource_manager());  // must happen before calling set context!
   scene->SetContext(context());
   scene->Resume();
 }

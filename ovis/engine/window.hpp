@@ -54,8 +54,8 @@ class Window {
   int width_;
   int height_;
 
-  ResourceManager resource_manager_;
   GraphicsContext graphics_context_;
+  ResourceManager resource_manager_;
 
   std::vector<Scene*> scene_stack_;
 };

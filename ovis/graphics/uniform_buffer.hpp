@@ -12,6 +12,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/texture2d.hpp>
 
@@ -155,6 +156,16 @@ class UniformBuffer : public GraphicsResource {
     SDL_assert(m_uniform_indices[sampler_name] < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[m_uniform_indices[sampler_name]].type ==
                GL_SAMPLER_2D);
+    SetTexture(m_uniform_descriptions[m_uniform_indices[sampler_name]]
+                   .base_texture_unit,
+               texture);
+  }
+
+  inline void SetTexture(const std::string& sampler_name, Cubemap* texture) {
+    SDL_assert(m_uniform_indices.find(sampler_name) != m_uniform_indices.end());
+    SDL_assert(m_uniform_indices[sampler_name] < m_uniform_descriptions.size());
+    SDL_assert(m_uniform_descriptions[m_uniform_indices[sampler_name]].type ==
+               GL_SAMPLER_CUBE);
     SetTexture(m_uniform_descriptions[m_uniform_indices[sampler_name]]
                    .base_texture_unit,
                texture);

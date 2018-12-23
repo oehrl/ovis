@@ -14,6 +14,7 @@ namespace ovis {
 class SceneController;
 class SceneRenderer;
 class GraphicsContext;
+class ResourceManager;
 
 class Scene {
   friend class SceneController;
@@ -33,6 +34,11 @@ class Scene {
 
   inline GraphicsContext* context() const { return context_; }
   void SetContext(GraphicsContext* context);
+
+  inline ResourceManager* resource_manager() const { return resource_manager_; }
+  inline void SetResourceManager(ResourceManager* resource_manager) {
+    resource_manager_ = resource_manager;
+  }
 
   template <typename ControllerType = SceneController>
   inline ControllerType* GetController(
@@ -81,6 +87,7 @@ class Scene {
   std::unordered_map<std::string, SceneRenderer*> m_renderers;
   std::vector<SceneRenderer*> m_render_order;
   GraphicsContext* context_;
+  ResourceManager* resource_manager_;
   Camera camera_;
   glm::uvec2 size_;
   bool m_renderers_sorted;

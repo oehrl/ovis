@@ -1,11 +1,13 @@
 #pragma once
 
+#include <array>
 #include <functional>
 #include <mutex>
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
-#include "ovis/core/resource.hpp"
+#include <ovis/core/down_cast.hpp>
+#include <ovis/core/resource.hpp>
 
 namespace ovis {
 
@@ -25,7 +27,7 @@ class ResourceManager {
   bool RegisterResource(const std::string& id, Args&&... constructor_arguments);
 
   template <typename T>
-  ResourcePointer<T> GetResource(const std::string& id);
+  std::shared_ptr<Resource<T>> GetResource(const std::string& id);
 
  private:
   // std::mutex resources_mutex_;
@@ -48,12 +50,13 @@ bool ResourceManager::RegisterResource(const std::string& id,
 }
 
 template <typename T>
-ResourcePointer<T> ResourceManager::GetResource(const std::string& id) {
+std::shared_ptr<Resource<T>> ResourceManager::GetResource(
+    const std::string& id) {
   auto resource_iterator = resources_.find(id);
   if (resource_iterator == resources_.end()) {
-    return ResourcePointer<T>();
+    return std::shared_ptr<Resource<T>>{};
   } else {
-    return ResourcePointer<T>(resource_iterator->second);
+    return down_cast<Resource<T>>(resource_iterator->second);
   }
 }
 
