@@ -14,7 +14,6 @@ class ShaderProgram;
 struct StaticMeshDescription {
   size_t vertex_count;
   PrimitiveTopology primitive_topology;
-  ShaderProgram* shader_program;
   std::vector<VertexAttributeDescription> vertex_attributes;
 };
 
@@ -32,7 +31,7 @@ class StaticMesh {
 
   inline void UpdateVertexBuffer(size_t start = 0, size_t count = 0);
 
-  void Draw();
+  void Draw(ShaderProgram* shader_program);
 
  private:
   GraphicsContext* graphics_context_;
@@ -55,7 +54,6 @@ StaticMesh<VertexType>::StaticMesh(GraphicsContext* graphics_context,
                                                   vertices_.data());
 
   VertexInputDescription vi_desc;
-  vi_desc.shader_program = description.shader_program;
   vi_desc.vertex_attributes = description.vertex_attributes;
   vi_desc.vertex_buffers = {vertex_buffer_.get()};
   vertex_input_ = std::make_unique<VertexInput>(graphics_context, vi_desc);
@@ -80,11 +78,11 @@ void StaticMesh<VertexType>::UpdateVertexBuffer(size_t start, size_t count) {
 }
 
 template <typename VertexType>
-void StaticMesh<VertexType>::Draw() {
+void StaticMesh<VertexType>::Draw(ShaderProgram* shader_program) {
   DrawItem draw_item;
   draw_item.primitive_topology = description_.primitive_topology;
   draw_item.vertex_input = vertex_input_.get();
-  draw_item.shader_program = description_.shader_program;
+  draw_item.shader_program = shader_program;
   draw_item.start = 0;
   draw_item.count = vertices_.size();
   graphics_context_->Draw(draw_item);
@@ -118,19 +116,19 @@ std::vector<VertexAttributeDescription> GetVertexAttributesDescription(
   std::vector<VertexAttributeDescription> descriptions;
   descriptions.reserve(attributes.size());
 
+  std::size_t location = 0;
   for (auto attribute : attributes) {
     VertexAttributeDescription attribute_desc;
+    attribute_desc.location = location++;
     attribute_desc.buffer_index = 0;
     attribute_desc.offset_in_bytes = current_offset;
 
     switch (attribute) {
       case VertexAttribute::POSITION2D:
-        attribute_desc.name = "Position";
         attribute_desc.type = VertexAttributeType::FLOAT32_VECTOR2;
         break;
 
       case VertexAttribute::POSITION3D:
-        attribute_desc.name = "Position";
         attribute_desc.type = VertexAttributeType::FLOAT32_VECTOR3;
         break;
     }
@@ -144,7 +142,6 @@ std::vector<VertexAttributeDescription> GetVertexAttributesDescription(
 struct SimpleMeshDescription {
   size_t vertex_count;
   PrimitiveTopology primitive_topology;
-  ShaderProgram* shader_program;
 };
 
 template <VertexAttribute... ATTRIBUTES>
@@ -153,7 +150,6 @@ class SimpleMesh : public StaticMesh<Vertex<ATTRIBUTES...>> {
   SimpleMesh(GraphicsContext* context, const SimpleMeshDescription& description)
       : StaticMesh<Vertex<ATTRIBUTES...>>(
             context, {description.vertex_count, description.primitive_topology,
-                      description.shader_program,
                       GetVertexAttributesDescription({ATTRIBUTES...})}) {}
 };
 

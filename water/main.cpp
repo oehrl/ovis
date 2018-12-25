@@ -19,6 +19,8 @@
 #include <ovis/engine/engine.hpp>
 #include <ovis/engine/window.hpp>
 
+#include "skybox_renderer.hpp"
+
 using namespace ovis;
 
 class ClearRenderer : public SceneRenderer {
@@ -40,59 +42,40 @@ class ClearRenderer : public SceneRenderer {
   DrawItem draw_item_;
 };
 
-class WaterRenderer : public SceneRenderer {
-  using MeshType = SimpleMesh<VertexAttribute::POSITION2D>;
-
+class MovementController : public SceneController {
  public:
-  WaterRenderer(Scene* scene) : SceneRenderer(scene, "WaterRenderer") {
-    RenderAfter("ClearRenderer");
-    RenderBefore("GuiRenderer");
-  }
+  MovementController(Scene* scene)
+      : SceneController(scene, "MovementController") {}
 
-  void CreateResources() override {
-    ovis::ShaderProgramDescription sp_desc;
-    sp_desc.vertex_shader_source =
-        "#define M_PI 3.1415926535897932384626433832795\n"
-        "in vec2 a_Position;\n"
-        "out vec3 vs_TexCoord;\n"
-        "void main() {\n"
-        "  vs_TexCoord = vec3(a_Position, 1.0);\n"
-        "  gl_Position = vec4(a_Position, 0.0, 1.0);\n"
-        "}\n";
-    sp_desc.fragment_shader_source =
-        "uniform samplerCube u_Skybox;\n"
-        "in vec3 vs_TexCoord;\n"
-        "void main() {\n"
-        "  gl_FragColor = textureCube(u_Skybox, vs_TexCoord);\n"
-        "}\n";
-    shader_program_ = std::make_unique<ovis::ShaderProgram>(context(), sp_desc);
+  bool ProcessEvent(const SDL_Event& event) override {
+    switch (event.type) {
+      case SDL_MOUSEMOTION:
+        if (left_button_down_) {
+          yaw_ -= event.motion.xrel * 0.01f;
+          pitch_ += event.motion.yrel * 0.01f;
+          scene()->camera().transform().SetYawPitchRoll(yaw_, pitch_, 0.0f);
+        }
+        return true;
 
-    SimpleMeshDescription mesh_desc;
-    mesh_desc.primitive_topology = PrimitiveTopology::TRIANGLE_STRIP;
-    mesh_desc.shader_program = shader_program_.get();
-    mesh_desc.vertex_count = 4;
-    mesh_ = std::make_unique<MeshType>(context(), mesh_desc);
-    mesh_->vertices()[0].position = glm::vec2(-1.0, 1.0);
-    mesh_->vertices()[1].position = glm::vec2(-1.0, -1.0);
-    mesh_->vertices()[2].position = glm::vec2(1.0, 1.0);
-    mesh_->vertices()[3].position = glm::vec2(1.0, -1.0);
-    mesh_->UpdateVertexBuffer();
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.button.button == 1) {
+          left_button_down_ = true;
+        }
+        return true;
 
-    scene()->resource_manager()->Load(
-        "/Users/Simon/Documents/ovis-cpp/resources/skybox.cubemap");
-    skybox_texture_ = scene()->resource_manager()->GetResource<Cubemap>(
-        "/Users/Simon/Documents/ovis-cpp/resources/skybox.cubemap");
-  }
-
-  void Render() override {
-    shader_program_->SetTexture("Skybox", skybox_texture_->get());
-    mesh_->Draw();
+      case SDL_MOUSEBUTTONUP:
+        if (event.button.button == 1) {
+          left_button_down_ = false;
+        }
+        return true;
+    }
+    return false;
   }
 
  private:
-  std::unique_ptr<ShaderProgram> shader_program_;
-  std::unique_ptr<MeshType> mesh_;
-  std::shared_ptr<Resource<Cubemap>> skybox_texture_;
+  bool left_button_down_ = false;
+  float yaw_ = 0.0f;
+  float pitch_ = 0.0f;
 };
 
 class GameScene : public Scene {
@@ -100,15 +83,17 @@ class GameScene : public Scene {
   GameScene()
       : Scene("GameScene", {1280, 720}),
         clear_renderer_(this),
-        water_renderer_(this),
-        gui_renderer_(this),
-        gui_controller_(this) {}
+        skybox_renderer_(this),
+        // gui_renderer_(this),
+        // gui_controller_(this),
+        movement_controller_(this) {}
 
  private:
   ClearRenderer clear_renderer_;
-  WaterRenderer water_renderer_;
-  GuiRenderer gui_renderer_;
-  GuiController gui_controller_;
+  SkyboxRenderer skybox_renderer_;
+  // GuiRenderer gui_renderer_;
+  // GuiController gui_controller_;
+  MovementController movement_controller_;
 };
 
 int main() {

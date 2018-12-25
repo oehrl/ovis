@@ -1,8 +1,12 @@
+#include <fstream>
 #include <iostream>
 #include <vector>
+#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/range.hpp>
+#include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/shader_program.hpp>
 
@@ -127,12 +131,28 @@ void ShaderProgram::Bind() {
   m_uniform_buffer->Bind();
 }
 
-std::unique_ptr<ShaderProgram> LoadShaderProgram(
-    GraphicsContext* graphics_context, const std::string& path) {
+bool LoadShaderProgram(GraphicsContext* graphics_context,
+                       ResourceManager* resource_manager,
+                       const std::string& filename) {
+  std::ifstream params_file(filename + ".json");
+  rapidjson::IStreamWrapper isw(params_file);
+  rapidjson::Document d;
+  d.ParseStream(isw);
+
+  const auto directory = ExtractDirectory(filename);
+  LogD(directory);
+  LogD(directory + "/" + d["vertex_shader_source"].GetString());
   ShaderProgramDescription sp_desc;
-  sp_desc.vertex_shader_source = LoadTextFile(path + ".vert");
-  sp_desc.fragment_shader_source = LoadTextFile(path + ".frag");
-  return std::make_unique<ShaderProgram>(graphics_context, sp_desc);
+  sp_desc.vertex_shader_source =
+      LoadTextFile(directory + "/" + d["vertex_shader_source"].GetString());
+  sp_desc.fragment_shader_source =
+      LoadTextFile(directory + "/" + d["fragment_shader_source"].GetString());
+
+  resource_manager->RegisterResource<ShaderProgram>(filename, graphics_context,
+                                                    sp_desc);
+
+  LogI("Sucessfully loaded shader program: ", filename);
+  return true;
 }
 
 }  // namespace ovis

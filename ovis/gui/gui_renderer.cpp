@@ -50,10 +50,10 @@ void GuiRenderer::CreateResources() {
   int height;
   ImGui::GetIO().Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
   Texture2DDescription tex_desc;
-  tex_desc.width         = width;
-  tex_desc.height        = height;
-  tex_desc.format        = TextureFormat::RGBA_UINT8;
-  tex_desc.filter        = TextureFilter::POINT;
+  tex_desc.width = width;
+  tex_desc.height = height;
+  tex_desc.format = TextureFormat::RGBA_UINT8;
+  tex_desc.filter = TextureFilter::POINT;
   tex_desc.mip_map_count = 1;
   font_atlas_texture_ =
       std::make_unique<Texture2D>(context(), tex_desc, pixels);
@@ -68,9 +68,9 @@ void GuiRenderer::Render() {
   auto draw_data = ImGui::GetDrawData();
 
   DrawItem draw_item;
-  draw_item.primitive_topology              = PrimitiveTopology::TRIANGLE_LIST;
-  draw_item.shader_program                  = shader_.get();
-  draw_item.blend_state.enabled             = true;
+  draw_item.primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
+  draw_item.shader_program = shader_.get();
+  draw_item.blend_state.enabled = true;
   draw_item.blend_state.source_color_factor = SourceBlendFactor::SOURCE_ALPHA;
   draw_item.blend_state.destination_color_factor =
       DestinationBlendFactor::ONE_MINUS_SOURCE_ALPHA;
@@ -124,18 +124,17 @@ void GuiRenderer::UpdateVertexBuffer(const ImVector<ImDrawVert>& vertices) {
          vertices_size_in_bytes, ")");
 
     VertexBufferDescription vb_desc;
-    vb_desc.size_in_bytes        = vertices_size_in_bytes;
+    vb_desc.size_in_bytes = vertices_size_in_bytes;
     vb_desc.vertex_size_in_bytes = sizeof(ImDrawVert);
     vertices_ =
         std::make_unique<VertexBuffer>(context(), vb_desc, vertices.Data);
 
     VertexInputDescription vi_desc;
-    vi_desc.shader_program    = shader_.get();
-    vi_desc.vertex_buffers    = {vertices_.get()};
+    vi_desc.vertex_buffers = {vertices_.get()};
     vi_desc.vertex_attributes = {
-        {"Position", VertexAttributeType::FLOAT32_VECTOR2, 0, 0},
-        {"TexCoords", VertexAttributeType::FLOAT32_VECTOR2, 8, 0},
-        {"Color", VertexAttributeType::UINT8_NORM_VECTOR4, 16, 0}};
+        {0, 0, 0, VertexAttributeType::FLOAT32_VECTOR2},
+        {1, 8, 0, VertexAttributeType::FLOAT32_VECTOR2},
+        {2, 16, 0, VertexAttributeType::UINT8_NORM_VECTOR4}};
     vertex_input_ = std::make_unique<VertexInput>(context(), vi_desc);
   } else {
     vertices_->Write(0, vertices_size_in_bytes, vertices.Data);
@@ -152,7 +151,7 @@ void GuiRenderer::UpdateIndexBuffer(const ImVector<ImDrawIdx>& indices) {
          indices_size_in_bytes, ")");
     IndexBufferDescription ib_desc;
     ib_desc.size_in_bytes = indices_size_in_bytes;
-    ib_desc.index_format  = IndexFormat::UINT16;
+    ib_desc.index_format = IndexFormat::UINT16;
     indices_ = std::make_unique<IndexBuffer>(context(), ib_desc, indices.Data);
   } else {
     indices_->Write(0, indices_size_in_bytes, indices.Data);

@@ -27,7 +27,7 @@ class ResourceManager {
   bool RegisterResource(const std::string& id, Args&&... constructor_arguments);
 
   template <typename T>
-  std::shared_ptr<Resource<T>> GetResource(const std::string& id);
+  ResourcePointer<T> GetResource(const std::string& id);
 
  private:
   // std::mutex resources_mutex_;
@@ -50,13 +50,13 @@ bool ResourceManager::RegisterResource(const std::string& id,
 }
 
 template <typename T>
-std::shared_ptr<Resource<T>> ResourceManager::GetResource(
-    const std::string& id) {
+ResourcePointer<T> ResourceManager::GetResource(const std::string& id) {
   auto resource_iterator = resources_.find(id);
   if (resource_iterator == resources_.end()) {
-    return std::shared_ptr<Resource<T>>{};
+    return ResourcePointer<T>{};
   } else {
-    return down_cast<Resource<T>>(resource_iterator->second);
+    return ResourcePointer<T>{
+        down_cast<Resource<T>>(resource_iterator->second)};
   }
 }
 

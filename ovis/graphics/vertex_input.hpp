@@ -58,14 +58,13 @@ enum class VertexAttributeType {
 };
 
 struct VertexAttributeDescription {
-  std::string name;
-  VertexAttributeType type;
+  std::size_t location;
   std::size_t offset_in_bytes;
-  unsigned buffer_index;
+  std::size_t buffer_index;
+  VertexAttributeType type;
 };
 
 struct VertexInputDescription {
-  ShaderProgram* shader_program;
   std::vector<VertexBuffer*> vertex_buffers;
   std::vector<VertexAttributeDescription> vertex_attributes;
 };

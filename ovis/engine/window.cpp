@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <ovis/core/log.hpp>
 #include <ovis/graphics/cubemap.hpp>
+#include <ovis/graphics/shader_program.hpp>
 #include <ovis/scene/scene.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -22,6 +23,10 @@ Window::Window(const std::string& title, int width, int height)
   resource_manager_.RegisterFileLoader(
       ".cubemap", std::bind(&ovis::LoadCubemap, &graphics_context_,
                             std::placeholders::_1, std::placeholders::_2));
+
+  resource_manager_.RegisterFileLoader(
+      ".shader", std::bind(&ovis::LoadShaderProgram, &graphics_context_,
+                           std::placeholders::_1, std::placeholders::_2));
 }
 
 Window::~Window() {

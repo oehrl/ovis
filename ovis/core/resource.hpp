@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <typeindex>
 #include <vector>
 #include "SDL_assert.h"
@@ -94,14 +95,26 @@ namespace ovis {
 template <typename T>
 class Resource;
 
+// template <typename T>
+// using ResourcePointer = std::shared_ptr<Resource<T>>;
+
 template <typename T>
 class ResourcePointer {
+  friend class ResourceManager;
+
  public:
   ResourcePointer() = default;
   ResourcePointer(std::shared_ptr<Resource<T>> resource)
       : resource_(std::move(resource)) {}
+  template <typename Derived,
+            typename = std::enable_if_t<std::is_base_of<T, Derived>::value>>
+  ResourcePointer(const ResourcePointer<Derived>& other)
+      : resource_(other.resource_) {}
 
-  T* get() { return resource_ ? resource_->get() : nullptr; }
+  inline const T* get() const { return resource_ ? resource_->get() : nullptr; }
+  inline T* get() { return resource_ ? resource_->get() : nullptr; }
+  inline const T* operator->() const { return resource_->get(); }
+  inline T* operator->() { return resource_->get(); }
 
  private:
   std::shared_ptr<Resource<T>> resource_;
