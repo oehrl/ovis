@@ -91,7 +91,7 @@ ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
       break;
     }
   }
-  return GetResource(filename);
+  return GetResource<T>(filename);
 }
 
 template <typename T, typename... Args>

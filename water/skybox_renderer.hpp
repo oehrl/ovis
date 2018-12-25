@@ -62,16 +62,11 @@ class SkyboxRenderer : public ovis::SceneRenderer {
     mesh_->vertices()[35].position = glm::vec3(1.0f, -1.0f, 1.0f);
     mesh_->UpdateVertexBuffer();
 
-    scene()->resource_manager()->Load(
-        "/Users/Simon/Documents/ovis-cpp/resources/skybox.cubemap");
     skybox_texture_ = scene()->resource_manager()->GetResource<ovis::Cubemap>(
-        "/Users/Simon/Documents/ovis-cpp/resources/skybox.cubemap");
+        "skybox.cubemap");
 
-    scene()->resource_manager()->Load(
-        "/Users/Simon/Documents/ovis-cpp/resources/skybox.shader");
     shader_program_ =
-        scene()->resource_manager()->GetResource<ovis::ShaderProgram>(
-            "/Users/Simon/Documents/ovis-cpp/resources/skybox.shader");
+        scene()->resource_manager()->Load<ovis::ShaderProgram>("skybox.shader");
   }
 
   void Render() override {
