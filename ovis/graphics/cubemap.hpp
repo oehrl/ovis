@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
+#include <rapidjson/document.h>
 #include <ovis/graphics/texture.hpp>
 
 namespace ovis {
@@ -55,6 +56,7 @@ class Cubemap : public Texture {
 
 bool LoadCubemap(GraphicsContext* graphics_context,
                  ResourceManager* resource_manager,
-                 const std::string& filename);
+                 const rapidjson::Document& parameters, const std::string& id,
+                 const std::string& directory);
 
 }  // namespace ovis

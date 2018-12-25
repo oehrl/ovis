@@ -77,6 +77,8 @@ Cubemap::Cubemap(GraphicsContext* context,
   }
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, min_filter);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, mag_filter);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void Cubemap::Write(CubemapSide side, std::size_t level, std::size_t x,
@@ -115,18 +117,14 @@ void Cubemap::Bind(int texture_unit) {
 
 bool LoadCubemap(GraphicsContext* graphics_context,
                  ResourceManager* resource_manager,
-                 const std::string& filename) {
-  std::ifstream params_file(filename + ".json");
-  rapidjson::IStreamWrapper isw(params_file);
-  rapidjson::Document d;
-  d.ParseStream(isw);
-
+                 const rapidjson::Document& parameters, const std::string& id,
+                 const std::string& directory) {
   CubemapDescription cubemap_desc;
-  cubemap_desc.width = d["width"].GetInt();
-  cubemap_desc.height = d["height"].GetInt();
+  cubemap_desc.width = parameters["width"].GetInt();
+  cubemap_desc.height = parameters["height"].GetInt();
   cubemap_desc.mip_map_count = 1;
 
-  const auto& filter = d["filter"].GetString();
+  const auto& filter = parameters["filter"].GetString();
   if (std::strcmp(filter, "point") == 0) {
     cubemap_desc.filter = TextureFilter::POINT;
   } else if (std::strcmp(filter, "bilinear") == 0) {
@@ -134,33 +132,26 @@ bool LoadCubemap(GraphicsContext* graphics_context,
   } else if (std::strcmp(filter, "trilinear") == 0) {
     cubemap_desc.filter = TextureFilter::TRILINEAR;
   } else {
-    LogE("Failed to load cubemap '", filename, "': invalid filter (", filter,
-         ")");
+    LogE("Failed to load cubemap '", id, "': invalid filter (", filter, ")");
     return false;
   }
 
-  const auto& format = d["format"].GetString();
+  const auto& format = parameters["format"].GetString();
   if (std::strcmp(format, "RGB_UINT8") == 0) {
     cubemap_desc.format = TextureFormat::RGB_UINT8;
   } else if (std::strcmp(format, "RGBA_UINT8") == 0) {
     cubemap_desc.format = TextureFormat::RGBA_UINT8;
   } else {
-    LogE("Failed to load cubemap '", filename, "': invalid format (", format,
-         ")");
+    LogE("Failed to load cubemap '", id, "': invalid format (", format, ")");
     return false;
   }
 
-  std::ifstream binary_file(filename, std::ios::binary);
-  binary_file.seekg(0, std::ios::end);
-  auto size = binary_file.tellg();
-  binary_file.seekg(0, std::ios::beg);
-  std::vector<uint8_t> buffer(size);
-  binary_file.read(reinterpret_cast<char*>(buffer.data()), size);
-
-  resource_manager->RegisterResource<Cubemap>(filename, graphics_context,
+  std::vector<uint8_t> buffer =
+      LoadBinaryFile(directory + "/" + parameters["data_file"].GetString());
+  resource_manager->RegisterResource<Cubemap>(id, graphics_context,
                                               cubemap_desc, buffer.data());
 
-  LogI("Sucessfully loaded cubemap: ", filename);
+  LogI("Sucessfully loaded cubemap: ", id);
   return true;
 }
 

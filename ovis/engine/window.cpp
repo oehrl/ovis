@@ -22,11 +22,13 @@ Window::Window(const std::string& title, int width, int height)
 
   resource_manager_.RegisterFileLoader(
       ".cubemap", std::bind(&ovis::LoadCubemap, &graphics_context_,
-                            std::placeholders::_1, std::placeholders::_2));
+                            std::placeholders::_1, std::placeholders::_2,
+                            std::placeholders::_3, std::placeholders::_4));
 
   resource_manager_.RegisterFileLoader(
       ".shader", std::bind(&ovis::LoadShaderProgram, &graphics_context_,
-                           std::placeholders::_1, std::placeholders::_2));
+                           std::placeholders::_1, std::placeholders::_2,
+                           std::placeholders::_3, std::placeholders::_4));
 }
 
 Window::~Window() {

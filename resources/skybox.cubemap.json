@@ -1,1 +1,7 @@
-{"format":"RGB_UINT8","width":512,"height":512,"filter":"bilinear"}
+{
+  "format": "RGB_UINT8",
+  "width": 512,
+  "height": 512,
+  "filter": "bilinear",
+  "data_file": "skybox.cubemap"
+}

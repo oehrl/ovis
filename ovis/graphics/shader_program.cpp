@@ -133,25 +133,19 @@ void ShaderProgram::Bind() {
 
 bool LoadShaderProgram(GraphicsContext* graphics_context,
                        ResourceManager* resource_manager,
-                       const std::string& filename) {
-  std::ifstream params_file(filename + ".json");
-  rapidjson::IStreamWrapper isw(params_file);
-  rapidjson::Document d;
-  d.ParseStream(isw);
-
-  const auto directory = ExtractDirectory(filename);
-  LogD(directory);
-  LogD(directory + "/" + d["vertex_shader_source"].GetString());
+                       const rapidjson::Document& parameters,
+                       const std::string& id, const std::string& directory) {
+  LogD(directory + "/" + parameters["vertex_shader_source"].GetString());
   ShaderProgramDescription sp_desc;
-  sp_desc.vertex_shader_source =
-      LoadTextFile(directory + "/" + d["vertex_shader_source"].GetString());
-  sp_desc.fragment_shader_source =
-      LoadTextFile(directory + "/" + d["fragment_shader_source"].GetString());
+  sp_desc.vertex_shader_source = LoadTextFile(
+      directory + "/" + parameters["vertex_shader_source"].GetString());
+  sp_desc.fragment_shader_source = LoadTextFile(
+      directory + "/" + parameters["fragment_shader_source"].GetString());
 
-  resource_manager->RegisterResource<ShaderProgram>(filename, graphics_context,
+  resource_manager->RegisterResource<ShaderProgram>(id, graphics_context,
                                                     sp_desc);
 
-  LogI("Sucessfully loaded shader program: ", filename);
+  LogI("Sucessfully loaded shader program: ", id);
   return true;
 }
 

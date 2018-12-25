@@ -61,6 +61,7 @@ class ShaderProgram : public GraphicsResource {
 
 bool LoadShaderProgram(GraphicsContext* graphics_context,
                        ResourceManager* resource_manager,
-                       const std::string& filename);
+                       const rapidjson::Document& parameters,
+                       const std::string& id, const std::string& directory);
 
 }  // namespace ovis

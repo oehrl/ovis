@@ -100,14 +100,16 @@ int main() {
   Init();
 
   Window window("Water", 1280, 720);
+  window.resource_manager()->AddSearchPath("");
 
-  window.resource_manager()->RegisterFileLoader(
-      ".txt",
-      [](ovis::ResourceManager* resource_manager, const std::string& filename) {
-        resource_manager->RegisterResource<std::string>(
-            filename, ovis::LoadTextFile(filename));
-        return true;
-      });
+  // window.resource_manager()->RegisterFileLoader(
+  //     ".txt",
+  //     [](ovis::ResourceManager* resource_manager, const std::string&
+  //     filename) {
+  //       resource_manager->RegisterResource<std::string>(
+  //           filename, ovis::LoadTextFile(filename));
+  //       return true;
+  //     });
 
   // window.resource_manager()->Load("test.txt");
 
