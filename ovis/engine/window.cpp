@@ -3,6 +3,7 @@
 #include <ovis/core/log.hpp>
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/shader_program.hpp>
+#include <ovis/graphics/texture2d.hpp>
 #include <ovis/scene/scene.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -19,6 +20,11 @@ Window::Window(const std::string& title, int width, int height)
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
   SDL_GetWindowSize(sdl_window_, &width_, &height_);
+
+  resource_manager_.RegisterFileLoader(
+      ".texture2d", std::bind(&ovis::LoadTexture2D, &graphics_context_,
+                              std::placeholders::_1, std::placeholders::_2,
+                              std::placeholders::_3, std::placeholders::_4));
 
   resource_manager_.RegisterFileLoader(
       ".cubemap", std::bind(&ovis::LoadCubemap, &graphics_context_,

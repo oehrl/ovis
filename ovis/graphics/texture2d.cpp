@@ -1,5 +1,8 @@
 #include <SDL_assert.h>
 #include <SDL_surface.h>
+#include <ovis/core/file.hpp>
+#include <ovis/core/log.hpp>
+#include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/texture2d.hpp>
 
@@ -17,14 +20,14 @@ Texture2D::Texture2D(GraphicsContext* context,
   switch (description.format) {
     case TextureFormat::RGB_UINT8:
       internal_format = GL_RGB;
-      source_format   = GL_RGB;
-      source_type     = GL_UNSIGNED_BYTE;
+      source_format = GL_RGB;
+      source_type = GL_UNSIGNED_BYTE;
       break;
 
     case TextureFormat::RGBA_UINT8:
       internal_format = GL_RGBA;
-      source_format   = GL_RGBA;
-      source_type     = GL_UNSIGNED_BYTE;
+      source_format = GL_RGBA;
+      source_type = GL_UNSIGNED_BYTE;
       break;
 
     default:
@@ -75,12 +78,12 @@ void Texture2D::Write(std::size_t level, std::size_t x, std::size_t y,
   switch (m_description.format) {
     case TextureFormat::RGB_UINT8:
       source_format = GL_RGB;
-      source_type   = GL_UNSIGNED_BYTE;
+      source_type = GL_UNSIGNED_BYTE;
       break;
 
     case TextureFormat::RGBA_UINT8:
       source_format = GL_RGBA;
-      source_type   = GL_UNSIGNED_BYTE;
+      source_type = GL_UNSIGNED_BYTE;
       break;
 
     default:
@@ -98,33 +101,44 @@ void Texture2D::Bind(int texture_unit) {
   context()->BindTexture(GL_TEXTURE_2D, name(), texture_unit);
 }
 
-// std::unique_ptr<Texture2D> LoadTexture(const std::string& filename) {
-//   SDL_Surface* surface = SDL_LoadBMP(filename.c_str());
+bool LoadTexture2D(GraphicsContext* graphics_context,
+                   ResourceManager* resource_manager,
+                   const rapidjson::Document& parameters, const std::string& id,
+                   const std::string& directory) {
+  Texture2DDescription texture2d_desc;
+  texture2d_desc.width = parameters["width"].GetInt();
+  texture2d_desc.height = parameters["height"].GetInt();
+  texture2d_desc.mip_map_count = 1;
 
-//   if (surface->format->format != SDL_PIXELFORMAT_RGB24) {
-//     SDL_Surface* new_surface =
-//         SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB24, 0);
-//     SDL_FreeSurface(surface);
-//     surface = new_surface;
-//   }
-//   SDL_assert(surface->format->format == SDL_PIXELFORMAT_RGB24);
+  const auto& filter = parameters["filter"].GetString();
+  if (std::strcmp(filter, "point") == 0) {
+    texture2d_desc.filter = TextureFilter::POINT;
+  } else if (std::strcmp(filter, "bilinear") == 0) {
+    texture2d_desc.filter = TextureFilter::BILINEAR;
+  } else if (std::strcmp(filter, "trilinear") == 0) {
+    texture2d_desc.filter = TextureFilter::TRILINEAR;
+  } else {
+    LogE("Failed to load texture '", id, "': invalid filter (", filter, ")");
+    return false;
+  }
 
-//   SDL_LockSurface(surface);
+  const auto& format = parameters["format"].GetString();
+  if (std::strcmp(format, "RGB_UINT8") == 0) {
+    texture2d_desc.format = TextureFormat::RGB_UINT8;
+  } else if (std::strcmp(format, "RGBA_UINT8") == 0) {
+    texture2d_desc.format = TextureFormat::RGBA_UINT8;
+  } else {
+    LogE("Failed to load texture '", id, "': invalid format (", format, ")");
+    return false;
+  }
 
-//   Texture2DDescription tex_desc;
-//   tex_desc.width         = surface->w;
-//   tex_desc.height        = surface->h;
-//   tex_desc.mip_map_count = 1;
-//   tex_desc.format        = TextureFormat::RGB_UINT8;
-//   tex_desc.filter        = TextureFilter::BILINEAR;
+  std::vector<uint8_t> buffer =
+      LoadBinaryFile(directory + "/" + parameters["data_file"].GetString());
+  resource_manager->RegisterResource<Texture2D>(id, graphics_context,
+                                                texture2d_desc, buffer.data());
 
-//   std::unique_ptr<Texture2D> texture =
-//       std::make_unique<Texture2D>(context(), tex_desc, surface->pixels);
-
-//   SDL_UnlockSurface(surface);
-//   SDL_FreeSurface(surface);
-
-//   return texture;
-// }
+  LogI("Sucessfully loaded texture: ", id);
+  return true;
+}
 
 }  // namespace ovis

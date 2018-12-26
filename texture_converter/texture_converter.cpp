@@ -7,8 +7,56 @@
 #include <rapidjson/writer.h>
 #include <stb_image.h>
 
-int ParseTexture2D(int, const char* []) {
-  return -1;
+int ParseTexture2D(int argc, const char* argv[]) {
+  const std::string usage = "TextureConverter texture2d [in] [out]";
+  if (argc < 2) {
+    std::cout << usage << std::endl;
+    return -1;
+  } else {
+    int image_width;
+    int image_height;
+    int image_channel_count;
+
+    unsigned char* data = stbi_load(argv[0], &image_width, &image_height,
+                                    &image_channel_count, 0);
+
+    if (data) {
+      std::ofstream file(argv[1], std::ios::binary);
+      file.write(reinterpret_cast<const char*>(data),
+                 image_width * image_height * image_channel_count);
+      file.close();
+      stbi_image_free(data);
+
+      rapidjson::Document d;
+      d.SetObject();
+      rapidjson::Document::AllocatorType& allocator = d.GetAllocator();
+
+      // (image_channel_count == 3 ? "RGB_UINT8" : "RGBA_UINT8")
+      if (image_channel_count == 3) {
+        d.AddMember("format", "RGB_UINT8", allocator);
+      } else if (image_channel_count == 4) {
+        d.AddMember("format", "RGBA_UINT8", allocator);
+      }
+      d.AddMember("width", image_width, allocator);
+      d.AddMember("height", image_height, allocator);
+      d.AddMember("filter", "bilinear", allocator);
+      d.AddMember("data_file", rapidjson::Value(argv[1], allocator), allocator);
+      rapidjson::StringBuffer strbuf;
+      rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+      d.Accept(writer);
+
+      std::string params_filename = argv[1];
+      params_filename += ".json";
+      std::ofstream params_file(params_filename);
+      params_file << strbuf.GetString();
+      params_file.close();
+    } else {
+      std::cerr << "Failed to load file: " << argv[0] << std::endl;
+      return -2;
+    }
+
+    return 0;
+  }
 }
 
 int ParseCubemap(int argc, const char* argv[]) {

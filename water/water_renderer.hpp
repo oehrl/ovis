@@ -2,6 +2,7 @@
 
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/static_mesh.hpp>
+#include <ovis/graphics/texture2d.hpp>
 #include <ovis/scene/scene.hpp>
 #include <ovis/scene/scene_renderer.hpp>
 
@@ -31,6 +32,10 @@ class WaterRenderer : public ovis::SceneRenderer {
 
     shader_program_ =
         scene()->resource_manager()->Load<ovis::ShaderProgram>("water.shader");
+
+    ocean_normals1_texture_ =
+        scene()->resource_manager()->Load<ovis::Texture2D>(
+            "ocean_normals1.texture2d");
   }
 
   void Render() override {
@@ -38,6 +43,7 @@ class WaterRenderer : public ovis::SceneRenderer {
         "ViewProjectionMatrix",
         scene()->camera().CalculateViewProjectionMatrix());
     shader_program_->SetTexture("Skybox", skybox_texture_.get());
+    shader_program_->SetTexture("OceanNormals1", ocean_normals1_texture_.get());
     shader_program_->SetUniform("CameraPosition",
                                 scene()->camera().transform().translation());
     mesh_->Draw(shader_program_.get());
@@ -47,4 +53,5 @@ class WaterRenderer : public ovis::SceneRenderer {
   std::unique_ptr<MeshType> mesh_;
   ovis::ResourcePointer<ovis::ShaderProgram> shader_program_;
   ovis::ResourcePointer<ovis::Cubemap> skybox_texture_;
+  ovis::ResourcePointer<ovis::Texture2D> ocean_normals1_texture_;
 };
