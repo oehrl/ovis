@@ -72,7 +72,6 @@ class MovementController : public SceneController {
     if (left_button_down_) {
       scene()->camera().transform().Translate(
           glm::vec3(global_move_vector) * (delta_time.count() / 1000000.0f));
-      LogD(glm::to_string(scene()->camera().transform().translation()));
     }
   }
 
