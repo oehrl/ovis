@@ -165,12 +165,13 @@ class GameScene : public Scene {
   MovementController movement_controller_;
 };
 
-int main() {
+int main(int argc, char* argv[]) {
+  (void)argc;
   Init();
 
   Window window("Water", 1280, 720);
-  window.resource_manager()->AddSearchPath(
-      "/Users/Simon/Documents/ovis-cpp/resources/");
+  window.resource_manager()->AddSearchPath(ExtractDirectory(argv[0]) +
+                                           "/resources/");
 
   window.resource_manager()->Load("skybox.cubemap");
 
