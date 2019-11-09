@@ -26,14 +26,13 @@ std::optional<std::string> LoadTextFile(const std::string& filename) {
   }
 }
 
-std::optional<std::vector<std::uint8_t>> LoadBinaryFile(
-    const std::string& filename) {
+std::optional<Blob> LoadBinaryFile(const std::string& filename) {
   std::ifstream file(filename);
 
   if (file.is_open()) {
     file.seekg(0, std::ios::end);
 
-    std::vector<std::uint8_t> buffer(file.tellg());
+    Blob buffer(file.tellg());
     file.seekg(0, std::ios::beg);
 
     file.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
