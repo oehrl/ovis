@@ -16,3 +16,4 @@ add_custom_command(
 )
 
 target_link_libraries(Water OvisEngine)
+add_compile_options(Water "--preload-file resources")

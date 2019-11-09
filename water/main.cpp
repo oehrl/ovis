@@ -167,9 +167,11 @@ class GameScene : public Scene {
 
 int main(int argc, char* argv[]) {
   (void)argc;
+  (void)argv;
   Init();
 
   Window window("Water", 1280, 720);
+  window.resource_manager()->AddSearchPath("./");
   window.resource_manager()->AddSearchPath(ExtractDirectory(argv[0]) +
                                            "/resources/");
 

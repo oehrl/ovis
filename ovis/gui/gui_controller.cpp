@@ -19,6 +19,7 @@ int GetMouseButtonIndex(uint8_t button) {
       return 4;
   }
   assert(false);
+  return 0;
 }
 
 }  // namespace
