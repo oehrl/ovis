@@ -35,6 +35,7 @@ endif()
 add_subdirectory(ovis)
 # add_subdirectory(rockreaper3d)
 add_subdirectory(water)
+add_subdirectory(slotmachine)
 
 if (NOT OVIS_EMSCRIPTEN) 
   add_subdirectory(texture_converter)
