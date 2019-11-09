@@ -146,13 +146,18 @@ bool LoadCubemap(GraphicsContext* graphics_context,
     return false;
   }
 
-  std::vector<uint8_t> buffer =
+  auto file_content =
       LoadBinaryFile(directory + "/" + parameters["data_file"].GetString());
-  resource_manager->RegisterResource<Cubemap>(id, graphics_context,
-                                              cubemap_desc, buffer.data());
 
-  LogI("Sucessfully loaded cubemap: ", id);
-  return true;
+  if (file_content.has_value()) {
+    resource_manager->RegisterResource<Cubemap>(
+        id, graphics_context, cubemap_desc, file_content->data());
+    LogI("Sucessfully loaded texture: ", id);
+    return true;
+  } else {
+    LogE("Cannot open ", parameters["data_file"].GetString());
+    return false;
+  }
 }
 
 }  // namespace ovis

@@ -137,16 +137,35 @@ bool LoadShaderProgram(GraphicsContext* graphics_context,
                        const std::string& id, const std::string& directory) {
   LogD(directory + "/" + parameters["vertex_shader_source"].GetString());
   ShaderProgramDescription sp_desc;
-  sp_desc.vertex_shader_source = LoadTextFile(
+
+  const auto vertex_shader_source = LoadTextFile(
       directory + "/" + parameters["vertex_shader_source"].GetString());
-  sp_desc.fragment_shader_source = LoadTextFile(
+
+  if (vertex_shader_source.has_value()) {
+    sp_desc.vertex_shader_source = *vertex_shader_source;
+  } else {
+    LogE("Cannot open: ",
+         directory + "/" + parameters["vertex_shader_source"].GetString());
+  }
+
+  const auto fragment_shader_source = LoadTextFile(
       directory + "/" + parameters["fragment_shader_source"].GetString());
+  if (fragment_shader_source.has_value()) {
+    sp_desc.fragment_shader_source = *fragment_shader_source;
+  } else {
+    LogE("Cannot open: ",
+         directory + "/" + parameters["fragment_shader_source"].GetString());
+  }
 
-  resource_manager->RegisterResource<ShaderProgram>(id, graphics_context,
-                                                    sp_desc);
-
-  LogI("Sucessfully loaded shader program: ", id);
-  return true;
+  if (vertex_shader_source.has_value() && fragment_shader_source.has_value()) {
+    resource_manager->RegisterResource<ShaderProgram>(id, graphics_context,
+                                                      sp_desc);
+    LogI("Sucessfully loaded shader program: ", id);
+    return true;
+  } else {
+    LogE("Failed to load shader program: ", id);
+    return false;
+  }
 }
 
 }  // namespace ovis

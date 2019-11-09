@@ -132,13 +132,18 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
     return false;
   }
 
-  std::vector<uint8_t> buffer =
+  auto file_content =
       LoadBinaryFile(directory + "/" + parameters["data_file"].GetString());
-  resource_manager->RegisterResource<Texture2D>(id, graphics_context,
-                                                texture2d_desc, buffer.data());
 
-  LogI("Sucessfully loaded texture: ", id);
-  return true;
+  if (file_content.has_value()) {
+    resource_manager->RegisterResource<Texture2D>(
+        id, graphics_context, texture2d_desc, file_content->data());
+    LogI("Sucessfully loaded texture: ", id);
+    return true;
+  } else {
+    LogE("Cannot open ", parameters["data_file"].GetString());
+    return false;
+  }
 }
 
 }  // namespace ovis
