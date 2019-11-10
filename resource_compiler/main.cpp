@@ -121,7 +121,8 @@ int CompileShader(std::filesystem::path input_file,
   if (!fs::exists(output_vertex_shader_filename) ||
       fs::last_write_time(output_vertex_shader_filename) <
           last_input_vertex_shader_write_time) {
-    if (fs::copy_file(vertex_shader, output_vertex_shader_filename)) {
+    if (fs::copy_file(vertex_shader, output_vertex_shader_filename,
+                      fs::copy_options::update_existing)) {
       std::cout << "  Wrote " << output_vertex_shader_filename << "\n";
     } else {
       std::cerr << "  Failed to write " << output_vertex_shader_filename
@@ -133,7 +134,8 @@ int CompileShader(std::filesystem::path input_file,
   if (!fs::exists(output_fragment_shader_filename) ||
       fs::last_write_time(output_fragment_shader_filename) <
           last_input_fragment_shader_write_time) {
-    if (fs::copy_file(fragment_shader, output_fragment_shader_filename)) {
+    if (fs::copy_file(fragment_shader, output_fragment_shader_filename,
+                      fs::copy_options::update_existing)) {
       std::cout << "  Wrote " << output_fragment_shader_filename << "\n";
     } else {
       std::cerr << "  Failed to write " << output_fragment_shader_filename
