@@ -32,6 +32,7 @@ class StaticMesh {
   inline void UpdateVertexBuffer(size_t start = 0, size_t count = 0);
 
   void Draw(ShaderProgram* shader_program);
+  void Draw(DrawItem draw_configuration);
 
  private:
   GraphicsContext* graphics_context_;
@@ -80,12 +81,17 @@ void StaticMesh<VertexType>::UpdateVertexBuffer(size_t start, size_t count) {
 template <typename VertexType>
 void StaticMesh<VertexType>::Draw(ShaderProgram* shader_program) {
   DrawItem draw_item;
-  draw_item.primitive_topology = description_.primitive_topology;
-  draw_item.vertex_input = vertex_input_.get();
   draw_item.shader_program = shader_program;
-  draw_item.start = 0;
-  draw_item.count = vertices_.size();
-  graphics_context_->Draw(draw_item);
+  Draw(draw_item);
+}
+
+template <typename VertexType>
+void StaticMesh<VertexType>::Draw(DrawItem draw_configuration) {
+  draw_configuration.primitive_topology = description_.primitive_topology;
+  draw_configuration.vertex_input = vertex_input_.get();
+  draw_configuration.start = 0;
+  draw_configuration.count = vertices_.size();
+  graphics_context_->Draw(draw_configuration);
 }
 
 enum VertexAttribute {

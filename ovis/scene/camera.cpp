@@ -7,7 +7,7 @@ glm::mat4 Camera::CalculateProjectionMatrix() const {
   switch (projection_type_) {
     case ProjectionType::ORTHOGRAPHIC: {
       const float half_height = vertical_field_of_view_ * 0.5;
-      const float half_width  = half_height * aspect_ratio_;
+      const float half_width = half_height * aspect_ratio_;
       return glm::ortho(-half_width, half_width, -half_height, half_height,
                         near_clip_plane_, far_clip_plane_);
     }
