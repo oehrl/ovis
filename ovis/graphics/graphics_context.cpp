@@ -31,10 +31,11 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
 
   LogI("OpenGL version: ", glGetString(GL_VERSION));
 
-  int window_width  = 0;
-  int window_height = 0;
-  SDL_GetWindowSize(window, &window_width, &window_height);
-  glViewport(0, 0, window_width, window_height);
+  // int window_width = 0;
+  // int window_height = 0;
+  // SDL_GetWindowSize(window, &window_width, &window_height);
+  // LogD("Set viewport: ", window_width, "x", window_height);
+  // glViewport(0, 0, window_width, window_height);
 
   glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_caps.max_vertex_attribs);
   SDL_assert(m_caps.max_vertex_attribs >= 8);
