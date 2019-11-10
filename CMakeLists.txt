@@ -39,4 +39,5 @@ add_subdirectory(slotmachine)
 
 if (NOT OVIS_EMSCRIPTEN) 
   add_subdirectory(texture_converter)
+  add_subdirectory(resource_compiler)
 endif ()
