@@ -37,8 +37,7 @@ struct DrawItem {
   Uint32 count = 3;
   DepthBufferState depth_buffer_state;
   BlendState blend_state;
-  Rect<int> scissor_rect;
-  bool enable_scissoring = false;
+  std::optional<Rect<int>> scissor_rect;
 };
 
 class GraphicsContext final {
@@ -81,6 +80,7 @@ class GraphicsContext final {
   std::vector<bool> m_vertex_attrib_array_states;
   std::vector<GLuint> m_bound_textures;
   bool scissoring_enabled_;
+  Rect<int> current_scissor_rect_;
 
   inline void BindTexture(GLenum texture_type, GLuint texture_name,
                           GLuint texture_unit) {

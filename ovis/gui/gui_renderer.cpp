@@ -74,7 +74,7 @@ void GuiRenderer::Render() {
   draw_item.blend_state.source_color_factor = SourceBlendFactor::SOURCE_ALPHA;
   draw_item.blend_state.destination_color_factor =
       DestinationBlendFactor::ONE_MINUS_SOURCE_ALPHA;
-  draw_item.enable_scissoring = true;
+  draw_item.scissor_rect.emplace();
   shader_->SetUniform("InverseViewportSize", 1.0f / glm::vec2(scene()->size()));
 
   for (int i = 0; i < draw_data->CmdListsCount; ++i) {
@@ -93,12 +93,12 @@ void GuiRenderer::Render() {
       } else {
         auto clip_rect = draw_command.ClipRect;
 
-        draw_item.scissor_rect.left = static_cast<int>(clip_rect.x);
-        draw_item.scissor_rect.top =
+        draw_item.scissor_rect->left = static_cast<int>(clip_rect.x);
+        draw_item.scissor_rect->top =
             static_cast<int>(scene()->size().y - clip_rect.w);
-        draw_item.scissor_rect.width =
+        draw_item.scissor_rect->width =
             static_cast<int>(clip_rect.z - clip_rect.x);
-        draw_item.scissor_rect.height =
+        draw_item.scissor_rect->height =
             static_cast<int>(clip_rect.w - clip_rect.y);
         draw_item.count = draw_command.ElemCount;
         draw_item.start = index_offset;
