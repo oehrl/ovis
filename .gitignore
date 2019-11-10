@@ -1,3 +1,4 @@
 build/*
 *.xcuserstate
 .vscode/*
+.DS_Store
