@@ -33,19 +33,20 @@ class WheelsController : public SceneController {
     return wheel_positions_[index];
   }
 
-  void Update(std::chrono::microseconds delta_time) override {
-    const float delta_time_seconds = delta_time.count() / 1000000.0f;
+  inline float GetWheelSpeed(int wheel_index) {
+    if (wheel_index < static_cast<int>(current_state_)) {
+      return 0.0f;
+    } else {
+      return WHEEL_SPEED;
+    }
+  }
 
-    switch (current_state_) {
-      case State::ALL_SPINNING:
-        wheel_positions_[0] += WHEEL_SPEED * delta_time_seconds;
-      case State::FIRST_SET:
-        wheel_positions_[1] += WHEEL_SPEED * delta_time_seconds;
-      case State::SECOND_SET:
-        wheel_positions_[2] += WHEEL_SPEED * delta_time_seconds;
-      default:
-        break;
-    };
+  void Update(std::chrono::microseconds delta_time) override {
+    last_frame_time_ = delta_time.count() / 1000000.0f;
+
+    for (int i : IRange(3)) {
+      wheel_positions_[i] += GetWheelSpeed(i) * last_frame_time_;
+    }
 
     if (timer_value_ <= delta_time.count()) {
       timer_value_ = 0;
@@ -64,7 +65,6 @@ class WheelsController : public SceneController {
       }
     } else {
       timer_value_ -= delta_time.count();
-      LogD("Timer remaining ", timer_value_);
     }
 
     for (auto i : IRange(3)) {
@@ -81,6 +81,12 @@ class WheelsController : public SceneController {
         return true;
       }
     }
+    // if (event.type == SDL_KEYDOWN &&
+    //     event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+    //   for (int i : IRange(3)) {
+    //     wheel_positions_[i] += GetWheelSpeed(i) * last_frame_time_;
+    //   }
+    // }
 
     return false;
   }
@@ -88,21 +94,28 @@ class WheelsController : public SceneController {
   void StartTimer() {
     std::uniform_int_distribution dist{1000000, 3000000};
     timer_value_ = dist(generator_);
-    LogD("Timer set to ", timer_value_);
   }
+
+  float last_frame_time() const { return last_frame_time_; }
 
  private:
   float wheel_positions_[3] = {0.0f, 0.0f, 0.0f};
   static constexpr float WHEEL_SPEED = 20.0f;  // Icons per second
   static constexpr int ICON_COUNT = 4;
 
-  enum class State { ALL_SPINNING, FIRST_SET, SECOND_SET, ALL_SET };
+  enum class State {
+    ALL_SPINNING = 0,
+    FIRST_SET = 1,
+    SECOND_SET = 2,
+    ALL_SET = 3
+  };
   State current_state_ = State::ALL_SET;
 
   std::random_device random_device_;
   std::mt19937_64 generator_;
 
   int timer_value_ = 0;
+  float last_frame_time_ = 0.0f;
 };
 
 class IconsRenderer : public SceneRenderer {
@@ -139,43 +152,40 @@ class IconsRenderer : public SceneRenderer {
     const auto view_projection_matrix =
         scene()->camera().CalculateViewProjectionMatrix();
 
-    RenderWheel(-400.0f, wheels_controller_->GetWheelPosition(0),
-                view_projection_matrix);
-    RenderWheel(0.0f, wheels_controller_->GetWheelPosition(1),
-                view_projection_matrix);
-    RenderWheel(400.0f, wheels_controller_->GetWheelPosition(2),
-                view_projection_matrix);
-
-    // float closest = std::round(wheel_position_);
-    // --delay;
-    // if (delay <= 0) {
-    //   wheel_speed_ = 0.0f;
-    //   wheel_position_ = closest;
-    // } else {
-    //   wheel_position_ = fmod(wheel_position_ + wheel_speed_, icons_.size());
-    // }
+    for (auto i : IRange(3)) {
+      RenderWheel(i, view_projection_matrix);
+    }
   }
 
-  void RenderWheel(float x_offset, float wheel_position,
-                   const glm::mat4& view_projection_matrix) {
-    const float icon_size = 200;
-    const float margin = 50;
+  void RenderWheel(int wheel_index, const glm::mat4& view_projection_matrix) {
+    const float x_offset = (wheel_index - 1) * 420.0f;
+    const float wheel_position =
+        wheels_controller_->GetWheelPosition(wheel_index);
+    const float icon_size = 256;
+    const float margin = 20;
     const float total_size = icons_.size() * (icon_size + margin);
+    const float wheel_speed = wheels_controller_->GetWheelSpeed(wheel_index);
 
-    const int num_images = 8;  // Should be power of two!
+    constexpr float DESIRED_FPS = 480.0f;
+    const float frame_time = wheels_controller_->last_frame_time();
+
+    // Should optimally be power of two!
+    const float num_images =
+        wheel_speed > 0 ? round(frame_time * DESIRED_FPS) : 1.0f;
+    LogD("Num images: ", num_images);
     const float factor = 1.0f / num_images;
-    for (auto i : IRange(num_images)) {
+    for (auto i : IRange(static_cast<int>(num_images))) {
       for (const auto icon : IndexRange(icons_.begin(), icons_.end())) {
         Transform sprite_transform;
         sprite_transform.SetScale(icon_size);
 
-        (void)i;
-        const float temp_wheel_position =
-            wheel_position;  // - static_cast<float>(i) / num_images *
-                             // wheel_speed_;
-        float position =
-            (static_cast<float>(icon.index()) - temp_wheel_position) *
-            (icon_size + margin);
+        const float wheel_position_offset =
+            static_cast<float>(i) / num_images *
+            wheels_controller_->GetWheelSpeed(wheel_index) * frame_time;
+
+        float position = (static_cast<float>(icon.index()) -
+                          (wheel_position - wheel_position_offset)) *
+                         (icon_size + margin);
         if (position < total_size * -0.5) {
           position += total_size;
         }
@@ -222,7 +232,6 @@ class GameScene : public Scene {
         icons_renderer_(this, &wheels_controller_) {
     camera().SetProjectionType(ProjectionType::ORTHOGRAPHIC);
     camera().SetVerticalFieldOfView(720);
-    // camera().SetAspectRadio(720.0f / 1280.0f);
     camera().SetNearClipPlane(0.0f);
     camera().SetFarClipPlane(1.0f);
   }
