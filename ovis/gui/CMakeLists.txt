@@ -19,6 +19,13 @@ add_library(OvisGui ${OVIS_GUI_HEADER_FILES}
 
 target_link_libraries(OvisGui OvisScene OvisGraphics)
 
+set_target_properties(
+  OvisGui
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)
+
 # FreeType
 # target_include_directories(OvisGui PUBLIC freetype)
 # target_link_libraries(OvisGui freetype)

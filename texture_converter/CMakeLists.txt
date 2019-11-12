@@ -9,3 +9,10 @@ target_link_libraries(OvisTextureConverter
   PRIVATE stb_image
   PRIVATE rapidjson
 )
+
+set_target_properties(
+  OvisTextureConverter
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)

@@ -6,3 +6,9 @@ add_library(
   ${OVIS_MATH_HEADER_FILES}
   ${OVIS_MATH_SOURCE_FILES}
 )
+set_target_properties(
+  OvisMath
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)

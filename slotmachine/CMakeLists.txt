@@ -85,6 +85,12 @@ target_link_libraries(
   PUBLIC
     OvisEngine
 )
+set_target_properties(
+  SlotMachine
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)
 add_dependencies(SlotMachine SlotMachineResources)
 
 if (OVIS_EMSCRIPTEN)

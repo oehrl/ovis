@@ -14,6 +14,12 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/resources
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/resources/* ${CMAKE_CURRENT_BINARY_DIR}/resources
 )
+set_target_properties(
+  Water
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)
 
 target_link_libraries(Water OvisEngine)
 add_compile_options(Water "--preload-file resources")
