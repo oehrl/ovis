@@ -5,8 +5,11 @@ if (OVIS_EMSCRIPTEN)
   set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif ()
 
-add_executable(SlotMachine ${SLOT_MACHINE_HEADER_FILES}
-                           ${SLOT_MACHINE_SOURCE_FILES})
+add_executable(
+  SlotMachine
+  ${SLOT_MACHINE_HEADER_FILES}
+  ${SLOT_MACHINE_SOURCE_FILES}
+)
 
 # add_custom_command(
 #   TARGET SlotMachine
@@ -72,10 +75,16 @@ add_executable(SlotMachine ${SLOT_MACHINE_HEADER_FILES}
 
 add_custom_target(
   SlotMachineResources
-  OvisResourceCompiler ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_BINARY_DIR}/resources  
+  OvisResourceCompiler
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources
+    ${CMAKE_CURRENT_BINARY_DIR}/resources  
 )
 
-target_link_libraries(SlotMachine OvisEngine)
+target_link_libraries(
+  SlotMachine
+  PUBLIC
+    OvisEngine
+)
 add_dependencies(SlotMachine SlotMachineResources)
 
 if (OVIS_EMSCRIPTEN)
