@@ -14,7 +14,7 @@ std::vector<Window*> Window::all_windows_;
 Window::Window(const std::string& title, int width, int height)
     : sdl_window_(SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED,
                                    SDL_WINDOWPOS_UNDEFINED, width, height,
-                                   SDL_WINDOW_OPENGL)),
+                                   SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_) {
   assert(sdl_window_ != nullptr);
