@@ -7,7 +7,8 @@ namespace ovis {
 template <typename EnumType>
 class Flags {
   using UnderlyingType = std::underlying_type_t<EnumType>;
-  friend bool operator|(Flags<EnumType>, Flags<EnumType>);
+  template <typename T>
+  friend bool operator|(Flags<T>, Flags<T>);
 
  public:
   inline Flags() : value_(0) {}

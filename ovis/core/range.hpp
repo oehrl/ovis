@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <utility>
 
 template <typename T>
 class IntegralRange {
@@ -89,7 +90,7 @@ class IndexedRange {
   class Iterator {
    public:
     Iterator(const Iterator&) = default;
-    ~Iterator()               = default;
+    ~Iterator() = default;
 
     inline Iterator(T iterator, I index = I(0)) : m_value(iterator, index) {}
 
