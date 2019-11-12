@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <set>
 #include <vector>
 #include <SDL.h>
@@ -19,6 +20,7 @@ class UniformBuffer;
 class VertexBuffer;
 class VertexInput;
 class Texture;
+class RenderTargetConfiguration;
 
 enum class PrimitiveTopology {
   POINTS = GL_POINTS,
@@ -38,6 +40,7 @@ struct DrawItem {
   DepthBufferState depth_buffer_state;
   BlendState blend_state;
   std::optional<Rect<int>> scissor_rect;
+  RenderTargetConfiguration* render_target_configuration = nullptr;
 };
 
 class GraphicsContext final {
@@ -58,11 +61,17 @@ class GraphicsContext final {
   ~GraphicsContext();
 
   void Draw(const DrawItem& draw_item);
-  void Clear();
+
+  inline RenderTargetConfiguration* default_render_target_configuration()
+      const {
+    return m_default_render_target_configuration.get();
+  }
 
  private:
   SDL_GLContext m_context;
   std::set<GraphicsResource*> m_graphics_resources;
+  std::unique_ptr<RenderTargetConfiguration>
+      m_default_render_target_configuration;
 
   struct {
     GLint max_vertex_attribs;
@@ -81,6 +90,9 @@ class GraphicsContext final {
   std::vector<GLuint> m_bound_textures;
   bool scissoring_enabled_;
   Rect<int> current_scissor_rect_;
+  int x1, x2, x3;  // TODO: figure out why these three padding members are
+                   // necessary oO
+  Rect<int> current_viewport_;
 
   inline void BindTexture(GLenum texture_type, GLuint texture_name,
                           GLuint texture_unit) {

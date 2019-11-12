@@ -2,6 +2,7 @@
 
 #include <ovis/core/log.hpp>
 #include <ovis/graphics/index_buffer.hpp>
+#include <ovis/graphics/render_target_configuration.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/vertex_input.hpp>
 
@@ -50,6 +51,15 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+  int drawable_width;
+  int drawable_height;
+  SDL_GL_GetDrawableSize(window, &drawable_width, &drawable_height);
+  LogD("SDL_GL_GetDrawableSize ", drawable_width, "x", drawable_height);
+  current_viewport_ = {0, 0, drawable_width, drawable_height};
+
+  m_default_render_target_configuration.reset(
+      new RenderTargetConfiguration(this, drawable_width, drawable_height));
+
 #if !defined(__IPHONEOS__) && !defined(__EMSCRIPTEN__)
   GLuint vertex_array;
   glGenVertexArrays(1, &vertex_array);
@@ -58,6 +68,7 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
 }
 
 GraphicsContext::~GraphicsContext() {
+  m_default_render_target_configuration.reset();
   SDL_assert(m_graphics_resources.size() == 0);
 }
 
@@ -67,6 +78,19 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
 
   ApplyBlendState(&blend_state_, draw_item.blend_state);
   ApplyDepthBufferState(&depth_buffer_state_, draw_item.depth_buffer_state);
+
+  auto targets = draw_item.render_target_configuration != nullptr
+                     ? draw_item.render_target_configuration
+                     : default_render_target_configuration();
+  targets->Bind();
+  LogD("Targets dim: ", targets->width(), "x", targets->height());
+  if (targets->width() != current_viewport_.width ||
+      targets->height() != current_viewport_.height) {
+    LogD("glViewport(0,0,",targets->width(), ",", targets->height(), ")");
+    glViewport(0, 0, targets->width(), targets->height());
+    current_viewport_.width = targets->width();
+    current_viewport_.height = targets->height();
+  }
 
   if (draw_item.scissor_rect.has_value() != scissoring_enabled_) {
     if (draw_item.scissor_rect) {
@@ -116,16 +140,6 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
     glDrawElements(primitive_topology, draw_item.count, index_type,
                    reinterpret_cast<GLvoid*>(index_offset_in_bytes));
   }
-}
-
-void GraphicsContext::Clear() {
-  if (scissoring_enabled_) {
-    glDisable(GL_SCISSOR_TEST);
-    scissoring_enabled_ = false;
-  }
-  glClearColor(0.0f, 52.0f / 255.0f, 138.0f / 255.0f, 1.0f);
-  glClearDepthf(1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 }  // namespace ovis

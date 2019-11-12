@@ -7,8 +7,8 @@
 namespace ovis {
 
 RenderTargetConfiguration::RenderTargetConfiguration(
-  GraphicsContext* context,
-  const RenderTargetConfigurationDescription& description) 
+    GraphicsContext* context,
+    const RenderTargetConfigurationDescription& description)
     : GraphicsResource(context) {
   glGenFramebuffers(1, &m_frame_buffer);
 
@@ -17,6 +17,8 @@ RenderTargetConfiguration::RenderTargetConfiguration(
     if (color_attachment.value() != nullptr) {
       color_attachment.value()->Attach(GL_COLOR_ATTACHMENT0 +
                                        color_attachment.index());
+      width_ = color_attachment.value()->GetWidth();
+      height_ = color_attachment.value()->GetHeight();
     }
   }
   if (description.depth_attachment != nullptr) {
@@ -31,11 +33,28 @@ RenderTargetConfiguration::RenderTargetConfiguration(
 }
 
 RenderTargetConfiguration::~RenderTargetConfiguration() {
-  if (context()->m_bound_frame_buffer == m_frame_buffer) {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    context()->m_bound_frame_buffer = 0;
+  if (m_frame_buffer != 0) {
+    if (context()->m_bound_frame_buffer == m_frame_buffer) {
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      context()->m_bound_frame_buffer = 0;
+    }
+    glDeleteFramebuffers(1, &m_frame_buffer);
   }
 }
+
+void RenderTargetConfiguration::ClearColor(const glm::vec4& clear_color) {
+  Bind();
+  glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+  glClear(GL_COLOR_BUFFER_BIT);
+}
+
+RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
+                                                     std::size_t width,
+                                                     std::size_t height)
+    : GraphicsResource(context),
+      m_frame_buffer(0),
+      width_(width),
+      height_(height) {}
 
 void RenderTargetConfiguration::Bind() {
   if (context()->m_bound_frame_buffer != m_frame_buffer) {
@@ -44,4 +63,4 @@ void RenderTargetConfiguration::Bind() {
   }
 }
 
-}
+}  // namespace ovis

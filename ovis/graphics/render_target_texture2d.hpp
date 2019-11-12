@@ -14,11 +14,12 @@ class RenderTargetTexture2D : public RenderTarget {
  public:
   RenderTargetTexture2D(GraphicsContext* context,
                         const RenderTargetTexture2DDescription& description);
-  virtual ~RenderTargetTexture2D() override;
-
-  void Clear(const glm::vec4& color) override;
+  virtual ~RenderTargetTexture2D() override = default;
 
   inline Texture2D* texture() { return &m_texture; }
+
+  std::size_t GetWidth() const override;
+  std::size_t GetHeight() const override;
 
  private:
   Texture2D m_texture;
