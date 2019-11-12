@@ -9,6 +9,7 @@
 #include <ovis/core/log.hpp>
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_context.hpp>
+#include <ovis/graphics/render_target_configuration.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/static_mesh.hpp>
 #include <ovis/graphics/vertex_buffer.hpp>
@@ -32,7 +33,8 @@ class ClearRenderer : public SceneRenderer {
 
   void Render() override {
     SDL_assert(context() != nullptr);
-    this->context()->Clear();
+    context()->default_render_target_configuration()->ClearColor(
+        {0.0f, 0.0f, 0.0f, 1.0f});
   }
 
  private:

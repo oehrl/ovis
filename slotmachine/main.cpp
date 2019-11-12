@@ -11,6 +11,8 @@
 #include <ovis/core/range.hpp>
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_context.hpp>
+#include <ovis/graphics/render_target_configuration.hpp>
+#include <ovis/graphics/render_target_texture2d.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/static_mesh.hpp>
 #include <ovis/graphics/vertex_buffer.hpp>
@@ -135,8 +137,12 @@ class IconsRenderer : public SceneRenderer {
     mesh_->vertices()[3].position = glm::vec2(0.5f, -0.5f);
     mesh_->UpdateVertexBuffer();
 
-    shader_program_ =
+    sprite_shader_program_ =
         scene()->resource_manager()->Load<ovis::ShaderProgram>("sprite.shader");
+
+    vertical_blur_shader_program_ =
+        scene()->resource_manager()->Load<ShaderProgram>(
+            "vertical_blur.shader");
 
     icons_ = {
         scene()->resource_manager()->Load<Texture2D>("icons/beer.texture2d"),
@@ -144,10 +150,27 @@ class IconsRenderer : public SceneRenderer {
         scene()->resource_manager()->Load<Texture2D>("icons/shot.texture2d"),
         scene()->resource_manager()->Load<Texture2D>("icons/squat.texture2d"),
     };
+
+    RenderTargetTexture2DDescription render_target_description;
+
+    LogD("Scene size: ", scene()->size().x, "x", scene()->size().y);
+    render_target_description.texture_description.width = scene()->size().x;
+    render_target_description.texture_description.height = scene()->size().y;
+    render_target_description.texture_description.mip_map_count = 1;
+    render_target_description.texture_description.filter = TextureFilter::POINT;
+    render_target_description.texture_description.format =
+        TextureFormat::RGBA_UINT8;
+    render_target_ = std::make_unique<RenderTargetTexture2D>(
+        context(), render_target_description);
+
+    ovis::RenderTargetConfigurationDescription rtc_description;
+    rtc_description.color_attachments = {render_target_.get()};
+    render_target_configuration_ =
+        std::make_unique<RenderTargetConfiguration>(context(), rtc_description);
   }
 
   void Render() override {
-    context()->Clear();
+    render_target_configuration_->ClearColor({0.0f, 0.0f, 0.0f, 1.0f});
 
     const auto view_projection_matrix =
         scene()->camera().CalculateViewProjectionMatrix();
@@ -155,6 +178,16 @@ class IconsRenderer : public SceneRenderer {
     for (auto i : IRange(3)) {
       RenderWheel(i, view_projection_matrix);
     }
+
+    vertical_blur_shader_program_->SetUniform(
+        "InverseTextureHeight",
+        1.0f / render_target_->texture()->description().height);
+    vertical_blur_shader_program_->SetTexture("Texture",
+                                              render_target_->texture());
+
+    DrawItem draw_configuration;
+    draw_configuration.shader_program = vertical_blur_shader_program_.get();
+    mesh_->Draw(draw_configuration);
   }
 
   void RenderWheel(int wheel_index, const glm::mat4& view_projection_matrix) {
@@ -194,13 +227,15 @@ class IconsRenderer : public SceneRenderer {
         }
         sprite_transform.Translate(glm::vec3(x_offset, position, 0.0f));
 
-        shader_program_->SetUniform(
+        sprite_shader_program_->SetUniform(
             "Transform",
             view_projection_matrix * sprite_transform.CalculateMatrix());
-        shader_program_->SetTexture("SpriteTexture", icon.value().get());
+        sprite_shader_program_->SetTexture("SpriteTexture", icon.value().get());
 
         DrawItem draw_configuration;
-        draw_configuration.shader_program = shader_program_.get();
+        draw_configuration.render_target_configuration =
+            render_target_configuration_.get();
+        draw_configuration.shader_program = sprite_shader_program_.get();
         draw_configuration.blend_state.enabled = true;
         draw_configuration.blend_state.color_function = BlendFunction::ADD;
         draw_configuration.blend_state.source_color_factor =
@@ -220,8 +255,11 @@ class IconsRenderer : public SceneRenderer {
   using SpriteMesh = SimpleMesh<VertexAttribute::POSITION2D>;
   WheelsController* wheels_controller_;
   std::unique_ptr<SpriteMesh> mesh_;
-  ovis::ResourcePointer<ovis::ShaderProgram> shader_program_;
+  ovis::ResourcePointer<ovis::ShaderProgram> sprite_shader_program_;
+  ovis::ResourcePointer<ovis::ShaderProgram> vertical_blur_shader_program_;
   std::vector<ovis::ResourcePointer<ovis::Texture2D>> icons_;
+  std::unique_ptr<ovis::RenderTargetTexture2D> render_target_;
+  std::unique_ptr<ovis::RenderTargetConfiguration> render_target_configuration_;
 };
 
 class GameScene : public Scene {
