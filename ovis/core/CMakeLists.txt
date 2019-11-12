@@ -11,13 +11,18 @@ add_library(
 target_include_directories(
   OvisCore
   PUBLIC
-    ${CMAKE_SOURCE_DIR}/extern/SDL/include
+    ${SDL2_INCLUDE_DIRS}
 )
 target_link_libraries(
   OvisCore
   PUBLIC
-    SDL2
+    ${SDL2_LIBRARIES}
     rapidjson
+)
+target_link_directories(
+  OvisCore
+  PUBLIC
+    ${SDL2_LIBDIR}
 )
 set_target_properties(
   OvisCore
