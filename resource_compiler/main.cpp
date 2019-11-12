@@ -40,8 +40,12 @@ int CompileTexture2D(std::filesystem::path input_file,
       std::cerr << "  Cannot open " << output_data_file << std::endl;
       return -3;
     }
-    file.write(reinterpret_cast<const char*>(data),
-               image_width * image_height * image_channel_count);
+    for (int row = 0; row < image_height; ++row) {
+      file.write(reinterpret_cast<const char*>(data + (image_height - row - 1) *
+                                                          image_width *
+                                                          image_channel_count),
+                 image_width * image_channel_count);
+    }
     file.close();
     stbi_image_free(data);
     std::cout << "  Wrote " << output_data_file << "\n";
@@ -210,7 +214,7 @@ int main(int argc, char const* argv[]) {
         std::cout << "DIRECTORY: " << relative_path << "\n";
 
         const auto directory_to_create = output_directory / relative_path;
-        if (fs::exists(output_directory)) {
+        if (fs::exists(directory_to_create)) {
           std::cout << "  Nothing to do\n";
         } else if (!fs::create_directories(directory_to_create)) {
           std::cerr << "  Failed to create output directory!" << std::endl;

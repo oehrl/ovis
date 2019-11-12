@@ -7,7 +7,7 @@ in vec2 a_Position;
 out vec2 vs_TexCoord;
 
 void main() {
-  vs_TexCoord = a_Position * vec2(1.0, -1.0) + 0.5;
+  vs_TexCoord = a_Position + 0.5;
   // gl_Position = u_WorldViewProjection * vec4(a_Position, 0.0, 0.0);
   gl_Position = u_Transform * vec4(a_Position, 0.0, 1.0);
 }
