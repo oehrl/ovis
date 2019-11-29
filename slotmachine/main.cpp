@@ -144,11 +144,31 @@ class IconsRenderer : public SceneRenderer {
         scene()->resource_manager()->Load<ShaderProgram>(
             "vertical_blur.shader");
 
-    icons_ = {
+    icons_[0] = {
         scene()->resource_manager()->Load<Texture2D>("icons/beer.texture2d"),
         scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
         scene()->resource_manager()->Load<Texture2D>("icons/shot.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
         scene()->resource_manager()->Load<Texture2D>("icons/squat.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
+    };
+
+    icons_[1] = {
+        scene()->resource_manager()->Load<Texture2D>("icons/shot.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/beer.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/squat.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
+    };
+
+    icons_[2] = {
+        scene()->resource_manager()->Load<Texture2D>("icons/squat.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/beer.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/shot.texture2d"),
+        scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
     };
 
     RenderTargetTexture2DDescription render_target_description;
@@ -196,10 +216,10 @@ class IconsRenderer : public SceneRenderer {
         wheels_controller_->GetWheelPosition(wheel_index);
     const float icon_size = 256;
     const float margin = 20;
-    const float total_size = icons_.size() * (icon_size + margin);
+    const float total_size = icons_[wheel_index].size() * (icon_size + margin);
     const float wheel_speed = wheels_controller_->GetWheelSpeed(wheel_index);
 
-    constexpr float DESIRED_FPS = 480.0f;
+    constexpr float DESIRED_FPS = 60.0f;
     const float frame_time = wheels_controller_->last_frame_time();
 
     // Should optimally be power of two!
@@ -208,7 +228,8 @@ class IconsRenderer : public SceneRenderer {
     LogD("Num images: ", num_images);
     const float factor = 1.0f / num_images;
     for (auto i : IRange(static_cast<int>(num_images))) {
-      for (const auto icon : IndexRange(icons_.begin(), icons_.end())) {
+      for (const auto icon :
+           IndexRange(icons_[wheel_index].begin(), icons_[wheel_index].end())) {
         Transform sprite_transform;
         sprite_transform.SetScale(icon_size);
 
@@ -257,7 +278,7 @@ class IconsRenderer : public SceneRenderer {
   std::unique_ptr<SpriteMesh> mesh_;
   ovis::ResourcePointer<ovis::ShaderProgram> sprite_shader_program_;
   ovis::ResourcePointer<ovis::ShaderProgram> vertical_blur_shader_program_;
-  std::vector<ovis::ResourcePointer<ovis::Texture2D>> icons_;
+  std::vector<ovis::ResourcePointer<ovis::Texture2D>> icons_[3];
   std::unique_ptr<ovis::RenderTargetTexture2D> render_target_;
   std::unique_ptr<ovis::RenderTargetConfiguration> render_target_configuration_;
 };
