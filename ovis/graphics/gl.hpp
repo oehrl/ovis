@@ -6,6 +6,8 @@
 #include <SDL_opengles2.h>
 #elif defined(__EMSCRIPTEN__)
 #include <GLES2/gl2.h>
-#else
+#elif __APPLE__
 #include <OpenGL/gl3.h>
+#else
+#include <GL/gl.h>
 #endif
