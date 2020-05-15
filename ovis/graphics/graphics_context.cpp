@@ -1,6 +1,6 @@
-#include <ovis/graphics/graphics_context.hpp>
-
 #include <ovis/core/log.hpp>
+
+#include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/index_buffer.hpp>
 #include <ovis/graphics/render_target_configuration.hpp>
 #include <ovis/graphics/shader_program.hpp>
@@ -83,10 +83,8 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
                      ? draw_item.render_target_configuration
                      : default_render_target_configuration();
   targets->Bind();
-  LogD("Targets dim: ", targets->width(), "x", targets->height());
   if (targets->width() != current_viewport_.width ||
       targets->height() != current_viewport_.height) {
-    LogD("glViewport(0,0,",targets->width(), ",", targets->height(), ")");
     glViewport(0, 0, targets->width(), targets->height());
     current_viewport_.width = targets->width();
     current_viewport_.height = targets->height();
