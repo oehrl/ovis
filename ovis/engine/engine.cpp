@@ -57,7 +57,7 @@ void EmscriptenUpdate() {
 }  // namespace
 
 void Init() {
-  SDL_Init(SDL_INIT_VIDEO);
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 }
 
 void Run() {
