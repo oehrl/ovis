@@ -1,12 +1,15 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
+
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/range.hpp>
 #include <ovis/core/resource_manager.hpp>
+
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/shader_program.hpp>
 
@@ -107,7 +110,7 @@ void ShaderProgram::AttachShader(const std::string& source,
       std::vector<GLchar> info_log_buffer(info_log_length, '\0');
       glGetShaderInfoLog(shader, info_log_length, nullptr,
                          info_log_buffer.data());
-      LogE(info_log_buffer.data());
+      LogE("{}", info_log_buffer.data());
     }
 
     glDeleteShader(shader);
@@ -135,7 +138,6 @@ bool LoadShaderProgram(GraphicsContext* graphics_context,
                        ResourceManager* resource_manager,
                        const rapidjson::Document& parameters,
                        const std::string& id, const std::string& directory) {
-  LogD(directory + "/" + parameters["vertex_shader_source"].GetString());
   ShaderProgramDescription sp_desc;
 
   const auto vertex_shader_source = LoadTextFile(
@@ -144,8 +146,8 @@ bool LoadShaderProgram(GraphicsContext* graphics_context,
   if (vertex_shader_source.has_value()) {
     sp_desc.vertex_shader_source = *vertex_shader_source;
   } else {
-    LogE("Cannot open: ",
-         directory + "/" + parameters["vertex_shader_source"].GetString());
+    LogE("Cannot open: {}/{}", directory,
+         parameters["vertex_shader_source"].GetString());
   }
 
   const auto fragment_shader_source = LoadTextFile(
@@ -153,17 +155,17 @@ bool LoadShaderProgram(GraphicsContext* graphics_context,
   if (fragment_shader_source.has_value()) {
     sp_desc.fragment_shader_source = *fragment_shader_source;
   } else {
-    LogE("Cannot open: ",
-         directory + "/" + parameters["fragment_shader_source"].GetString());
+    LogE("Cannot open: {}/{}", directory,
+         parameters["fragment_shader_source"].GetString());
   }
 
   if (vertex_shader_source.has_value() && fragment_shader_source.has_value()) {
     resource_manager->RegisterResource<ShaderProgram>(id, graphics_context,
                                                       sp_desc);
-    LogI("Sucessfully loaded shader program: ", id);
+    LogI("Sucessfully loaded shader program: {}", id);
     return true;
   } else {
-    LogE("Failed to load shader program: ", id);
+    LogE("Failed to load shader program: {}", id);
     return false;
   }
 }

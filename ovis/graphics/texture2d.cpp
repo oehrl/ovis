@@ -118,7 +118,7 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
   } else if (std::strcmp(filter, "trilinear") == 0) {
     texture2d_desc.filter = TextureFilter::TRILINEAR;
   } else {
-    LogE("Failed to load texture '", id, "': invalid filter (", filter, ")");
+    LogE("Failed to load texture '{}': invalid filter ()", id, filter);
     return false;
   }
 
@@ -128,7 +128,7 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
   } else if (std::strcmp(format, "RGBA_UINT8") == 0) {
     texture2d_desc.format = TextureFormat::RGBA_UINT8;
   } else {
-    LogE("Failed to load texture '", id, "': invalid format (", format, ")");
+    LogE("Failed to load texture '{}': invalid format ()", id, format);
     return false;
   }
 
@@ -138,10 +138,10 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
   if (file_content.has_value()) {
     resource_manager->RegisterResource<Texture2D>(
         id, graphics_context, texture2d_desc, file_content->data());
-    LogI("Sucessfully loaded texture: ", id);
+    LogI("Sucessfully loaded texture: {}", id);
     return true;
   } else {
-    LogE("Cannot open ", parameters["data_file"].GetString());
+    LogE("Cannot open {}", parameters["data_file"].GetString());
     return false;
   }
 }

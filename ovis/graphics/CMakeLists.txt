@@ -28,10 +28,5 @@ target_link_libraries(
     SDL2
     ${OPENGL_LIBRARIES}
     rapidjson
-)
-set_target_properties(
-  OvisGraphics
-  PROPERTIES
-    CXX_STANDARD 17
-    CXX_EXTENSIONS OFF
+    OvisCore
 )

@@ -30,13 +30,7 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
   SDL_assert(m_context != nullptr);
   SDL_GL_MakeCurrent(window, m_context);
 
-  LogI("OpenGL version: ", glGetString(GL_VERSION));
-
-  // int window_width = 0;
-  // int window_height = 0;
-  // SDL_GetWindowSize(window, &window_width, &window_height);
-  // LogD("Set viewport: ", window_width, "x", window_height);
-  // glViewport(0, 0, window_width, window_height);
+  LogI("OpenGL version: {}", glGetString(GL_VERSION));
 
   glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_caps.max_vertex_attribs);
   SDL_assert(m_caps.max_vertex_attribs >= 8);
@@ -54,7 +48,7 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
   int drawable_width;
   int drawable_height;
   SDL_GL_GetDrawableSize(window, &drawable_width, &drawable_height);
-  LogD("SDL_GL_GetDrawableSize ", drawable_width, "x", drawable_height);
+  LogD("SDL_GL_GetDrawableSize {}x{}", drawable_width, drawable_height);
   current_viewport_ = {0, 0, drawable_width, drawable_height};
 
   m_default_render_target_configuration.reset(

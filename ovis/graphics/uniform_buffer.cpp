@@ -99,7 +99,7 @@ UniformBuffer::UniformBuffer(GraphicsContext* context,
 
     SDL_assert(uniform_name_buffer[0] == 'u' && uniform_name_buffer[1] == '_');
     m_uniform_indices[uniform_name_buffer.data() + 2] = i;
-    LogD(uniform_name_buffer.data(), " = ", i);
+    LogD("{}={}", uniform_name_buffer.data(), i);
   }
 
   m_uniform_buffer.resize(current_size, 0);

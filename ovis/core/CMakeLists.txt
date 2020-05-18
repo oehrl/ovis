@@ -18,15 +18,13 @@ target_link_libraries(
   PUBLIC
     ${SDL2_LIBRARIES}
     rapidjson
+    fmt::fmt
 )
 target_link_directories(
   OvisCore
   PUBLIC
     ${SDL2_LIBDIR}
 )
-set_target_properties(
+target_compile_features(
   OvisCore
-  PROPERTIES
-    CXX_STANDARD 17
-    CXX_EXTENSIONS OFF
-)
+    PUBLIC cxx_std_20)

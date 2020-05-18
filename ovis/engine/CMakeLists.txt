@@ -12,11 +12,4 @@ target_link_libraries(
     OvisCore
     OvisGraphics
     OvisScene
-    OvisGui
-)
-set_target_properties(
-  OvisEngine
-  PROPERTIES
-    CXX_STANDARD 17
-    CXX_EXTENSIONS OFF
 )

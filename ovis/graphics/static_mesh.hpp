@@ -73,8 +73,8 @@ void StaticMesh<VertexType>::UpdateVertexBuffer(size_t start, size_t count) {
   const size_t offset_in_bytes = start * sizeof(VertexType);
   const size_t length_in_bytes =
       (count > 0 ? count : vertices_.size()) * sizeof(VertexType);
-  LogD("offset: ", offset_in_bytes);
-  LogD("length_in_bytes: ", length_in_bytes);
+  LogD("offset: {}", offset_in_bytes);
+  LogD("length_in_bytes: {}", length_in_bytes);
   vertex_buffer_->Write(offset_in_bytes, length_in_bytes, &vertices_[start]);
 }
 

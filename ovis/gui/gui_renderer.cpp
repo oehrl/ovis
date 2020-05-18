@@ -13,7 +13,7 @@ GuiRenderer::~GuiRenderer() {
 }
 
 void GuiRenderer::CreateResources() {
-  LogD("Context: ", context());
+  LogD("Context: {}", context());
 
   ShaderProgramDescription shader_desc;
   shader_desc.vertex_shader_source =

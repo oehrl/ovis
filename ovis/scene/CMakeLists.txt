@@ -9,12 +9,7 @@ add_library(
 target_link_libraries(
   OvisScene
   PUBLIC
+    OvisCore
     OvisMath
     OvisGraphics
-)
-set_target_properties(
-  OvisScene
-  PROPERTIES
-    CXX_STANDARD 17
-    CXX_EXTENSIONS OFF
 )

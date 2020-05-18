@@ -4,3 +4,4 @@ if (NOT OVIS_EMSCRIPTEN)
 endif ()
 
 add_subdirectory(rapidjson)
+add_subdirectory(fmt)

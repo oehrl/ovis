@@ -132,7 +132,7 @@ bool LoadCubemap(GraphicsContext* graphics_context,
   } else if (std::strcmp(filter, "trilinear") == 0) {
     cubemap_desc.filter = TextureFilter::TRILINEAR;
   } else {
-    LogE("Failed to load cubemap '", id, "': invalid filter (", filter, ")");
+    LogE("Failed to load cubemap '{}': invalid filter ({}})", id, filter);
     return false;
   }
 
@@ -142,7 +142,7 @@ bool LoadCubemap(GraphicsContext* graphics_context,
   } else if (std::strcmp(format, "RGBA_UINT8") == 0) {
     cubemap_desc.format = TextureFormat::RGBA_UINT8;
   } else {
-    LogE("Failed to load cubemap '", id, "': invalid format (", format, ")");
+    LogE("Failed to load cubemap '{}': invalid format ({}})", id, format);
     return false;
   }
 
@@ -152,10 +152,10 @@ bool LoadCubemap(GraphicsContext* graphics_context,
   if (file_content.has_value()) {
     resource_manager->RegisterResource<Cubemap>(
         id, graphics_context, cubemap_desc, file_content->data());
-    LogI("Sucessfully loaded texture: ", id);
+    LogI("Sucessfully loaded texture: {}", id);
     return true;
   } else {
-    LogE("Cannot open ", parameters["data_file"].GetString());
+    LogE("Cannot open {}", parameters["data_file"].GetString());
     return false;
   }
 }

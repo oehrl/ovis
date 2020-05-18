@@ -13,11 +13,6 @@ pkg_check_modules(SDL2_mixer REQUIRED IMPORTED_TARGET SDL2_mixer)
 target_link_libraries(
   OvisAudio
   PUBLIC
-  PkgConfig::SDL2_mixer
-)
-set_target_properties(
-  OvisAudio
-  PROPERTIES
-    CXX_STANDARD 17
-    CXX_EXTENSIONS OFF
+    OvisCore
+    PkgConfig::SDL2_mixer
 )

@@ -1,14 +1,19 @@
 #include <cmath>
+
 #include <iostream>
 #include <random>
+
 #include <SDL_assert.h>
+
 #include <glm/gtx/string_cast.hpp>
 #include <ovis/gui/gui_controller.hpp>
 #include <ovis/gui/gui_renderer.hpp>
 #include <ovis/math/marching_cubes.hpp>
+
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/range.hpp>
+
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/render_target_configuration.hpp>
@@ -17,9 +22,11 @@
 #include <ovis/graphics/static_mesh.hpp>
 #include <ovis/graphics/vertex_buffer.hpp>
 #include <ovis/graphics/vertex_input.hpp>
+
 #include <ovis/scene/scene.hpp>
 #include <ovis/scene/scene_controller.hpp>
 #include <ovis/scene/scene_renderer.hpp>
+
 #include <ovis/engine/engine.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -140,10 +147,6 @@ class IconsRenderer : public SceneRenderer {
     sprite_shader_program_ =
         scene()->resource_manager()->Load<ovis::ShaderProgram>("sprite.shader");
 
-    vertical_blur_shader_program_ =
-        scene()->resource_manager()->Load<ShaderProgram>(
-            "vertical_blur.shader");
-
     icons_[0] = {
         scene()->resource_manager()->Load<Texture2D>("icons/beer.texture2d"),
         scene()->resource_manager()->Load<Texture2D>("icons/push_up.texture2d"),
@@ -199,14 +202,15 @@ class IconsRenderer : public SceneRenderer {
       RenderWheel(i, view_projection_matrix);
     }
 
-    vertical_blur_shader_program_->SetUniform(
-        "InverseTextureHeight",
-        1.0f / render_target_->texture()->description().height);
-    vertical_blur_shader_program_->SetTexture("Texture",
-                                              render_target_->texture());
+    Transform transform;
+    transform.SetScale(glm::vec3{100.0f, 100.0f, 1.0f});
+    sprite_shader_program_->SetUniform("Transform",
+                                       transform.CalculateMatrix());
+    sprite_shader_program_->SetTexture("SpriteTexture",
+                                       render_target_->texture());
 
     DrawItem draw_configuration;
-    draw_configuration.shader_program = vertical_blur_shader_program_.get();
+    draw_configuration.shader_program = sprite_shader_program_.get();
     mesh_->Draw(draw_configuration);
   }
 
@@ -225,7 +229,7 @@ class IconsRenderer : public SceneRenderer {
     // Should optimally be power of two!
     const float num_images =
         wheel_speed > 0 ? round(frame_time * DESIRED_FPS) : 1.0f;
-    LogD("Num images: ", num_images);
+    // LogD("Num images: ", num_images);
     const float factor = 1.0f / num_images;
     for (auto i : IRange(static_cast<int>(num_images))) {
       for (const auto icon :
@@ -277,7 +281,6 @@ class IconsRenderer : public SceneRenderer {
   WheelsController* wheels_controller_;
   std::unique_ptr<SpriteMesh> mesh_;
   ovis::ResourcePointer<ovis::ShaderProgram> sprite_shader_program_;
-  ovis::ResourcePointer<ovis::ShaderProgram> vertical_blur_shader_program_;
   std::vector<ovis::ResourcePointer<ovis::Texture2D>> icons_[3];
   std::unique_ptr<ovis::RenderTargetTexture2D> render_target_;
   std::unique_ptr<ovis::RenderTargetConfiguration> render_target_configuration_;

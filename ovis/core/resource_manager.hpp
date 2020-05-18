@@ -48,11 +48,11 @@ class ResourceManager {
 
 template <typename T>
 ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
-  LogI("Loading '", filename, "'...");
+  LogI("Loading '{}'...", filename);
   const std::string extension = filename.substr(filename.find_last_of('.'));
   auto resource_loaders = resource_loaders_.equal_range(extension);
   if (resource_loaders.first == resource_loaders.second) {
-    LogE("No file loaders for extension '", extension, "'!");
+    LogE("No file loaders for extension '{}'!", extension);
     return ResourcePointer<T>{};
   }
 
@@ -64,9 +64,9 @@ ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
     const std::string resource_path = search_path + filename + ".json";
     std::ifstream resource_parameter_file(resource_path);
     if (!resource_parameter_file.is_open()) {
-      LogI("File '", resource_path, "' does not exist");
+      LogV("File '{}' does not exist", resource_path);
     } else {
-      LogI("File '", resource_path, "' exists");
+      LogV("File '{}' exists", resource_path);
 
       rapidjson::IStreamWrapper iws{resource_parameter_file};
       rapidjson::Document parameter_document;
@@ -84,9 +84,9 @@ ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
       }
 
       if (is_loaded) {
-        LogI(resource_path, " was successfully loaded!");
+        LogI("'{}' was successfully loaded!", resource_path);
       } else {
-        LogE("Could not load '", resource_path, "'!");
+        LogE("Could not load '{}'!", resource_path);
       }
       break;
     }
