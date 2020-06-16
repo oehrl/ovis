@@ -16,7 +16,8 @@ Window::Window(const std::string& title, int width, int height)
                                    SDL_WINDOWPOS_UNDEFINED, width, height,
                                    SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
       id_(SDL_GetWindowID(sdl_window_)),
-      graphics_context_(sdl_window_) {
+      graphics_context_(sdl_window_),
+      render_pipeline_(&graphics_context_) {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
   SDL_GetWindowSize(sdl_window_, &width_, &height_);
@@ -76,7 +77,7 @@ void Window::Update(std::chrono::microseconds delta_time) {
 
 void Window::Render() {
   if (scene_stack_.size() > 0) {
-    scene_stack_.back()->Render(width_, height_);
+    render_pipeline_.Render(scene_stack_.back());
   }
   SDL_GL_SwapWindow(sdl_window_);
 }
@@ -87,8 +88,7 @@ void Window::PushScene(Scene* scene) {
   }
   scene_stack_.push_back(scene);
   scene->SetResourceManager(
-      resource_manager());  // must happen before calling set context!
-  scene->SetContext(context());
+      resource_manager());
   scene->Resume();
 }
 
@@ -103,7 +103,6 @@ void Window::PopScene() {
   assert(scene_stack_.size() > 0);
 
   scene_stack_.back()->Pause();
-  scene_stack_.back()->SetContext(nullptr);
   scene_stack_.pop_back();
   if (scene_stack_.size() > 0) {
     scene_stack_.back()->Resume();

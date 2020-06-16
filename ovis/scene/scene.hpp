@@ -32,9 +32,6 @@ class Scene {
   inline void Resize(const glm::uvec2& new_size);
   inline glm::uvec2 size() const { return size_; }
 
-  inline GraphicsContext* context() const { return context_; }
-  void SetContext(GraphicsContext* context);
-
   inline ResourceManager* resource_manager() const { return resource_manager_; }
   inline void SetResourceManager(ResourceManager* resource_manager) {
     resource_manager_ = resource_manager;
@@ -47,14 +44,7 @@ class Scene {
     return down_cast<ControllerType*>(GetControllerInternal(controller_name));
   }
 
-  template <typename RendererType = SceneRenderer>
-  inline RendererType* GetRenderer(const std::string& renderer_name) const {
-    static_assert(std::is_base_of<SceneRenderer, RendererType>::value, "");
-    return down_cast<RendererType*>(GetRendererInternal(renderer_name));
-  }
-
   void Update(std::chrono::microseconds delta_time);
-  void Render(float width, float height);
 
   void Resume();
   void Pause();
@@ -64,13 +54,9 @@ class Scene {
  private:
   void AddController(SceneController* controller);
   void RemoveController(SceneController* controller);
-  void AddRenderer(SceneRenderer* renderer);
-  void RemoveRenderer(SceneRenderer* renderer);
-  void SortRenderers();
 
   SceneController* GetControllerInternal(
       const std::string& controller_name) const;
-  SceneRenderer* GetRendererInternal(const std::string& renderer_name) const;
 
   virtual void OnUpdate(std::chrono::microseconds delta_time);
   virtual void OnResume();
@@ -84,13 +70,9 @@ class Scene {
 
   std::string m_name;
   std::unordered_map<std::string, SceneController*> m_controllers;
-  std::unordered_map<std::string, SceneRenderer*> m_renderers;
-  std::vector<SceneRenderer*> m_render_order;
-  GraphicsContext* context_;
   ResourceManager* resource_manager_;
   Camera camera_;
   glm::uvec2 size_;
-  bool m_renderers_sorted;
   bool m_is_paused;
   bool m_hides_previous;
 };

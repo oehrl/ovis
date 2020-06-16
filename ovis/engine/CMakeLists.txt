@@ -12,4 +12,5 @@ target_link_libraries(
     OvisCore
     OvisGraphics
     OvisScene
+    OvisRendering
 )

@@ -8,6 +8,7 @@
 #include <ovis/core/class.hpp>
 #include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
+#include <ovis/rendering/render_pipeline.hpp>
 
 namespace ovis {
 
@@ -55,6 +56,7 @@ class Window {
   int height_;
 
   GraphicsContext graphics_context_;
+  RenderPipeline render_pipeline_;
   ResourceManager resource_manager_;
 
   std::vector<Scene*> scene_stack_;
