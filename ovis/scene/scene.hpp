@@ -12,13 +12,13 @@
 namespace ovis {
 
 class SceneController;
-class SceneRenderer;
+class SceneObject;
 class GraphicsContext;
 class ResourceManager;
 
 class Scene {
   friend class SceneController;
-  friend class SceneRenderer;
+  friend class SceneObject;
 
  public:
   Scene(const std::string& name, const glm::uvec2& size,
@@ -44,6 +44,10 @@ class Scene {
     return down_cast<ControllerType*>(GetControllerInternal(controller_name));
   }
 
+  SceneObject* CreateObject(const std::string& object_name);
+  void DeleteObject(const std::string& object_name);
+  SceneObject* GetObject(const std::string& object_name);
+
   void Update(std::chrono::microseconds delta_time);
 
   void Resume();
@@ -54,6 +58,9 @@ class Scene {
  private:
   void AddController(SceneController* controller);
   void RemoveController(SceneController* controller);
+
+  void AddObject(SceneObject* object);
+  void RemoveObject(SceneObject* object);
 
   SceneController* GetControllerInternal(
       const std::string& controller_name) const;
@@ -70,6 +77,8 @@ class Scene {
 
   std::string m_name;
   std::unordered_map<std::string, SceneController*> m_controllers;
+  std::unordered_map<std::string, SceneObject*> objects_;
+  std::unordered_map<std::string, std::unique_ptr<SceneObject>> created_objects_;
   ResourceManager* resource_manager_;
   Camera camera_;
   glm::uvec2 size_;

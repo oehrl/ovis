@@ -4,9 +4,12 @@
 
 #include <algorithm>
 #include <map>
+
 #include <SDL_assert.h>
+
 #include <ovis/scene/scene.hpp>
 #include <ovis/scene/scene_controller.hpp>
+#include <ovis/scene/scene_object.hpp>
 
 namespace ovis {
 
@@ -18,6 +21,23 @@ Scene::Scene(const std::string& name, const glm::uvec2& size,
       m_hides_previous(hide_previous) {}
 
 Scene::~Scene() {}
+
+SceneObject* Scene::CreateObject(const std::string& object_name) {
+  auto result = created_objects_.insert(std::make_pair(
+      object_name, std::make_unique<SceneObject>(this, object_name)));
+  SDL_assert(result.second);
+  return result.first->second.get();
+}
+
+void Scene::DeleteObject(const std::string& object_name) {
+  SDL_assert(created_objects_.count(object_name) == 1);
+  created_objects_.erase(object_name);
+}
+
+SceneObject* Scene::GetObject(const std::string& object_name) {
+  auto object = objects_.find(object_name);
+  return object->second;
+}
 
 void Scene::Update(std::chrono::microseconds delta_time) {
   OnUpdate(delta_time);
@@ -76,6 +96,17 @@ void Scene::RemoveController(SceneController* controller) {
   SDL_assert(m_controllers.find(controller->name()) != m_controllers.end() &&
              m_controllers.find(controller->name())->second == controller);
   m_controllers.erase(m_controllers.find(controller->name()));
+}
+
+void Scene::AddObject(SceneObject* object) {
+  SDL_assert(objects_.find(object->name()) == objects_.end());
+  objects_.insert(std::make_pair(object->name(), object));
+}
+
+void Scene::RemoveObject(SceneObject* object) {
+  SDL_assert(objects_.find(object->name()) != objects_.end() &&
+             objects_.find(object->name())->second == object);
+  objects_.erase(objects_.find(object->name()));
 }
 
 SceneController* Scene::GetControllerInternal(
