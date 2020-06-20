@@ -2,13 +2,16 @@
 
 #include <SDL_assert.h>
 
+#include <ovis/rendering/geometry_pass.hpp>
 #include <ovis/rendering/render_pass.hpp>
 #include <ovis/rendering/render_pipeline.hpp>
 
 namespace ovis {
 
 RenderPipeline::RenderPipeline(GraphicsContext* graphics_context)
-    : graphics_context_(graphics_context), render_passes_sorted_(false) {}
+    : graphics_context_(graphics_context), render_passes_sorted_(false) {
+  AddRenderPass(new GeometryPass(this));
+}
 
 void RenderPipeline::AddRenderPass(RenderPass* render_pass) {
   SDL_assert(render_passes_.find(render_pass->name()) == render_passes_.end());

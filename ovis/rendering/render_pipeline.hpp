@@ -12,6 +12,7 @@ class RenderPass;
 class Scene;
 
 class RenderPipeline {
+  friend class RenderPass;
   MAKE_NON_COPY_OR_MOVABLE(RenderPipeline);
 
  public:
