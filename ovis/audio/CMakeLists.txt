@@ -1,10 +1,9 @@
-file(GLOB OVIS_AUDIO_HEADER_FILES "*.hpp")
-file(GLOB OVIS_AUDIO_SOURCE_FILES "*.cpp")
-
 add_library(
   OvisAudio
-  ${OVIS_AUDIO_HEADER_FILES}
-  ${OVIS_AUDIO_SOURCE_FILES}
+
+  audio_channel.hpp audio_channel.cpp
+  audio_chunk.hpp audio_chunk.cpp
+  audio_context.hpp audio_context.cpp
 )
 
 find_package(PkgConfig REQUIRED) 

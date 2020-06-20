@@ -3,8 +3,25 @@ file(GLOB OVIS_GRAPHICS_SOURCE_FILES "*.cpp")
 
 add_library(
   OvisGraphics
-  ${OVIS_GRAPHICS_HEADER_FILES}
-  ${OVIS_GRAPHICS_SOURCE_FILES}
+  
+  blend_state.hpp
+  cubemap.hpp cubemap.cpp
+  depth_buffer_state.hpp
+  gl.hpp
+  graphics_buffer.hpp graphics_buffer.cpp
+  graphics_context.hpp graphics_context.cpp
+  graphics_resource.hpp graphics_resource.cpp
+  index_buffer.hpp index_buffer.cpp
+  render_target_configuration.hpp render_target_configuration.cpp
+  render_target_texture2d.hpp render_target_texture2d.cpp
+  render_target.hpp
+  static_mesh.hpp
+  stencil_state.hpp
+  texture.hpp texture.cpp
+  texture2d.hpp texture2d.cpp
+  uniform_buffer.hpp uniform_buffer.cpp
+  vertex_buffer.hpp vertex_buffer.cpp
+  vertex_input.hpp vertex_input.cpp
 )
 
 if (APPLE)
@@ -19,13 +36,12 @@ find_package(OpenGL REQUIRED)
 target_include_directories(
   OvisGraphics
   PUBLIC
-    "${CMAKE_SOURCE_DIR}/extern/SDL/include"
+    ${CMAKE_SOURCE_DIR}/extern/glm/include
     ${OPENGL_INCLUDE_DIRS}
 )
 target_link_libraries(
   OvisGraphics
   PUBLIC
-    SDL2
     ${OPENGL_LIBRARIES}
     rapidjson
     OvisCore

@@ -1,12 +1,17 @@
-file(GLOB OVIS_CORE_HEADER_FILES "*.hpp")
-file(GLOB OVIS_CORE_SOURCE_FILES "*.cpp")
-
 find_package(SDL2 REQUIRED)
 
 add_library(
   OvisCore
-  ${OVIS_CORE_HEADER_FILES}
-  ${OVIS_CORE_SOURCE_FILES}
+  
+  array_view.hpp
+  class.hpp
+  down_cast.hpp
+  file.hpp file.cpp
+  flags.hpp
+  log.hpp
+  range.hpp
+  resource_manager.hpp resource_manager.cpp
+  resource.hpp
 )
 target_include_directories(
   OvisCore
@@ -27,4 +32,5 @@ target_link_directories(
 )
 target_compile_features(
   OvisCore
-    PUBLIC cxx_std_20)
+    PUBLIC cxx_std_20
+)

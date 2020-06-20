@@ -1,10 +1,8 @@
-file(GLOB OVIS_ENGINE_HEADER_FILES "*.hpp")
-file(GLOB OVIS_ENGINE_SOURCE_FILES "*.cpp")
-
 add_library(
   OvisEngine
-  ${OVIS_ENGINE_HEADER_FILES}
-  ${OVIS_ENGINE_SOURCE_FILES}
+  
+  engine.hpp engine.cpp
+  window.hpp window.cpp
 )
 target_link_libraries(
   OvisEngine

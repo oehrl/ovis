@@ -1,4 +1,0 @@
-{
-  "vertex_shader_source": "skybox.vert",
-  "fragment_shader_source": "skybox.frag"
-}

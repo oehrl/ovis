@@ -1,10 +1,17 @@
-file(GLOB OVIS_MATH_HEADER_FILES "*.hpp")
-file(GLOB OVIS_MATH_SOURCE_FILES "*.cpp")
-
 add_library(
   OvisMath
-  ${OVIS_MATH_HEADER_FILES}
-  ${OVIS_MATH_SOURCE_FILES}
+
+  heightmap.hpp
+  marching_cubes.hpp marching_cubes.cpp
+  plane.hpp
+  rect.hpp
+  transform.hpp transform.cpp
+  triangle.hpp
+)
+target_include_directories(
+  OvisMath
+  PUBLIC
+    ${CMAKE_SOURCE_DIR}/extern/glm/include
 )
 target_link_libraries(
   OvisMath

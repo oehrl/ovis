@@ -1,4 +1,0 @@
-{
-  "vertex_shader_source": "water.vert",
-  "fragment_shader_source": "water.frag"
-}

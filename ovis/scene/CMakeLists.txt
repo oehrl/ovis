@@ -1,10 +1,12 @@
-file(GLOB OVIS_SCENE_HEADER_FILES "*.hpp")
-file(GLOB OVIS_SCENE_SOURCE_FILES "*.cpp")
-
 add_library(
   OvisScene
-  ${OVIS_SCENE_HEADER_FILES}
-  ${OVIS_SCENE_SOURCE_FILES}
+  
+  camera.hpp camera.cpp
+  scene_component.hpp
+  scene_controller.hpp scene_controller.cpp
+  scene_object.hpp scene_object.cpp
+  scene.hpp scene.cpp
+  sub_system.hpp sub_system.cpp
 )
 target_link_libraries(
   OvisScene
