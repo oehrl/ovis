@@ -17,6 +17,7 @@ target_include_directories(
   OvisCore
   PUBLIC
     ${SDL2_INCLUDE_DIRS}
+    ${OVIS_ROOT}
 )
 target_link_libraries(
   OvisCore

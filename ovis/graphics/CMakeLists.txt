@@ -15,6 +15,7 @@ add_library(
   render_target_configuration.hpp render_target_configuration.cpp
   render_target_texture2d.hpp render_target_texture2d.cpp
   render_target.hpp
+  shader_program.hpp shader_program.cpp
   static_mesh.hpp
   stencil_state.hpp
   texture.hpp texture.cpp
@@ -36,7 +37,7 @@ find_package(OpenGL REQUIRED)
 target_include_directories(
   OvisGraphics
   PUBLIC
-    ${CMAKE_SOURCE_DIR}/extern/glm/include
+    ${OVIS_ROOT}/extern/glm/include
     ${OPENGL_INCLUDE_DIRS}
 )
 target_link_libraries(

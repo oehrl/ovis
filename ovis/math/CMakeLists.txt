@@ -11,8 +11,9 @@ add_library(
 target_include_directories(
   OvisMath
   PUBLIC
-    ${CMAKE_SOURCE_DIR}/extern/glm/include
+    ${OVIS_ROOT}/extern/glm/include
 )
+message(STATUS ${OVIS_ROOT})
 target_link_libraries(
   OvisMath
   PUBLIC
