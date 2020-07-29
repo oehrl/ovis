@@ -38,6 +38,7 @@ class Window {
   inline bool is_open() const { return is_open_; }
   inline GraphicsContext* context() { return &graphics_context_; }
   inline ResourceManager* resource_manager() { return &resource_manager_; }
+  inline RenderPipeline* render_pipeline() { return &render_pipeline_; }
 
   bool SendEvent(const SDL_Event& event);
   void Update(std::chrono::microseconds delta_time);
