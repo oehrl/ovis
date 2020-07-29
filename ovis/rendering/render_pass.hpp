@@ -12,7 +12,7 @@ class RenderPass {
   friend class RenderPipeline;
 
  public:
-  RenderPass(RenderPipeline* render_pipeline, const std::string& name);
+  RenderPass(const std::string& name);
   virtual ~RenderPass() = default;
 
   inline RenderPipeline* render_pipeline() const { return render_pipeline_; }
@@ -28,7 +28,7 @@ class RenderPass {
   void RenderAfter(const std::string& renderer_name);
 
  private:
-  RenderPipeline* render_pipeline_;
+  RenderPipeline* render_pipeline_ = nullptr;
   GraphicsContext* graphics_context_;
   std::string name_;
   std::set<std::string> render_before_list_;
