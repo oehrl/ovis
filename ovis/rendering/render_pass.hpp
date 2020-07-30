@@ -7,6 +7,7 @@ namespace ovis {
 
 class RenderPipeline;
 class GraphicsContext;
+class ResourceManager;
 
 class RenderPass {
   friend class RenderPipeline;
@@ -18,6 +19,7 @@ class RenderPass {
   inline RenderPipeline* render_pipeline() const { return render_pipeline_; }
   inline std::string name() const { return name_; }
   inline GraphicsContext* context() const { return graphics_context_; }
+  inline ResourceManager* resource_manager() const { return resource_manager_; }
 
   virtual void CreateResources() {}
   virtual void ReleaseResources() {}
@@ -29,7 +31,8 @@ class RenderPass {
 
  private:
   RenderPipeline* render_pipeline_ = nullptr;
-  GraphicsContext* graphics_context_;
+  GraphicsContext* graphics_context_ = nullptr;
+  ResourceManager* resource_manager_ = nullptr;
   std::string name_;
   std::set<std::string> render_before_list_;
   std::set<std::string> render_after_list_;

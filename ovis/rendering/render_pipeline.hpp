@@ -9,14 +9,16 @@ namespace ovis {
 
 class GraphicsContext;
 class RenderPass;
+class ResourceManager;
 class Scene;
 
-class RenderPipeline {
+class RenderPipeline final {
   friend class RenderPass;
   MAKE_NON_COPY_OR_MOVABLE(RenderPipeline);
 
  public:
-  RenderPipeline(GraphicsContext* graphics_context);
+  RenderPipeline(GraphicsContext* graphics_context, ResourceManager* resource_manager);
+  ~RenderPipeline();
 
   void AddRenderPass(RenderPass* render_pass);
   void RemoveRenderPass(RenderPass* render_pass);
@@ -35,6 +37,7 @@ class RenderPipeline {
   RenderPass* GetRenderPassInternal(const std::string& render_pass_name) const;
 
   GraphicsContext* graphics_context_;
+  ResourceManager* resource_manager_;
   std::unordered_map<std::string, RenderPass*> render_passes_;
   std::vector<RenderPass*> render_pass_order_;
   bool render_passes_sorted_;

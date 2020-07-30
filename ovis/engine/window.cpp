@@ -17,7 +17,7 @@ Window::Window(const std::string& title, int width, int height)
                                    SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
-      render_pipeline_(&graphics_context_) {
+      render_pipeline_(&graphics_context_, &resource_manager_) {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
   SDL_GetWindowSize(sdl_window_, &width_, &height_);

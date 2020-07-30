@@ -8,8 +8,18 @@
 
 namespace ovis {
 
-RenderPipeline::RenderPipeline(GraphicsContext* graphics_context)
-    : graphics_context_(graphics_context), render_passes_sorted_(false) {
+RenderPipeline::RenderPipeline(GraphicsContext* graphics_context,
+                               ResourceManager* resource_manager)
+    : graphics_context_(graphics_context),
+      resource_manager_(resource_manager),
+      render_passes_sorted_(false) {
+  SDL_assert(resource_manager != nullptr);
+}
+
+RenderPipeline::~RenderPipeline() {
+  while (render_passes_.size() > 0) {
+    RemoveRenderPass(render_passes_.begin()->second);
+  }
 }
 
 void RenderPipeline::AddRenderPass(RenderPass* render_pass) {
@@ -18,6 +28,7 @@ void RenderPipeline::AddRenderPass(RenderPass* render_pass) {
   SDL_assert(render_passes_.find(render_pass->name()) == render_passes_.end());
   render_passes_.insert(std::make_pair(render_pass->name(), render_pass));
   render_pass->render_pipeline_ = this;
+  render_pass->resource_manager_ = resource_manager_;
   if (graphics_context_ != nullptr) {
     render_pass->graphics_context_ = graphics_context_;
     render_pass->CreateResources();
@@ -34,6 +45,7 @@ void RenderPipeline::RemoveRenderPass(RenderPass* render_pass) {
     render_pass->ReleaseResources();
     render_pass->graphics_context_ = nullptr;
   }
+  render_pass->resource_manager_ = nullptr;
   render_pass->render_pipeline_ = nullptr;
   render_passes_.erase(render_passes_.find(render_pass->name()));
   render_passes_sorted_ = false;
