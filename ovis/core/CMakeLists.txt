@@ -16,20 +16,14 @@ add_library(
 target_include_directories(
   OvisCore
   PUBLIC
-    ${SDL2_INCLUDE_DIRS}
     ${OVIS_ROOT}
 )
 target_link_libraries(
   OvisCore
   PUBLIC
-    ${SDL2_LIBRARIES}
+    SDL2::SDL2-static
     rapidjson
     fmt::fmt
-)
-target_link_directories(
-  OvisCore
-  PUBLIC
-    ${SDL2_LIBDIR}
 )
 target_compile_features(
   OvisCore

@@ -1,5 +1,5 @@
-#include <SDL_assert.h>
-#include <SDL_surface.h>
+#include <SDL2/SDL_assert.h>
+#include <SDL2/SDL_surface.h>
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/resource_manager.hpp>

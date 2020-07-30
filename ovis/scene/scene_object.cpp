@@ -1,4 +1,4 @@
-#include <SDL_assert.h>
+#include <SDL2/SDL_assert.h>
 #include <ovis/scene/scene.hpp>
 #include <ovis/scene/scene_object.hpp>
 

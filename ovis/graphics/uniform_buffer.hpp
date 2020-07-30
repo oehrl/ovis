@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat2x2.hpp>
 #include <glm/mat3x3.hpp>

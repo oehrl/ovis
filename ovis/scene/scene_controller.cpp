@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include <SDL_assert.h>
+#include <SDL2/SDL_assert.h>
 
 #include <ovis/core/log.hpp>
 

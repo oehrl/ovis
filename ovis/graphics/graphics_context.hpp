@@ -3,7 +3,8 @@
 #include <memory>
 #include <set>
 #include <vector>
-#include <SDL.h>
+#include <optional>
+#include <SDL2/SDL.h>
 #include <ovis/math/rect.hpp>
 #include <ovis/core/class.hpp>
 #include <ovis/graphics/blend_state.hpp>

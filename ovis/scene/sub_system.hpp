@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 #include <ovis/core/class.hpp>
 
 namespace ovis {

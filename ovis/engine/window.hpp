@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <SDL_video.h>
+#include <SDL2/SDL_video.h>
 #include <ovis/core/class.hpp>
 #include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>

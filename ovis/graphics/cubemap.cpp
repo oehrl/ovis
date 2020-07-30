@@ -1,7 +1,7 @@
 #include <cstring>
 #include <fstream>
-#include <SDL_assert.h>
-#include <SDL_surface.h>
+#include <SDL2/SDL_assert.h>
+#include <SDL2/SDL_surface.h>
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <ovis/core/log.hpp>

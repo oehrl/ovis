@@ -3,7 +3,7 @@
 #include <chrono>
 #include <set>
 #include <string>
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 #include <ovis/core/class.hpp>
 
 namespace ovis {
