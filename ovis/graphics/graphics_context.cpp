@@ -129,8 +129,8 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
         static_cast<GLenum>(draw_item.index_buffer->description().index_format);
     const auto index_offset_in_bytes =
         draw_item.start * draw_item.index_buffer->bytes_per_index();
-    glDrawElements(primitive_topology, draw_item.count, index_type,
-                   reinterpret_cast<GLvoid*>(index_offset_in_bytes));
+    glDrawElementsBaseVertex(primitive_topology, draw_item.count, index_type,
+                   reinterpret_cast<GLvoid*>(index_offset_in_bytes), draw_item.base_vertex);
   }
 }
 

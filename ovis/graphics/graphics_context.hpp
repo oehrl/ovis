@@ -37,6 +37,7 @@ struct DrawItem {
   PrimitiveTopology primitive_topology = PrimitiveTopology::TRIANGLE_LIST;
   Uint32 start = 0;
   Uint32 count = 3;
+  Uint32 base_vertex = 0;
   DepthBufferState depth_buffer_state;
   BlendState blend_state;
   std::optional<Rect<int>> scissor_rect;
