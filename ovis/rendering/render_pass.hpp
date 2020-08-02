@@ -15,7 +15,7 @@ class RenderPass {
 
  public:
   RenderPass(const std::string& name);
-  virtual ~RenderPass() = default;
+  virtual ~RenderPass();
 
   inline RenderPipeline* render_pipeline() const { return render_pipeline_; }
   inline std::string name() const { return name_; }
