@@ -8,6 +8,7 @@ namespace ovis {
 class RenderPipeline;
 class GraphicsContext;
 class ResourceManager;
+class Scene;
 
 class RenderPass {
   friend class RenderPipeline;
@@ -23,7 +24,7 @@ class RenderPass {
 
   virtual void CreateResources() {}
   virtual void ReleaseResources() {}
-  virtual void Render() = 0;
+  virtual void Render(Scene* scene) = 0;
 
  protected:
   void RenderBefore(const std::string& renderer_name);

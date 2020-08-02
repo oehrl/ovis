@@ -8,7 +8,7 @@ class GeometryPass : public RenderPass {
  public:
   GeometryPass(RenderPipeline* render_pipeline);
 
-  void Render() override {}
+  void Render(Scene* scene) override {}
 };
 
 }  // namespace ovis
