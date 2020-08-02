@@ -1,6 +1,6 @@
 #include <map>
 
-#include <SDL_assert.h>
+#include <SDL2/SDL_assert.h>
 
 #include <ovis/rendering/geometry_pass.hpp>
 #include <ovis/rendering/render_pass.hpp>

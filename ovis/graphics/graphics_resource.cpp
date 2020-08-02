@@ -1,6 +1,6 @@
 #include <ovis/graphics/graphics_resource.hpp>
 
-#include <SDL_assert.h>
+#include <SDL2/SDL_assert.h>
 #include <ovis/graphics/graphics_context.hpp>
 
 namespace ovis {

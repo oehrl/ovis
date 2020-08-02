@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 #include <glm/vec2.hpp>
 #include <ovis/core/down_cast.hpp>
 #include <ovis/scene/camera.hpp>

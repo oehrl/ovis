@@ -38,12 +38,25 @@ target_include_directories(
   OvisGraphics
   PUBLIC
     ${OVIS_ROOT}/extern/glm/include
-    ${OPENGL_INCLUDE_DIRS}
 )
 target_link_libraries(
   OvisGraphics
   PUBLIC
-    ${OPENGL_LIBRARIES}
+    OpenGL::GL
     rapidjson
     OvisCore
 )
+
+if (WIN32)
+  find_package(GLEW REQUIRED)
+  target_include_directories(
+    OvisGraphics
+    PUBLIC
+      ${GLEW_INCLUDE_DIRS}
+  )
+  target_link_libraries(
+    OvisGraphics
+    PUBLIC
+      ${GLEW_LIBRARIES}
+  )
+endif ()

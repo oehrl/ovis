@@ -32,6 +32,10 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
 
   LogI("OpenGL version: {}", glGetString(GL_VERSION));
 
+#if _WIN32
+  glewInit();
+#endif
+
   glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_caps.max_vertex_attribs);
   SDL_assert(m_caps.max_vertex_attribs >= 8);
   m_vertex_attrib_array_states.resize(m_caps.max_vertex_attribs, false);

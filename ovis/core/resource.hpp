@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <typeindex>
 #include <vector>
-#include "SDL_assert.h"
+#include <SDL2/SDL_assert.h>
 
 namespace ovis {
 

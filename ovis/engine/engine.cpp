@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #if OVIS_EMSCRIPTEN
 #include <emscripten.h>
 #endif
