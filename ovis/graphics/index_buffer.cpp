@@ -22,6 +22,10 @@ IndexBuffer::IndexBuffer(GraphicsContext* context,
       m_bytes_per_index = 2;
       break;
 
+    case IndexFormat::UINT32:
+      m_bytes_per_index = 4;
+      break;
+
     default:
       SDL_assert(false);
   }

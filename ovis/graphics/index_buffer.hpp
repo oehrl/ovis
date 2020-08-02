@@ -8,6 +8,7 @@ namespace ovis {
 enum class IndexFormat {
   UINT8  = GL_UNSIGNED_BYTE,
   UINT16 = GL_UNSIGNED_SHORT,
+  UINT32 = GL_UNSIGNED_INT,
 };
 
 struct IndexBufferDescription {
