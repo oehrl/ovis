@@ -1,8 +1,8 @@
-#include <ovis/graphics/render_target_configuration.hpp>
-
 #include <ovis/core/range.hpp>
+
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/render_target.hpp>
+#include <ovis/graphics/render_target_configuration.hpp>
 
 namespace ovis {
 
@@ -46,6 +46,12 @@ void RenderTargetConfiguration::ClearColor(const glm::vec4& clear_color) {
   Bind();
   glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
   glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void RenderTargetConfiguration::ClearDepth(float depth) {
+  Bind();
+  glClearDepth(depth);
+  glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
