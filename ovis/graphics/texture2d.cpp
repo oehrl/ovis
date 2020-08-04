@@ -39,6 +39,8 @@ Texture2D::Texture2D(GraphicsContext* context,
                static_cast<GLsizei>(description.width),
                static_cast<GLsizei>(description.height), 0, source_format,
                source_type, pixels);
+  // glActiveTexture(GL_TEXTURE0);
+  glGenerateMipmap(GL_TEXTURE_2D);
 
   GLenum min_filter;
   GLenum mag_filter;
@@ -56,7 +58,7 @@ Texture2D::Texture2D(GraphicsContext* context,
       break;
 
     case TextureFilter::TRILINEAR:
-      SDL_assert(description.mip_map_count > 1);
+      // SDL_assert(description.mip_map_count > 1);
       min_filter = GL_LINEAR_MIPMAP_LINEAR;
       mag_filter = GL_LINEAR;
       break;
@@ -108,7 +110,7 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
   Texture2DDescription texture2d_desc;
   texture2d_desc.width = parameters["width"].GetInt();
   texture2d_desc.height = parameters["height"].GetInt();
-  texture2d_desc.mip_map_count = 1;
+  texture2d_desc.mip_map_count = 0;
 
   const auto& filter = parameters["filter"].GetString();
   if (std::strcmp(filter, "point") == 0) {
