@@ -49,7 +49,12 @@ class ResourceManager {
 template <typename T>
 ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
   LogI("Loading '{}'...", filename);
-  const std::string extension = filename.substr(filename.find_last_of('.'));
+  const auto dot_position = filename.find_last_of('.');
+  if (dot_position == filename.npos) {
+    LogE("No extension in '{}'!", filename);
+    return ResourcePointer<T>{};
+  }
+  const std::string extension = filename.substr(dot_position);
   auto resource_loaders = resource_loaders_.equal_range(extension);
   if (resource_loaders.first == resource_loaders.second) {
     LogE("No file loaders for extension '{}'!", extension);
