@@ -85,13 +85,13 @@ void ShaderProgram::AttachShader(const std::string& source,
       final_shader_source += "#define in varying\n";
     }
 #else
-    final_shader_source += "#version 120\n";
-    if (shader_type == GL_VERTEX_SHADER) {
-      final_shader_source += "#define in attribute\n";
-      final_shader_source += "#define out varying\n";
-    } else if (shader_type == GL_FRAGMENT_SHADER) {
-      final_shader_source += "#define in varying\n";
-    }
+    final_shader_source += "#version 460\n";
+    // if (shader_type == GL_VERTEX_SHADER) {
+    //   final_shader_source += "#define in attribute\n";
+    //   final_shader_source += "#define out varying\n";
+    // } else if (shader_type == GL_FRAGMENT_SHADER) {
+    //   final_shader_source += "#define in varying\n";
+    // }
 #endif
     final_shader_source += source;
 
