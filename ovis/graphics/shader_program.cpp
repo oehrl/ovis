@@ -117,12 +117,12 @@ void ShaderProgram::AttachShader(const std::string& source,
   }
 }
 
-GLint ShaderProgram::GetAttributeLocation(const std::string& attribute_name) {
+std::optional<std::size_t> ShaderProgram::GetAttributeLocation(const std::string& attribute_name) {
   auto attribute_iterator = m_attribute_locations.find("a_" + attribute_name);
   if (attribute_iterator == m_attribute_locations.end()) {
-    return -1;
+    return {};
   } else {
-    return attribute_iterator->second;
+    return static_cast<std::size_t>(attribute_iterator->second);
   }
 }
 

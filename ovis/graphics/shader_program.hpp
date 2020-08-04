@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/uniform_buffer.hpp>
@@ -47,6 +48,8 @@ class ShaderProgram : public GraphicsResource {
     m_uniform_buffer->SetTexture(sampler_name, texture);
   }
 
+  std::optional<std::size_t> GetAttributeLocation(const std::string& attribute_name);
+
  private:
   ShaderProgramDescription m_description;
   GLuint m_program_name;
@@ -55,7 +58,6 @@ class ShaderProgram : public GraphicsResource {
   std::unique_ptr<UniformBuffer> m_uniform_buffer;
 
   void AttachShader(const std::string& source, GLenum shader_type);
-  GLint GetAttributeLocation(const std::string& attribute_name);
   void Bind();
 };
 
