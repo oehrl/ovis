@@ -42,7 +42,7 @@ SceneObject* Scene::GetObject(const std::string& object_name) {
 void Scene::Update(std::chrono::microseconds delta_time) {
   OnUpdate(delta_time);
   for (auto controller : m_controllers) {
-    controller.second->Update(delta_time);
+    controller.second->UpdateWrapper(delta_time);
   }
 }
 

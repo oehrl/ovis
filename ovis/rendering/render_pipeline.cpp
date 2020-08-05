@@ -56,7 +56,7 @@ void RenderPipeline::Render(Scene* scene) {
     SortRenderPasses();
   }
   for (auto* render_pass : render_pass_order_) {
-    render_pass->Render(scene);
+    render_pass->RenderWrapper(scene);
   }
 }
 

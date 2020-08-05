@@ -14,6 +14,7 @@ namespace ovis {
 
 class Scene;
 class GraphicsDevice;
+class ProfilingLog;
 
 class Window {
   MAKE_NON_COPY_OR_MOVABLE(Window);
@@ -59,6 +60,7 @@ class Window {
   GraphicsContext graphics_context_;
   RenderPipeline render_pipeline_;
   ResourceManager resource_manager_;
+  ProfilingLog* profiling_log_;
 
   std::vector<Scene*> scene_stack_;
 };

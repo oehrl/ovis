@@ -12,6 +12,7 @@ add_library(
   range.hpp
   resource_manager.hpp resource_manager.cpp
   resource.hpp
+  profiling.hpp profiling.cpp
 )
 target_include_directories(
   OvisCore
@@ -27,5 +28,11 @@ target_link_libraries(
 )
 target_compile_features(
   OvisCore
-    PUBLIC cxx_std_20
+  PUBLIC
+    cxx_std_20
+)
+target_compile_definitions(
+  OvisCore
+  PUBLIC
+    -DOVIS_ENABLE_BUILT_IN_PROFILING=1
 )

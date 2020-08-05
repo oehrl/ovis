@@ -10,7 +10,12 @@
 namespace ovis {
 
 SceneController::SceneController(Scene* scene, const std::string& name)
-    : m_scene(scene), m_name(name) {
+    : m_scene(scene),
+      m_name(name)
+#if OVIS_ENABLE_BUILT_IN_PROFILING
+      , update_profiler_(name + "Update")
+#endif
+{
   SDL_assert(scene != nullptr);
   scene->AddController(this);
   LogD("Controller '{}' added to scene '{}'", name, scene->name());

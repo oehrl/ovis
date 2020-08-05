@@ -3,6 +3,8 @@
 #include <set>
 #include <string>
 
+#include <ovis/core/profiling.hpp>
+
 namespace ovis {
 
 class RenderPipeline;
@@ -37,6 +39,20 @@ class RenderPass {
   std::string name_;
   std::set<std::string> render_before_list_;
   std::set<std::string> render_after_list_;
+
+#if OVIS_ENABLE_BUILT_IN_PROFILING
+  CPUTimeProfiler cpu_render_profiler_;
+#endif
+
+  inline void RenderWrapper(Scene* scene) {
+#if OVIS_ENABLE_BUILT_IN_PROFILING
+    cpu_render_profiler_.BeginMeasurement();
+#endif
+    Render(scene);
+#if OVIS_ENABLE_BUILT_IN_PROFILING
+    cpu_render_profiler_.EndMeasurement();
+#endif
+  }
 };
 
 }  // namespace ovis

@@ -3,7 +3,14 @@
 
 namespace ovis {
 
-RenderPass::RenderPass(const std::string& name) : name_(name) {}
+RenderPass::RenderPass(const std::string& name)
+    : name_(name)
+#if OVIS_ENABLE_BUILT_IN_PROFILING
+      ,
+      cpu_render_profiler_(name + "::Render")
+#endif
+{
+}
 
 RenderPass::~RenderPass() {
   if (render_pipeline_ != nullptr) {
