@@ -110,7 +110,7 @@ void StaticMesh<VertexType, IndexType>::UpdateIndexBuffer(size_t start,
   SDL_assert(start + count <= indices_.size());
   const size_t offset_in_bytes = start * sizeof(IndexType);
   const size_t length_in_bytes =
-      (count > 0 ? count : vertices_.size()) * sizeof(IndexType);
+      (count > 0 ? count : indices_.size()) * sizeof(IndexType);
   LogD("offset: {}", offset_in_bytes);
   LogD("length_in_bytes: {}", length_in_bytes);
   index_buffer_->Write(offset_in_bytes, length_in_bytes, &indices_[start]);
@@ -118,7 +118,7 @@ void StaticMesh<VertexType, IndexType>::UpdateIndexBuffer(size_t start,
 
 template <typename VertexType, typename IndexType>
 void StaticMesh<VertexType, IndexType>::Draw(ShaderProgram* shader_program) {
-  DrawPart(shader_program, 0, vertices_.size());
+  DrawPart(shader_program, 0, indices_.size());
 }
 
 template <typename VertexType, typename IndexType>
