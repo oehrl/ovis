@@ -96,6 +96,7 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
         glScissor(draw_item.scissor_rect->left, draw_item.scissor_rect->top,
                   draw_item.scissor_rect->width,
                   draw_item.scissor_rect->height);
+        current_scissor_rect_ = *draw_item.scissor_rect;
       }
     } else {
       glDisable(GL_SCISSOR_TEST);
