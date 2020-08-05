@@ -21,7 +21,7 @@ inline void Log(LogLevel level, std::string_view format_string, T&&... args) {
   const char log_level_char = detail::LOG_LEVEL_CHARS[static_cast<int>(level)];
   fmt::format_to(std::ostream_iterator<char>(std::cout), "{}:", log_level_char);
   fmt::format_to(std::ostream_iterator<char>(std::cout), format_string, std::forward<T>(args)...);
-  std::cout << '\n';
+  std::cout << std::endl;
 }
 
 template <typename... T>
