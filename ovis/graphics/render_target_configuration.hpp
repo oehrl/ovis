@@ -24,7 +24,7 @@ class RenderTargetConfiguration : public GraphicsResource {
       const RenderTargetConfigurationDescription& description);
   virtual ~RenderTargetConfiguration() override;
 
-  void ClearColor(const glm::vec4& color);
+  void ClearColor(const glm::vec4& color = {0.0f, 0.0f, 0.0f, 0.0f});
   void ClearDepth(float depth = 1.0f);
 
   inline std::size_t width() const {return width_;}
