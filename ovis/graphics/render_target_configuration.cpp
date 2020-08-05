@@ -43,12 +43,20 @@ RenderTargetConfiguration::~RenderTargetConfiguration() {
 }
 
 void RenderTargetConfiguration::ClearColor(const glm::vec4& clear_color) {
+  if (context()->scissoring_enabled_) {
+    glDisable(GL_SCISSOR_TEST);
+    context()->scissoring_enabled_ = false;
+  }
   Bind();
   glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void RenderTargetConfiguration::ClearDepth(float depth) {
+  if (context()->scissoring_enabled_) {
+    glDisable(GL_SCISSOR_TEST);
+    context()->scissoring_enabled_ = false;
+  }
   Bind();
   glClearDepth(depth);
   glClear(GL_DEPTH_BUFFER_BIT);
