@@ -3,7 +3,11 @@
 #include <set>
 #include <string>
 
+#if OVIS_ENABLE_BUILT_IN_PROFILING
 #include <ovis/core/profiling.hpp>
+
+#include <ovis/graphics/gpu_time_profiler.hpp>
+#endif
 
 namespace ovis {
 
@@ -42,16 +46,28 @@ class RenderPass {
 
 #if OVIS_ENABLE_BUILT_IN_PROFILING
   CPUTimeProfiler cpu_render_profiler_;
+  std::unique_ptr<GPUTimeProfiler> gpu_render_profiler_;
 #endif
 
   inline void RenderWrapper(Scene* scene) {
 #if OVIS_ENABLE_BUILT_IN_PROFILING
     cpu_render_profiler_.BeginMeasurement();
+    gpu_render_profiler_->BeginMeasurement();
 #endif
     Render(scene);
 #if OVIS_ENABLE_BUILT_IN_PROFILING
     cpu_render_profiler_.EndMeasurement();
+    gpu_render_profiler_->EndMeasurement();
 #endif
+  }
+
+  inline void CreateResourcesWrapper() {
+    gpu_render_profiler_ = std::make_unique<GPUTimeProfiler>(context(), name() + "::Render");
+    CreateResources();
+  }
+  inline void ReleaseResourcesWrapper() {
+    gpu_render_profiler_.reset();
+    ReleaseResources();
   }
 };
 

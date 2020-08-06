@@ -31,7 +31,7 @@ void RenderPipeline::AddRenderPass(RenderPass* render_pass) {
   render_pass->resource_manager_ = resource_manager_;
   if (graphics_context_ != nullptr) {
     render_pass->graphics_context_ = graphics_context_;
-    render_pass->CreateResources();
+    render_pass->CreateResourcesWrapper();
   }
   render_passes_sorted_ = false;
 }
@@ -42,7 +42,7 @@ void RenderPipeline::RemoveRenderPass(RenderPass* render_pass) {
   SDL_assert(render_pass != nullptr);
   SDL_assert(render_pass->render_pipeline_ == this);
   if (graphics_context_ != nullptr) {
-    render_pass->ReleaseResources();
+    render_pass->ReleaseResourcesWrapper();
     render_pass->graphics_context_ = nullptr;
   }
   render_pass->resource_manager_ = nullptr;

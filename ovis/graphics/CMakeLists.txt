@@ -8,6 +8,7 @@ add_library(
   cubemap.hpp cubemap.cpp
   depth_buffer_state.hpp
   gl.hpp
+  gpu_time_profiler.hpp gpu_time_profiler.cpp
   graphics_buffer.hpp graphics_buffer.cpp
   graphics_context.hpp graphics_context.cpp
   graphics_resource.hpp graphics_resource.cpp
