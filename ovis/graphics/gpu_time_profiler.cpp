@@ -28,7 +28,7 @@ void GPUElapsedTimeQuery::End() {
 
 GPUTimeProfiler::GPUTimeProfiler(GraphicsContext* context,
                                  const std::string& id)
-    : Profiler(ProfilingLog::default_log(), id, "ms"), query_(context) {}
+    : Profiler(ProfilingLog::default_log(), "GPU::" + id, "ms"), query_(context) {}
 
 GPUTimeProfiler::~GPUTimeProfiler() {
   if (query_will_have_data_) {
