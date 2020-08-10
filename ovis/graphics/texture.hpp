@@ -9,6 +9,10 @@ namespace ovis {
 enum class TextureFormat {
   RGB_UINT8,
   RGBA_UINT8,
+  RGBA_FLOAT32,
+  DEPTH_UINT16,
+  DEPTH_UINT24,
+  DEPTH_FLOAT32,
 };
 
 enum class TextureFilter {

@@ -1,8 +1,10 @@
 #include <SDL2/SDL_assert.h>
 #include <SDL2/SDL_surface.h>
+
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/resource_manager.hpp>
+
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/texture2d.hpp>
 
@@ -30,17 +32,58 @@ Texture2D::Texture2D(GraphicsContext* context,
       source_type = GL_UNSIGNED_BYTE;
       break;
 
+    case TextureFormat::RGBA_FLOAT32:
+      internal_format = GL_RGBA32F;
+      source_format = GL_RGBA;
+      source_type = GL_FLOAT;
+      break;
+
+    case TextureFormat::DEPTH_UINT16:
+      SDL_assert(pixels == nullptr);
+      internal_format = GL_DEPTH_COMPONENT16;
+      source_format = GL_DEPTH_COMPONENT;
+      source_type = GL_FLOAT;
+      break;
+
+    case TextureFormat::DEPTH_UINT24:
+      SDL_assert(pixels == nullptr);
+      internal_format = GL_DEPTH_COMPONENT24;
+      source_format = GL_DEPTH_COMPONENT;
+      source_type = GL_FLOAT;
+      break;
+
+    case TextureFormat::DEPTH_FLOAT32:
+      SDL_assert(pixels == nullptr);
+      internal_format = GL_DEPTH_COMPONENT32F;
+      source_format = GL_DEPTH_COMPONENT;
+      source_type = GL_FLOAT;
+      break;
+
     default:
       SDL_assert(false);
       break;
   }
 
-  glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
-               static_cast<GLsizei>(description.width),
-               static_cast<GLsizei>(description.height), 0, source_format,
-               source_type, pixels);
-  // glActiveTexture(GL_TEXTURE0);
-  glGenerateMipmap(GL_TEXTURE_2D);
+  if (pixels == nullptr) {
+#if 0
+    glTexStorage2D(GL_TEXTURE_2D, 0, internal_format,
+                   static_cast<GLsizei>(description.width),
+                   static_cast<GLsizei>(description.height));
+#else
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
+                 static_cast<GLsizei>(description.width),
+                 static_cast<GLsizei>(description.height), 0, source_format,
+                 source_type, pixels);
+#endif
+  } else {
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
+                 static_cast<GLsizei>(description.width),
+                 static_cast<GLsizei>(description.height), 0, source_format,
+                 source_type, pixels);
+  }
+  if (description.mip_map_count != 1) {
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
 
   GLenum min_filter;
   GLenum mag_filter;
