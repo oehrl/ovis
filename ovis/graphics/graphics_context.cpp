@@ -72,7 +72,7 @@ GraphicsContext::~GraphicsContext() {
 
 void GraphicsContext::Draw(const DrawItem& draw_item) {
   SDL_assert(draw_item.shader_program != nullptr);
-  SDL_assert(draw_item.vertex_input != nullptr);
+  // SDL_assert(draw_item.vertex_input != nullptr);
 
   ApplyBlendState(&blend_state_, draw_item.blend_state);
   ApplyDepthBufferState(&depth_buffer_state_, draw_item.depth_buffer_state);
@@ -105,7 +105,9 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
   }
 
   draw_item.shader_program->Bind();
-  draw_item.vertex_input->Bind();
+  if (draw_item.vertex_input != nullptr) {
+    draw_item.vertex_input->Bind();
+  }
   const GLenum primitive_topology =
       static_cast<GLenum>(draw_item.primitive_topology);
 
