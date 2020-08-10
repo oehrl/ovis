@@ -6,6 +6,8 @@
 #include <ovis/rendering/render_pass.hpp>
 #include <ovis/rendering/render_pipeline.hpp>
 
+#include <ovis/core/log.hpp>
+
 namespace ovis {
 
 RenderPipeline::RenderPipeline(GraphicsContext* graphics_context,
@@ -57,6 +59,30 @@ void RenderPipeline::Render(Scene* scene) {
   }
   for (auto* render_pass : render_pass_order_) {
     render_pass->RenderWrapper(scene);
+  }
+}
+
+RenderTargetTexture2D* RenderPipeline::CreateRenderTarget2D(
+    const std::string& id,
+    const RenderTargetTexture2DDescription& description) {
+  if (render_targets_.count(id) == 0) {
+    return static_cast<RenderTargetTexture2D*>(
+        render_targets_
+            .emplace(std::make_pair(id, std::make_unique<RenderTargetTexture2D>(
+                                            graphics_context_, description)))
+            .first->second.get());
+  } else {
+    LogE("Render target '{}' does already exist");
+    return nullptr;
+  }
+}
+
+RenderTarget* RenderPipeline::GetRenderTarget(const std::string& id) {
+  const auto render_target = render_targets_.find(id);
+  if (render_target == render_targets_.end()) {
+    return nullptr;
+  } else {
+    return render_target->second.get();
   }
 }
 

@@ -4,6 +4,8 @@
 #include <vector>
 #include <ovis/core/down_cast.hpp>
 #include <ovis/core/class.hpp>
+#include <ovis/graphics/render_target.hpp>
+#include <ovis/graphics/render_target_texture2d.hpp>
 
 namespace ovis {
 
@@ -29,6 +31,9 @@ class RenderPipeline final {
     return down_cast<RenderPassType*>(GetRenderPassInternal(render_pass_name));
   }
 
+  RenderTargetTexture2D* CreateRenderTarget2D(const std::string& id, const RenderTargetTexture2DDescription& description);
+  RenderTarget* GetRenderTarget(const std::string& id);
+
   void Render(Scene* scene);
 
  private:
@@ -41,6 +46,7 @@ class RenderPipeline final {
   std::unordered_map<std::string, RenderPass*> render_passes_;
   std::vector<RenderPass*> render_pass_order_;
   bool render_passes_sorted_;
+  std::unordered_map<std::string, std::unique_ptr<RenderTarget>> render_targets_;
 };
 
 }  // namespace ovis
