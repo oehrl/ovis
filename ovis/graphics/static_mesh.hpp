@@ -123,7 +123,7 @@ void StaticMesh<VertexType, IndexType>::Draw(ShaderProgram* shader_program) {
 
 template <typename VertexType, typename IndexType>
 void StaticMesh<VertexType, IndexType>::Draw(DrawItem draw_configuration) {
-  DrawPart(draw_configuration, 0, vertices_.size());
+  DrawPart(draw_configuration, 0, indices_.size());
 }
 
 template <typename VertexType, typename IndexType>
