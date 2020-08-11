@@ -47,10 +47,12 @@ ShaderProgram::ShaderProgram(GraphicsContext* context,
 
       GLint attribute_location =
           glGetAttribLocation(m_program_name, attribute_name_buffer.data());
-      SDL_assert(attribute_location >= 0);
 
-      m_attribute_names[attribute_location] = attribute_name_buffer.data();
-      m_attribute_locations[attribute_name_buffer.data()] = attribute_location;
+      // Internal attributes (e.g., VertexID) do not have an attribute location
+      if (attribute_location >= 0) {
+        m_attribute_names[attribute_location] = attribute_name_buffer.data();
+        m_attribute_locations[attribute_name_buffer.data()] = attribute_location;
+      }
     }
   }
 
