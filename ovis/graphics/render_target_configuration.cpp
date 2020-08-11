@@ -58,7 +58,7 @@ void RenderTargetConfiguration::ClearDepth(float depth) {
     context()->scissoring_enabled_ = false;
   }
   Bind();
-  glClearDepth(depth);
+  glClearDepthf(depth);
   glClear(GL_DEPTH_BUFFER_BIT);
 }
 

@@ -32,6 +32,7 @@ Texture2D::Texture2D(GraphicsContext* context,
       source_type = GL_UNSIGNED_BYTE;
       break;
 
+#if !OVIS_EMSCRIPTEN
     case TextureFormat::RGBA_FLOAT32:
       internal_format = GL_RGBA32F;
       source_format = GL_RGBA;
@@ -58,9 +59,10 @@ Texture2D::Texture2D(GraphicsContext* context,
       source_format = GL_DEPTH_COMPONENT;
       source_type = GL_FLOAT;
       break;
+#endif
 
     default:
-      SDL_assert(false);
+      SDL_assert(false && "Invalid texture format");
       break;
   }
 
