@@ -1,3 +1,5 @@
+#include <glm/gtc/type_ptr.hpp>
+
 #include <ovis/core/range.hpp>
 
 #include <ovis/graphics/graphics_context.hpp>
@@ -46,14 +48,15 @@ RenderTargetConfiguration::~RenderTargetConfiguration() {
   }
 }
 
-void RenderTargetConfiguration::ClearColor(const glm::vec4& clear_color) {
+void RenderTargetConfiguration::ClearColor(size_t color_attachment_index,
+                                           const glm::vec4& clear_color) {
   if (context()->scissoring_enabled_) {
     glDisable(GL_SCISSOR_TEST);
     context()->scissoring_enabled_ = false;
   }
   Bind();
-  glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClearBufferfv(GL_COLOR, color_attachment_index,
+                  glm::value_ptr(clear_color));
 }
 
 void RenderTargetConfiguration::ClearDepth(float depth) {
@@ -62,8 +65,7 @@ void RenderTargetConfiguration::ClearDepth(float depth) {
     context()->scissoring_enabled_ = false;
   }
   Bind();
-  glClearDepth(depth);
-  glClear(GL_DEPTH_BUFFER_BIT);
+  glClearBufferfv(GL_DEPTH, 0, &depth);
 }
 
 RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
