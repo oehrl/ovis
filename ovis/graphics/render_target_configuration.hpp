@@ -31,6 +31,7 @@ class RenderTargetConfiguration : public GraphicsResource {
   inline std::size_t height() const {return height_;}
 
  private:
+  std::vector<GLenum> draw_buffers_;
   GLuint m_frame_buffer;
 
   std::size_t width_;
