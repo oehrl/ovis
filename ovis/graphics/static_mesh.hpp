@@ -118,12 +118,12 @@ void StaticMesh<VertexType, IndexType>::UpdateIndexBuffer(size_t start,
 
 template <typename VertexType, typename IndexType>
 void StaticMesh<VertexType, IndexType>::Draw(ShaderProgram* shader_program) {
-  DrawPart(shader_program, 0, indices_.size());
+  DrawPart(shader_program, 0, static_cast<Uint32>(indices_.size()));
 }
 
 template <typename VertexType, typename IndexType>
 void StaticMesh<VertexType, IndexType>::Draw(DrawItem draw_configuration) {
-  DrawPart(draw_configuration, 0, indices_.size());
+  DrawPart(draw_configuration, 0, static_cast<Uint32>(indices_.size()));
 }
 
 template <typename VertexType, typename IndexType>
