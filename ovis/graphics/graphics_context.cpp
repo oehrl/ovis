@@ -104,6 +104,15 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
     }
   }
 
+  if (culling_enabled_ != draw_item.enable_culling) {
+    if (draw_item.enable_culling) {
+      glEnable(GL_CULL_FACE);
+    } else {
+      glDisable(GL_CULL_FACE);
+    }
+    culling_enabled_ = draw_item.enable_culling;
+  }
+
   draw_item.shader_program->Bind();
   if (draw_item.vertex_input != nullptr) {
     draw_item.vertex_input->Bind();

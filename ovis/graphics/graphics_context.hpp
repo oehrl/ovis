@@ -43,6 +43,7 @@ struct DrawItem {
   BlendState blend_state;
   std::optional<Rect<int>> scissor_rect;
   RenderTargetConfiguration* render_target_configuration = nullptr;
+  bool enable_culling = false;
 };
 
 class GraphicsContext final {
@@ -92,6 +93,7 @@ class GraphicsContext final {
   std::vector<GLuint> m_bound_textures;
   bool scissoring_enabled_;
   Rect<int> current_scissor_rect_;
+  bool culling_enabled_ = false;
   int x1, x2, x3;  // TODO: figure out why these three padding members are
                    // necessary oO
   Rect<int> current_viewport_;
