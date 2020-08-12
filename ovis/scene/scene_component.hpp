@@ -8,7 +8,7 @@ class SceneComponentBase {
 };
 
 template <typename T>
-class SceneComponent {
+class SceneComponent : public SceneComponentBase {
  public:
   template <typename... Args>
   SceneComponent(Args&... component_arguments)
