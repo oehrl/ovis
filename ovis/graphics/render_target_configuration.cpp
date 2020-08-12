@@ -64,6 +64,10 @@ void RenderTargetConfiguration::ClearDepth(float depth) {
     glDisable(GL_SCISSOR_TEST);
     context()->scissoring_enabled_ = false;
   }
+  if (!context()->depth_buffer_state_.write_enabled) {
+    glDepthMask(true);
+    context()->depth_buffer_state_.write_enabled = true;
+  }
   Bind();
   glClearBufferfv(GL_DEPTH, 0, &depth);
 }
