@@ -54,9 +54,9 @@ class Camera {
   Transform transform_;
   ProjectionType projection_type_ = ProjectionType::PERSPECTIVE;
   float vertical_field_of_view_   = glm::radians(90.0f);
-  float aspect_ratio_             = 1.0;
-  float near_clip_plane_          = 0.1;
-  float far_clip_plane_           = 1000.0;
+  float aspect_ratio_             = 1.0f;
+  float near_clip_plane_          = 0.1f;
+  float far_clip_plane_           = 1000.0f;
 };
 
 }  // namespace ovis

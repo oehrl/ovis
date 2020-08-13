@@ -4,8 +4,8 @@
 
 #include <ovis/core/log.hpp>
 
-#include <ovis/scene/scene.hpp>
-#include <ovis/scene/scene_controller.hpp>
+#include <ovis/engine/scene.hpp>
+#include <ovis/engine/scene_controller.hpp>
 
 namespace ovis {
 

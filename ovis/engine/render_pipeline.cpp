@@ -2,11 +2,12 @@
 
 #include <SDL2/SDL_assert.h>
 
-#include <ovis/rendering/geometry_pass.hpp>
-#include <ovis/rendering/render_pass.hpp>
-#include <ovis/rendering/render_pipeline.hpp>
+#include <ovis/engine/render_pass.hpp>
+#include <ovis/engine/render_pipeline.hpp>
 
 #include <ovis/core/log.hpp>
+
+#include <ovis/graphics/render_target_configuration.hpp>
 
 namespace ovis {
 
@@ -84,6 +85,26 @@ RenderTarget* RenderPipeline::GetRenderTarget(const std::string& id) {
   } else {
     return render_target->second.get();
   }
+}
+
+std::unique_ptr<RenderTargetConfiguration>
+RenderPipeline::CreateRenderTargetConfiguration(
+    std::vector<std::string> color_render_target_ids,
+    std::string depth_render_target_id) {
+  RenderTargetConfigurationDescription render_target_config_desc;
+  render_target_config_desc.color_attachments.reserve(
+      color_render_target_ids.size());
+  for (const auto& render_target_id : color_render_target_ids) {
+    render_target_config_desc.color_attachments.push_back(
+        GetRenderTarget(render_target_id));
+    SDL_assert(render_target_config_desc.color_attachments.back() != nullptr);
+  }
+  if (depth_render_target_id.length() > 0) {
+    render_target_config_desc.depth_attachment =
+        GetRenderTarget(depth_render_target_id);
+  }
+  return std::make_unique<ovis::RenderTargetConfiguration>(
+      graphics_context_, render_target_config_desc);
 }
 
 void RenderPipeline::SortRenderPasses() {

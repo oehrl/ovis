@@ -1,4 +1,4 @@
-#include "ovis/scene/sub_system.hpp"
+#include <ovis/engine/sub_system.hpp>
 #include <cassert>
 
 namespace ovis {

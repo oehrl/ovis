@@ -4,7 +4,7 @@
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/texture2d.hpp>
-#include <ovis/scene/scene.hpp>
+#include <ovis/engine/scene.hpp>
 #include <ovis/engine/window.hpp>
 #include <ovis/core/profiling.hpp>
 

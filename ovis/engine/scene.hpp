@@ -1,13 +1,18 @@
 #pragma once
 
 #include <chrono>
+
 #include <string>
 #include <unordered_map>
 #include <vector>
+
 #include <SDL2/SDL_events.h>
+
 #include <glm/vec2.hpp>
+
 #include <ovis/core/down_cast.hpp>
-#include <ovis/scene/camera.hpp>
+
+#include <ovis/engine/camera.hpp>
 
 namespace ovis {
 
@@ -48,6 +53,17 @@ class Scene {
   void DeleteObject(const std::string& object_name);
   SceneObject* GetObject(const std::string& object_name);
 
+  template <typename ComponentType>
+  void GetSceneObjectsWithComponent(
+      std::vector<SceneObject*>* scene_objects) const;
+
+  template <typename ComponentType>
+  inline std::vector<SceneObject*> GetSceneObjectsWithComponent() const {
+    std::vector<SceneObject*> scene_objects;
+    GetSceneObjectsWithComponent<ComponentType>(&scene_objects);
+    return scene_objects;
+  }
+
   void Update(std::chrono::microseconds delta_time);
 
   void Resume();
@@ -78,12 +94,33 @@ class Scene {
   std::string m_name;
   std::unordered_map<std::string, SceneController*> m_controllers;
   std::unordered_map<std::string, SceneObject*> objects_;
-  std::unordered_map<std::string, std::unique_ptr<SceneObject>> created_objects_;
+  std::unordered_map<std::string, std::unique_ptr<SceneObject>>
+      created_objects_;
   ResourceManager* resource_manager_;
   Camera camera_;
   glm::uvec2 size_;
   bool m_is_paused;
   bool m_hides_previous;
 };
+
+}  // namespace ovis
+
+#include <ovis/engine/scene_object.hpp>
+
+namespace ovis {
+
+template <typename ComponentType>
+inline void Scene::GetSceneObjectsWithComponent(
+    std::vector<SceneObject*>* scene_objects) const {
+  SDL_assert(scene_objects != nullptr);
+  scene_objects->clear();
+
+  for (auto& name_object_pair : objects_) {
+    SceneObject* scene_object = name_object_pair.second;
+    if (scene_object->HasComponent<ComponentType>()) {
+      scene_objects->push_back(scene_object);
+    }
+  }
+}
 
 }  // namespace ovis

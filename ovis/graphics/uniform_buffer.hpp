@@ -15,6 +15,7 @@
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/texture2d.hpp>
+#include <ovis/core/log.hpp>
 
 namespace ovis {
 
@@ -44,7 +45,10 @@ class UniformBuffer : public GraphicsResource {
 
   template <typename... T>
   inline void SetUniform(const std::string& name, T&&... value) {
-    SDL_assert(m_uniform_indices.find(name) != m_uniform_indices.end());
+    if (m_uniform_indices.find(name) == m_uniform_indices.end()) {
+      LogW("Trying to set unknown uniform: '{}'", name);
+      return;
+    }
     SetUniform(m_uniform_indices[name], value...);
   }
 

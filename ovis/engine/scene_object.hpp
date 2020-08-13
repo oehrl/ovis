@@ -5,7 +5,8 @@
 #include <unordered_map>
 
 #include <ovis/core/class.hpp>
-#include <ovis/scene/scene_component.hpp>
+
+#include <ovis/engine/scene_component.hpp>
 
 namespace ovis {
 
@@ -21,14 +22,29 @@ class SceneObject {
   inline std::string name() const { return name_; }
 
   template <typename T, typename... Args>
-  T& AddComponent(Args&&... arguments) {
+  T* AddComponent(Args&&... arguments) {
     if (components_.count(typeid(T)) == 0) {
-      components_.insert(std::make_pair(
-          typeid(T),
-          std::make_unique<SceneComponent>(std::move<Args>(arguments)...)));
+      // components_.insert(std::make_pair(
+      //     typeid(T),
+      //     std::move(component)));
+      components_[typeid(T)] = 
+          std::make_unique<SceneComponent<T>>(std::move<Args>(arguments)...);
+      return down_cast<SceneComponent<T>>(components_[typeid(T)].get())->component();
+      // TODO: use insert! 
     } else {
       return nullptr;
     }
+  }
+
+  template <typename T>
+  bool HasComponent() const {
+    return components_.count(typeid(T)) > 0;
+  }
+
+  template <typename T>
+  T* GetComponent() {
+    return down_cast<SceneComponent<T>>(components_[typeid(T)].get())
+        ->component();
   }
 
   template <typename T>

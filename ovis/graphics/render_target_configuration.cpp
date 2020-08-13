@@ -1,3 +1,5 @@
+#include <glm/gtc/type_ptr.hpp>
+
 #include <ovis/core/range.hpp>
 
 #include <ovis/graphics/graphics_context.hpp>
@@ -13,12 +15,16 @@ RenderTargetConfiguration::RenderTargetConfiguration(
   glGenFramebuffers(1, &m_frame_buffer);
 
   Bind();
+  draw_buffers_.reserve(description.color_attachments.size());
   for (auto color_attachment : IndexRange(description.color_attachments)) {
     if (color_attachment.value() != nullptr) {
       color_attachment.value()->Attach(GL_COLOR_ATTACHMENT0 +
                                        color_attachment.index());
       width_ = color_attachment.value()->GetWidth();
       height_ = color_attachment.value()->GetHeight();
+      draw_buffers_.push_back(GL_COLOR_ATTACHMENT0 + color_attachment.index());
+    } else {
+      draw_buffers_.push_back(GL_NONE);
     }
   }
   if (description.depth_attachment != nullptr) {
@@ -42,14 +48,20 @@ RenderTargetConfiguration::~RenderTargetConfiguration() {
   }
 }
 
-void RenderTargetConfiguration::ClearColor(const glm::vec4& clear_color) {
+void RenderTargetConfiguration::ClearColor(size_t color_attachment_index,
+                                           const glm::vec4& clear_color) {
   if (context()->scissoring_enabled_) {
     glDisable(GL_SCISSOR_TEST);
     context()->scissoring_enabled_ = false;
   }
   Bind();
+#if OVIS_EMSCRIPTEN
   glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
   glClear(GL_COLOR_BUFFER_BIT);
+#else
+  glClearBufferfv(GL_COLOR, color_attachment_index,
+                  glm::value_ptr(clear_color));
+#endif
 }
 
 void RenderTargetConfiguration::ClearDepth(float depth) {
@@ -57,9 +69,17 @@ void RenderTargetConfiguration::ClearDepth(float depth) {
     glDisable(GL_SCISSOR_TEST);
     context()->scissoring_enabled_ = false;
   }
+  if (!context()->depth_buffer_state_.write_enabled) {
+    glDepthMask(true);
+    context()->depth_buffer_state_.write_enabled = true;
+  }
   Bind();
+#if OVIS_EMSCRIPTEN
   glClearDepthf(depth);
   glClear(GL_DEPTH_BUFFER_BIT);
+#else
+  glClearBufferfv(GL_DEPTH, 0, &depth);
+#endif
 }
 
 RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
@@ -68,12 +88,16 @@ RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
     : GraphicsResource(context),
       m_frame_buffer(0),
       width_(width),
-      height_(height) {}
+      height_(height),
+      draw_buffers_({GL_COLOR_ATTACHMENT0}) {}
 
 void RenderTargetConfiguration::Bind() {
   if (context()->m_bound_frame_buffer != m_frame_buffer) {
     glBindFramebuffer(GL_FRAMEBUFFER, m_frame_buffer);
     context()->m_bound_frame_buffer = m_frame_buffer;
+#if !OVIS_EMSCRIPTEN
+    glDrawBuffers(draw_buffers_.size(), draw_buffers_.data());
+#endif
   }
 }
 

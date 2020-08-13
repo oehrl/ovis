@@ -39,9 +39,11 @@ inline void ApplyDepthBufferState(DepthBufferState* current_state,
   if (new_state.test_enabled) {
     if (current_state->write_enabled != new_state.write_enabled) {
       glDepthMask(new_state.write_enabled);
+      current_state->write_enabled = new_state.write_enabled;
     }
     if (current_state->function != new_state.function) {
       glDepthFunc(static_cast<GLenum>(new_state.function));
+      current_state->function = new_state.function;
     }
   }
 }
