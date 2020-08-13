@@ -32,6 +32,12 @@ if (OVIS_EMSCRIPTEN)
     OvisCore
     PUBLIC
       -std=c++1z
+      -s USE_SDL=2
+    )
+    target_link_options(
+      OvisCore
+      PUBLIC
+        -s USE_SDL=2
     )
 else ()
   find_package(SDL2 REQUIRED)
