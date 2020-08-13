@@ -8,7 +8,7 @@
 #include <ovis/core/class.hpp>
 #include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
-#include <ovis/rendering/render_pipeline.hpp>
+#include <ovis/engine/render_pipeline.hpp>
 
 namespace ovis {
 

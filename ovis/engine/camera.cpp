@@ -1,5 +1,5 @@
 #include <glm/gtc/matrix_transform.hpp>
-#include <ovis/scene/camera.hpp>
+#include <ovis/engine/camera.hpp>
 #include <SDL2/SDL_assert.h>
 
 namespace ovis {

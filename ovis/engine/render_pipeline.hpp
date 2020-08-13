@@ -8,6 +8,7 @@
 
 #include <ovis/graphics/render_target.hpp>
 #include <ovis/graphics/render_target_texture2d.hpp>
+#include <ovis/graphics/render_target_configuration.hpp>
 
 namespace ovis {
 

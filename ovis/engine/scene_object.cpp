@@ -1,6 +1,6 @@
 #include <SDL2/SDL_assert.h>
-#include <ovis/scene/scene.hpp>
-#include <ovis/scene/scene_object.hpp>
+#include <ovis/engine/scene.hpp>
+#include <ovis/engine/scene_object.hpp>
 
 namespace ovis {
 

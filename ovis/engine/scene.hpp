@@ -12,7 +12,7 @@
 
 #include <ovis/core/down_cast.hpp>
 
-#include <ovis/scene/camera.hpp>
+#include <ovis/engine/camera.hpp>
 
 namespace ovis {
 
@@ -105,7 +105,7 @@ class Scene {
 
 }  // namespace ovis
 
-#include <ovis/scene/scene_object.hpp>
+#include <ovis/engine/scene_object.hpp>
 
 namespace ovis {
 

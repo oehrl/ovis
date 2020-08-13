@@ -2,9 +2,8 @@
 
 #include <SDL2/SDL_assert.h>
 
-#include <ovis/rendering/geometry_pass.hpp>
-#include <ovis/rendering/render_pass.hpp>
-#include <ovis/rendering/render_pipeline.hpp>
+#include <ovis/engine/render_pass.hpp>
+#include <ovis/engine/render_pipeline.hpp>
 
 #include <ovis/core/log.hpp>
 

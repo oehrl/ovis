@@ -6,7 +6,7 @@
 
 #include <ovis/core/class.hpp>
 
-#include <ovis/scene/scene_component.hpp>
+#include <ovis/engine/scene_component.hpp>
 
 namespace ovis {
 
