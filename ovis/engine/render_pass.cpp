@@ -12,12 +12,6 @@ RenderPass::RenderPass(const std::string& name)
 {
 }
 
-RenderPass::~RenderPass() {
-  if (render_pipeline_ != nullptr) {
-    render_pipeline_->RemoveRenderPass(this);
-  }
-}
-
 void RenderPass::RenderBefore(const std::string& render_pass_name) {
   render_before_list_.insert(render_pass_name);
 }

@@ -2,55 +2,56 @@
 
 #include <SDL2/SDL_assert.h>
 
-#include <ovis/engine/render_pass.hpp>
-#include <ovis/engine/render_pipeline.hpp>
-
 #include <ovis/core/log.hpp>
 
 #include <ovis/graphics/render_target_configuration.hpp>
 
+#include <ovis/engine/render_pass.hpp>
+#include <ovis/engine/render_pipeline.hpp>
+#include <ovis/engine/sub_system.hpp>
+
 namespace ovis {
 
 RenderPipeline::RenderPipeline(GraphicsContext* graphics_context,
-                               ResourceManager* resource_manager)
+                               ResourceManager* resource_manager,
+                               std::vector<std::string> render_pass_ids)
     : graphics_context_(graphics_context),
       resource_manager_(resource_manager),
       render_passes_sorted_(false) {
   SDL_assert(resource_manager != nullptr);
-}
-
-RenderPipeline::~RenderPipeline() {
-  while (render_passes_.size() > 0) {
-    RemoveRenderPass(render_passes_.begin()->second);
+  for (const auto& render_pass_id : render_pass_ids) {
+    AddRenderPass(render_pass_id);
   }
 }
 
-void RenderPipeline::AddRenderPass(RenderPass* render_pass) {
-  SDL_assert(render_pass != nullptr);
-  SDL_assert(render_pass->render_pipeline_ == nullptr);
-  SDL_assert(render_passes_.find(render_pass->name()) == render_passes_.end());
-  render_passes_.insert(std::make_pair(render_pass->name(), render_pass));
-  render_pass->render_pipeline_ = this;
-  render_pass->resource_manager_ = resource_manager_;
+void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
+  const auto render_pass_factory = render_pass_factories()->find(render_pass_id);
+  if (render_pass_factory == render_pass_factories()->end()) {
+    LogE("Cannot find render pass '{}'", render_pass_id);
+    return;
+  }
+
+  if (render_passes_.count(render_pass_id) != 0) {
+    LogE("Render pass '{}' already added", render_pass_id);
+    return;
+  }
+
+  auto render_pass =
+      render_pass_factory->second->CreateRenderPass(render_pass_id);
+  if (render_pass == nullptr) {
+    LogE("Failed to create render pass '{}'", render_pass_id);
+    return;
+  }
+
+  auto insert_return_value =
+      render_passes_.insert(std::make_pair(render_pass_id, std::move(render_pass)));
+  SDL_assert(insert_return_value.second);
+  insert_return_value.first->second->render_pipeline_ = this;
+  insert_return_value.first->second->resource_manager_ = resource_manager_;
   if (graphics_context_ != nullptr) {
-    render_pass->graphics_context_ = graphics_context_;
-    render_pass->CreateResourcesWrapper();
+    insert_return_value.first->second->graphics_context_ = graphics_context_;
+    insert_return_value.first->second->CreateResourcesWrapper();
   }
-  render_passes_sorted_ = false;
-}
-
-void RenderPipeline::RemoveRenderPass(RenderPass* render_pass) {
-  SDL_assert(render_passes_.find(render_pass->name()) != render_passes_.end() &&
-             render_passes_.find(render_pass->name())->second == render_pass);
-  SDL_assert(render_pass != nullptr);
-  SDL_assert(render_pass->render_pipeline_ == this);
-  if (graphics_context_ != nullptr) {
-    render_pass->ReleaseResourcesWrapper();
-    render_pass->graphics_context_ = nullptr;
-  }
-  render_pass->resource_manager_ = nullptr;
-  render_pass->render_pipeline_ = nullptr;
-  render_passes_.erase(render_passes_.find(render_pass->name()));
   render_passes_sorted_ = false;
 }
 
@@ -107,12 +108,17 @@ RenderPipeline::CreateRenderTargetConfiguration(
       graphics_context_, render_target_config_desc);
 }
 
+std::unordered_map<std::string, SubSystem*>* RenderPipeline::render_pass_factories() {
+  static std::unordered_map<std::string, SubSystem*>* render_pass_factories = new std::unordered_map<std::string, SubSystem*>();
+  return render_pass_factories;
+}
+
 void RenderPipeline::SortRenderPasses() {
   // First depends on second beeing already rendered
   std::multimap<std::string, std::string> dependencies;
   std::set<std::string> render_passes_left_;
 
-  for (auto name_renderer_pair : render_passes_) {
+  for (const auto& name_renderer_pair : render_passes_) {
     render_passes_left_.insert(name_renderer_pair.first);
 
     for (auto render_before : name_renderer_pair.second->render_before_list_) {
@@ -137,7 +143,8 @@ void RenderPipeline::SortRenderPasses() {
 
     SDL_assert(next != render_passes_left_.end());
 
-    render_pass_order_.push_back(render_passes_[*next]);
+    SDL_assert(render_passes_.find(*next) != render_passes_.end());
+    render_pass_order_.push_back(render_passes_[*next].get());
     for (auto i = dependencies.begin(), e = dependencies.end(); i != e;) {
       if (i->second == *next) {
         i = dependencies.erase(i);
@@ -157,7 +164,7 @@ RenderPass* RenderPipeline::GetRenderPassInternal(
   if (render_pass == render_passes_.end()) {
     return nullptr;
   } else {
-    return render_pass->second;
+    return render_pass->second.get();
   }
 }
 

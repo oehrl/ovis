@@ -18,7 +18,7 @@ Window::Window(const std::string& title, int width, int height)
                                    SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
-      render_pipeline_(&graphics_context_, &resource_manager_),
+      render_pipeline_(&graphics_context_, &resource_manager_, {}),
       profiling_log_(ProfilingLog::default_log()) {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);

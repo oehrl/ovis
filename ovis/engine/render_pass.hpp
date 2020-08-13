@@ -21,7 +21,7 @@ class RenderPass {
 
  public:
   RenderPass(const std::string& name);
-  virtual ~RenderPass();
+  virtual ~RenderPass() = default;
 
   inline RenderPipeline* render_pipeline() const { return render_pipeline_; }
   inline std::string name() const { return name_; }
@@ -62,7 +62,8 @@ class RenderPass {
   }
 
   inline void CreateResourcesWrapper() {
-    gpu_render_profiler_ = std::make_unique<GPUTimeProfiler>(context(), name() + "::Render");
+    gpu_render_profiler_ =
+        std::make_unique<GPUTimeProfiler>(context(), name() + "::Render");
     CreateResources();
   }
   inline void ReleaseResourcesWrapper() {

@@ -1,26 +1,25 @@
-#include <ovis/engine/sub_system.hpp>
 #include <cassert>
+
+#include <ovis/core/log.hpp>
+#include <ovis/engine/render_pipeline.hpp>
+#include <ovis/engine/sub_system.hpp>
 
 namespace ovis {
 
 SubSystem::SubSystem(const std::string& name) : name_(name) {
-  all_subsystems_.push_back(this);
 }
 
 SubSystem::~SubSystem() {
-  auto it = std::find(all_subsystems_.begin(), all_subsystems_.end(), this);
-  assert(it != all_subsystems_.end());
-  std::swap(*it, all_subsystems_.back());
-  all_subsystems_.pop_back();
 }
 
-SubSystem* SubSystem::GetByName(const std::string& name) {
-  for (const auto& sub_system : all_subsystems_) {
-    if (sub_system->name() == name) {
-      return sub_system;
-    }
+void SubSystem::RegisterRenderPass(const std::string& id) {
+  if (!RenderPipeline::render_pass_factories()
+           ->insert(std::make_pair(id, this))
+           .second) {
+    LogE("The render pass '{}' was already registered", id);
   }
-  return nullptr;
 }
+
+void SubSystem::RegisterSceneController(const std::string& id) {}
 
 }  // namespace ovis

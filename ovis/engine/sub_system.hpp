@@ -1,13 +1,19 @@
 #pragma once
 
 #include <chrono>
+
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
+
 #include <SDL2/SDL_events.h>
+
 #include <ovis/core/class.hpp>
 
 namespace ovis {
+
+class RenderPass;
+class SceneController;
 
 class SubSystem {
   MAKE_NON_COPY_OR_MOVABLE(SubSystem);
@@ -16,26 +22,31 @@ class SubSystem {
   SubSystem(const std::string& name);
   virtual ~SubSystem();
 
-  inline static const std::vector<SubSystem*> all_sub_systems() {
-    return all_subsystems_;
-  }
-
-  static SubSystem* GetByName(const std::string& name);
-
   inline std::string name() const { return name_; }
 
-  virtual void BeforeEventProcessing() {}
-  virtual void AfterEventProcessing() {}
+  // virtual void BeforeEventProcessing() {}
+  // virtual void AfterEventProcessing() {}
 
-  virtual void BeforeUpdate() {}
-  virtual void AfterUpdate() {}
+  // virtual void BeforeUpdate() {}
+  // virtual void AfterUpdate() {}
 
-  virtual void BeforeRendering() {}
-  virtual void AfterRendering() {}
+  // virtual void BeforeRendering() {}
+  // virtual void AfterRendering() {}
+
+  virtual std::unique_ptr<RenderPass> CreateRenderPass(const std::string& id) {
+    return nullptr;
+  }
+
+  virtual std::unique_ptr<SceneController> CreateSceneController(
+      const std::string& id) {
+    return nullptr;
+  }
+
+ protected:
+  void RegisterRenderPass(const std::string& id);
+  void RegisterSceneController(const std::string& id);
 
  private:
-  static std::vector<SubSystem*> all_subsystems_;
-
   std::string name_;
 };
 
