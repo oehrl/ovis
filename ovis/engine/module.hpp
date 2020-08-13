@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include <SDL2/SDL_events.h>
@@ -49,5 +50,11 @@ class Module {
  private:
   std::string name_;
 };
+
+#define OVIS_ADD_MODULE(ModuleName)                                  \
+  static_assert(std::is_base_of<::ovis::Module, ModuleName>::value); \
+  namespace {                                                        \
+  static ModuleName ovis_module_ModuleName;                          \
+  }
 
 }  // namespace ovis
