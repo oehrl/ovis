@@ -17,13 +17,13 @@ namespace ovis {
 class GraphicsContext;
 class ResourceManager;
 class Scene;
-class SubSystem;
+class Module;
 
 class RenderPipeline final {
   MAKE_NON_COPY_OR_MOVABLE(RenderPipeline);
 
   friend class RenderPass;
-  friend class SubSystem;
+  friend class Module;
 
  public:
   RenderPipeline(GraphicsContext* graphics_context,
@@ -52,7 +52,7 @@ class RenderPipeline final {
   void Render(Scene* scene);
 
  private:
-  static std::unordered_map<std::string, SubSystem*>* render_pass_factories();
+  static std::unordered_map<std::string, Module*>* render_pass_factories();
   void SortRenderPasses();
 
   RenderPass* GetRenderPassInternal(const std::string& render_pass_name) const;

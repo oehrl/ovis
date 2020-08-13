@@ -8,7 +8,7 @@ add_library(
   scene_controller.hpp scene_controller.cpp
   scene_object.hpp scene_object.cpp
   scene.hpp scene.cpp
-  sub_system.hpp sub_system.cpp
+  module.hpp module.cpp
   render_pipeline.hpp render_pipeline.cpp
   render_pass.hpp render_pass.cpp
 )

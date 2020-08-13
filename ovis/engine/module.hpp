@@ -15,12 +15,12 @@ namespace ovis {
 class RenderPass;
 class SceneController;
 
-class SubSystem {
-  MAKE_NON_COPY_OR_MOVABLE(SubSystem);
+class Module {
+  MAKE_NON_COPY_OR_MOVABLE(Module);
 
  public:
-  SubSystem(const std::string& name);
-  virtual ~SubSystem();
+  Module(const std::string& name);
+  virtual ~Module();
 
   inline std::string name() const { return name_; }
 

@@ -8,7 +8,7 @@
 
 #include <ovis/engine/render_pass.hpp>
 #include <ovis/engine/render_pipeline.hpp>
-#include <ovis/engine/sub_system.hpp>
+#include <ovis/engine/module.hpp>
 
 namespace ovis {
 
@@ -108,8 +108,8 @@ RenderPipeline::CreateRenderTargetConfiguration(
       graphics_context_, render_target_config_desc);
 }
 
-std::unordered_map<std::string, SubSystem*>* RenderPipeline::render_pass_factories() {
-  static std::unordered_map<std::string, SubSystem*>* render_pass_factories = new std::unordered_map<std::string, SubSystem*>();
+std::unordered_map<std::string, Module*>* RenderPipeline::render_pass_factories() {
+  static std::unordered_map<std::string, Module*>* render_pass_factories = new std::unordered_map<std::string, Module*>();
   return render_pass_factories;
 }
 
