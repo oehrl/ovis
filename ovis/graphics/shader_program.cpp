@@ -76,9 +76,9 @@ void ShaderProgram::AttachShader(const std::string& source,
     SDL_assert(shader != 0);
 
     std::string final_shader_source;
-#if OVIS_EMPSCRIPTEN
+#if OVIS_EMSCRIPTEN
     final_shader_source += "#version 100\n";
-    final_shader_source += "#define OVIS_EMSCRIPTEN 1";
+    final_shader_source += "#define OVIS_EMSCRIPTEN 1\n";
     if (shader_type == GL_VERTEX_SHADER) {
       final_shader_source += "#define in attribute\n";
       final_shader_source += "#define out varying\n";
