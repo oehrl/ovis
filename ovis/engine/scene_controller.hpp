@@ -37,6 +37,8 @@ class SceneController {
 
   virtual bool ProcessEvent(const SDL_Event& event);
 
+  static std::vector<std::string> GetRegisteredControllers();
+
  private:
   static std::unordered_map<std::string, Module*>* scene_controller_factories();
 

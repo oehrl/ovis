@@ -16,13 +16,13 @@ namespace ovis {
 
 std::vector<Window*> Window::all_windows_;
 
-Window::Window(const std::string& title, int width, int height)
+Window::Window(const WindowDescription& desc)
     : sdl_window_(SDL_CreateWindow(
-          title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-          width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
+          desc.title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+          desc.width, desc.height, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
-      render_pipeline_(&graphics_context_, &resource_manager_, {}),
+      render_pipeline_(&graphics_context_, &resource_manager_),
       scene_(this),
       profiling_log_(ProfilingLog::default_log()) {
   assert(sdl_window_ != nullptr);
@@ -43,6 +43,16 @@ Window::Window(const std::string& title, int width, int height)
       ".shader", std::bind(&ovis::LoadShaderProgram, &graphics_context_,
                            std::placeholders::_1, std::placeholders::_2,
                            std::placeholders::_3, std::placeholders::_4));
+
+  for (const auto& search_path : desc.resource_search_paths) {
+    resource_manager_.AddSearchPath(search_path);
+  }
+  for (const auto& controller : desc.scene_controllers) {
+    scene_.AddController(controller);
+  }
+  for (const auto& render_pass : desc.render_passes) {
+    render_pipeline_.AddRenderPass(render_pass);
+  }
 }
 
 Window::~Window() {

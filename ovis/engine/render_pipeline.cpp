@@ -13,21 +13,17 @@
 namespace ovis {
 
 RenderPipeline::RenderPipeline(GraphicsContext* graphics_context,
-                               ResourceManager* resource_manager,
-                               std::vector<std::string> render_pass_ids)
+                               ResourceManager* resource_manager)
     : graphics_context_(graphics_context),
       resource_manager_(resource_manager),
       render_passes_sorted_(false) {
   SDL_assert(resource_manager != nullptr);
-  for (const auto& render_pass_id : render_pass_ids) {
-    AddRenderPass(render_pass_id);
-  }
 }
 
 void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
   const auto render_pass_factory =
-      render_pass_factories()->find(render_pass_id);
-  if (render_pass_factory == render_pass_factories()->end()) {
+      RenderPass::render_pass_factories()->find(render_pass_id);
+  if (render_pass_factory == RenderPass::render_pass_factories()->end()) {
     LogE("Cannot find render pass '{}'", render_pass_id);
     return;
   }
@@ -113,13 +109,6 @@ RenderPipeline::CreateRenderTargetConfiguration(
   }
   return std::make_unique<ovis::RenderTargetConfiguration>(
       graphics_context_, render_target_config_desc);
-}
-
-std::unordered_map<std::string, Module*>*
-RenderPipeline::render_pass_factories() {
-  static std::unordered_map<std::string, Module*>* render_pass_factories =
-      new std::unordered_map<std::string, Module*>();
-  return render_pass_factories;
 }
 
 void RenderPipeline::SortRenderPasses() {

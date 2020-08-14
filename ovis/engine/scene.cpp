@@ -20,6 +20,12 @@ Scene::Scene(Window* window) : m_is_paused(true), window_(window) {}
 
 Scene::~Scene() {}
 
+void Scene::AddRegisteredControllers() {
+  for (const auto& default_scene_controller : *SceneController::scene_controller_factories()) {
+    AddController(default_scene_controller.first);
+  }
+}
+
 void Scene::AddController(const std::string& scene_controller_id) {
   const auto controller_factory =
       SceneController::scene_controller_factories()->find(scene_controller_id);

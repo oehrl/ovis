@@ -1,26 +1,43 @@
 #pragma once
 
 #include <chrono>
+
 #include <memory>
 #include <string>
 #include <vector>
+
 #include <SDL2/SDL_video.h>
+
 #include <ovis/core/class.hpp>
 #include <ovis/core/resource_manager.hpp>
+
 #include <ovis/graphics/graphics_context.hpp>
+
+#include <ovis/engine/render_pass.hpp>
 #include <ovis/engine/render_pipeline.hpp>
 #include <ovis/engine/scene.hpp>
+#include <ovis/engine/scene_controller.hpp>
 
 namespace ovis {
 
 class GraphicsDevice;
 class ProfilingLog;
 
+struct WindowDescription {
+  std::string title;
+  int width = 1280;
+  int height = 720;
+  std::vector<std::string> resource_search_paths;
+  std::vector<std::string> render_passes = RenderPass::GetRegisteredRenderPasses();
+  std::vector<std::string> scene_controllers =
+      SceneController::GetRegisteredControllers();
+};
+
 class Window {
   MAKE_NON_COPY_OR_MOVABLE(Window);
 
  public:
-  Window(const std::string& title, int width = 1280, int height = 720);
+  Window(const WindowDescription& description);
   ~Window();
 
   inline static const std::vector<Window*>& all_windows() {

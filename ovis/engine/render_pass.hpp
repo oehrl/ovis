@@ -2,6 +2,7 @@
 
 #include <set>
 #include <string>
+#include <unordered_map>
 
 #if OVIS_ENABLE_BUILT_IN_PROFILING
 #include <ovis/core/profiling.hpp>
@@ -15,9 +16,11 @@ class RenderPipeline;
 class GraphicsContext;
 class ResourceManager;
 class Scene;
+class Module;
 
 class RenderPass {
   friend class RenderPipeline;
+  friend class Module;
 
  public:
   RenderPass(const std::string& name);
@@ -34,11 +37,15 @@ class RenderPass {
 
   virtual void DrawDebugUI() {}
 
+  static std::vector<std::string> GetRegisteredRenderPasses();
+
  protected:
   void RenderBefore(const std::string& renderer_name);
   void RenderAfter(const std::string& renderer_name);
 
  private:
+  static std::unordered_map<std::string, Module*>* render_pass_factories();
+
   RenderPipeline* render_pipeline_ = nullptr;
   GraphicsContext* graphics_context_ = nullptr;
   ResourceManager* resource_manager_ = nullptr;

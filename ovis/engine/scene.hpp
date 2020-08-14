@@ -39,6 +39,7 @@ class Scene {
     resource_manager_ = resource_manager;
   }
 
+  void AddRegisteredControllers();
   void AddController(const std::string& id);
   void RemoveController(const std::string& id);
 

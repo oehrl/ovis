@@ -22,13 +22,9 @@ class Module;
 class RenderPipeline final {
   MAKE_NON_COPY_OR_MOVABLE(RenderPipeline);
 
-  friend class RenderPass;
-  friend class Module;
-
  public:
   RenderPipeline(GraphicsContext* graphics_context,
-                 ResourceManager* resource_manager,
-                 std::vector<std::string> render_pass_ids);
+                 ResourceManager* resource_manager);
 
   void AddRenderPass(const std::string& render_pass_id);
   void RemoveRenderPass(const std::string& render_pass_id);
@@ -53,7 +49,6 @@ class RenderPipeline final {
   void DrawDebugUI();
 
  private:
-  static std::unordered_map<std::string, Module*>* render_pass_factories();
   void SortRenderPasses();
 
   RenderPass* GetRenderPassInternal(const std::string& render_pass_name) const;

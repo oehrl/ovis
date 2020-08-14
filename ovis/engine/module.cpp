@@ -3,7 +3,7 @@
 #include <ovis/core/log.hpp>
 
 #include <ovis/engine/module.hpp>
-#include <ovis/engine/render_pipeline.hpp>
+#include <ovis/engine/render_pass.hpp>
 #include <ovis/engine/scene_controller.hpp>
 
 namespace ovis {
@@ -13,7 +13,7 @@ Module::Module(const std::string& name) : name_(name) {}
 Module::~Module() {}
 
 void Module::RegisterRenderPass(const std::string& id) {
-  if (!RenderPipeline::render_pass_factories()
+  if (!RenderPass::render_pass_factories()
            ->insert(std::make_pair(id, this))
            .second) {
     LogE("The render pass '{}' was already registered", id);
