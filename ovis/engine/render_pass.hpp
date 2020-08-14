@@ -32,6 +32,8 @@ class RenderPass {
   virtual void ReleaseResources() {}
   virtual void Render(Scene* scene) = 0;
 
+  virtual void DrawDebugUI() {}
+
  protected:
   void RenderBefore(const std::string& renderer_name);
   void RenderAfter(const std::string& renderer_name);

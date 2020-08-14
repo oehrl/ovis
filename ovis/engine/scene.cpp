@@ -7,20 +7,47 @@
 
 #include <SDL2/SDL_assert.h>
 
+#include <ovis/core/log.hpp>
+
+#include <ovis/engine/module.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_controller.hpp>
 #include <ovis/engine/scene_object.hpp>
 
 namespace ovis {
 
-Scene::Scene(const std::string& name, const glm::uvec2& size,
-             bool hide_previous)
-    : m_name(name),
-      size_(size),
-      m_is_paused(true),
-      m_hides_previous(hide_previous) {}
+Scene::Scene(Window* window) : m_is_paused(true), window_(window) {}
 
 Scene::~Scene() {}
+
+void Scene::AddController(const std::string& scene_controller_id) {
+  const auto controller_factory =
+      SceneController::scene_controller_factories()->find(scene_controller_id);
+  if (controller_factory ==
+      SceneController::scene_controller_factories()->end()) {
+    LogE("Cannot find scene controller '{}'", scene_controller_id);
+    return;
+  }
+
+  if (m_controllers.count(scene_controller_id) != 0) {
+    LogE("Scene controller '{}' already added", scene_controller_id);
+    return;
+  }
+
+  auto controller =
+      controller_factory->second->CreateSceneController(scene_controller_id);
+  if (controller == nullptr) {
+    LogE("Failed to create scene controller '{}'", scene_controller_id);
+    return;
+  }
+
+  auto insert_return_value = m_controllers.insert(
+      std::make_pair(scene_controller_id, std::move(controller)));
+  SDL_assert(insert_return_value.second);
+  insert_return_value.first->second->m_scene = this;
+}
+
+void RemoveSceneController(const std::string& id) {}
 
 SceneObject* Scene::CreateObject(const std::string& object_name) {
   auto result = created_objects_.insert(std::make_pair(
@@ -39,30 +66,27 @@ SceneObject* Scene::GetObject(const std::string& object_name) {
   return object->second;
 }
 
+void Scene::BeforeUpdate() {
+  for (const auto& controller : m_controllers) {
+    controller.second->BeforeUpdate();
+  }
+}
+
+void Scene::AfterUpdate() {
+  for (const auto& controller : m_controllers) {
+    controller.second->AfterUpdate();
+  }
+}
+
 void Scene::Update(std::chrono::microseconds delta_time) {
-  OnUpdate(delta_time);
-  for (auto controller : m_controllers) {
+  for (const auto& controller : m_controllers) {
     controller.second->UpdateWrapper(delta_time);
   }
 }
 
-// void Scene::Render(float width, float height) {
-//   if (!m_renderers_sorted) {
-//     SortRenderers();
-//   }
-
-//   const float aspect_ratio = width / height;
-//   camera_.SetAspectRadio(aspect_ratio);
-
-//   for (auto renderer : m_render_order) {
-//     renderer->Render();
-//   }
-// }
-
 void Scene::Pause() {
   if (!m_is_paused) {
     m_is_paused = true;
-    OnPause();
   }
 }
 
@@ -83,19 +107,7 @@ bool Scene::ProcessEvent(const SDL_Event& event) {
 void Scene::Resume() {
   if (m_is_paused) {
     m_is_paused = false;
-    OnResume();
   }
-}
-
-void Scene::AddController(SceneController* controller) {
-  SDL_assert(m_controllers.find(controller->name()) == m_controllers.end());
-  m_controllers.insert(std::make_pair(controller->name(), controller));
-}
-
-void Scene::RemoveController(SceneController* controller) {
-  SDL_assert(m_controllers.find(controller->name()) != m_controllers.end() &&
-             m_controllers.find(controller->name())->second == controller);
-  m_controllers.erase(m_controllers.find(controller->name()));
 }
 
 void Scene::AddObject(SceneObject* object) {
@@ -115,14 +127,8 @@ SceneController* Scene::GetControllerInternal(
   if (controller == m_controllers.end()) {
     return nullptr;
   } else {
-    return controller->second;
+    return controller->second.get();
   }
 }
-
-void Scene::OnUpdate(std::chrono::microseconds /*delta_time*/) {}
-
-void Scene::OnResume() {}
-
-void Scene::OnPause() {}
 
 }  // namespace ovis

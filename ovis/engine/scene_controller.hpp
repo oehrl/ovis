@@ -4,6 +4,7 @@
 
 #include <set>
 #include <string>
+#include <unordered_map>
 
 #include <SDL2/SDL_events.h>
 
@@ -14,11 +15,14 @@
 #endif
 
 namespace ovis {
+
 class Scene;
+class Module;
 
 class SceneController {
   MAKE_NON_COPY_OR_MOVABLE(SceneController);
   friend class Scene;
+  friend class Module;
 
  public:
   SceneController(Scene* scene, const std::string& name);
@@ -27,10 +31,15 @@ class SceneController {
   inline Scene* scene() const { return m_scene; }
   inline std::string name() const { return m_name; }
 
+  virtual void BeforeUpdate() {}
+  virtual void AfterUpdate() {}
   virtual void Update(std::chrono::microseconds delta_time);
+
   virtual bool ProcessEvent(const SDL_Event& event);
 
  private:
+  static std::unordered_map<std::string, Module*>* scene_controller_factories();
+
   Scene* m_scene;
   std::string m_name;
 

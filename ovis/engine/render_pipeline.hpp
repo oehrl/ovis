@@ -50,6 +50,7 @@ class RenderPipeline final {
       std::string depth_render_target_id = "");
 
   void Render(Scene* scene);
+  void DrawDebugUI();
 
  private:
   static std::unordered_map<std::string, Module*>* render_pass_factories();

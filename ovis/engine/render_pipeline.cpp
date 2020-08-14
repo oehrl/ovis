@@ -6,9 +6,9 @@
 
 #include <ovis/graphics/render_target_configuration.hpp>
 
+#include <ovis/engine/module.hpp>
 #include <ovis/engine/render_pass.hpp>
 #include <ovis/engine/render_pipeline.hpp>
-#include <ovis/engine/module.hpp>
 
 namespace ovis {
 
@@ -25,7 +25,8 @@ RenderPipeline::RenderPipeline(GraphicsContext* graphics_context,
 }
 
 void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
-  const auto render_pass_factory = render_pass_factories()->find(render_pass_id);
+  const auto render_pass_factory =
+      render_pass_factories()->find(render_pass_id);
   if (render_pass_factory == render_pass_factories()->end()) {
     LogE("Cannot find render pass '{}'", render_pass_id);
     return;
@@ -43,8 +44,8 @@ void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
     return;
   }
 
-  auto insert_return_value =
-      render_passes_.insert(std::make_pair(render_pass_id, std::move(render_pass)));
+  auto insert_return_value = render_passes_.insert(
+      std::make_pair(render_pass_id, std::move(render_pass)));
   SDL_assert(insert_return_value.second);
   insert_return_value.first->second->render_pipeline_ = this;
   insert_return_value.first->second->resource_manager_ = resource_manager_;
@@ -61,6 +62,12 @@ void RenderPipeline::Render(Scene* scene) {
   }
   for (auto* render_pass : render_pass_order_) {
     render_pass->RenderWrapper(scene);
+  }
+}
+
+void RenderPipeline::DrawDebugUI() {
+  for (auto* render_pass : render_pass_order_) {
+    render_pass->DrawDebugUI();
   }
 }
 
@@ -108,8 +115,10 @@ RenderPipeline::CreateRenderTargetConfiguration(
       graphics_context_, render_target_config_desc);
 }
 
-std::unordered_map<std::string, Module*>* RenderPipeline::render_pass_factories() {
-  static std::unordered_map<std::string, Module*>* render_pass_factories = new std::unordered_map<std::string, Module*>();
+std::unordered_map<std::string, Module*>*
+RenderPipeline::render_pass_factories() {
+  static std::unordered_map<std::string, Module*>* render_pass_factories =
+      new std::unordered_map<std::string, Module*>();
   return render_pass_factories;
 }
 
@@ -122,13 +131,23 @@ void RenderPipeline::SortRenderPasses() {
     render_passes_left_.insert(name_renderer_pair.first);
 
     for (auto render_before : name_renderer_pair.second->render_before_list_) {
-      dependencies.insert(
-          std::make_pair(render_before, name_renderer_pair.first));
+      if (render_passes_.count(render_before) == 0) {
+        LogW("Cannot render {0} before {1}, {1} not found!",
+             name_renderer_pair.first, render_before);
+      } else {
+        dependencies.insert(
+            std::make_pair(render_before, name_renderer_pair.first));
+      }
     }
 
     for (auto render_after : name_renderer_pair.second->render_after_list_) {
-      dependencies.insert(
-          std::make_pair(name_renderer_pair.first, render_after));
+      if (render_passes_.count(render_after) == 0) {
+        LogW("Cannot render {0} after {1}, {1} not found!",
+             name_renderer_pair.first, render_after);
+      } else {
+        dependencies.insert(
+            std::make_pair(name_renderer_pair.first, render_after));
+      }
     }
   }
 

@@ -9,10 +9,10 @@
 #include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/engine/render_pipeline.hpp>
+#include <ovis/engine/scene.hpp>
 
 namespace ovis {
 
-class Scene;
 class GraphicsDevice;
 class ProfilingLog;
 
@@ -40,14 +40,13 @@ class Window {
   inline GraphicsContext* context() { return &graphics_context_; }
   inline ResourceManager* resource_manager() { return &resource_manager_; }
   inline RenderPipeline* render_pipeline() { return &render_pipeline_; }
+  inline Scene* scene() { return &scene_; }
+  inline int width() const { return width_; }
+  inline int height() const { return height_; }
 
   bool SendEvent(const SDL_Event& event);
   void Update(std::chrono::microseconds delta_time);
   void Render();
-
-  void PushScene(Scene* scene);
-  void ReplaceScene(Scene* scene);
-  void PopScene();
 
  private:
   static std::vector<Window*> all_windows_;
@@ -60,9 +59,8 @@ class Window {
   GraphicsContext graphics_context_;
   RenderPipeline render_pipeline_;
   ResourceManager resource_manager_;
+  Scene scene_;
   ProfilingLog* profiling_log_;
-
-  std::vector<Scene*> scene_stack_;
 };
 
 }  // namespace ovis

@@ -1,24 +1,29 @@
 #include <cassert>
+
 #include <algorithm>
+
 #include <ovis/core/log.hpp>
+#include <ovis/core/profiling.hpp>
+
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/texture2d.hpp>
+
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/window.hpp>
-#include <ovis/core/profiling.hpp>
 
 namespace ovis {
 
 std::vector<Window*> Window::all_windows_;
 
 Window::Window(const std::string& title, int width, int height)
-    : sdl_window_(SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED,
-                                   SDL_WINDOWPOS_UNDEFINED, width, height,
-                                   SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
+    : sdl_window_(SDL_CreateWindow(
+          title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+          width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
       render_pipeline_(&graphics_context_, &resource_manager_, {}),
+      scene_(this),
       profiling_log_(ProfilingLog::default_log()) {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
@@ -63,53 +68,20 @@ bool Window::SendEvent(const SDL_Event& event) {
     }
   }
 
-  if (scene_stack_.size() == 0) {
-    return false;
-  }
-
-  assert(scene_stack_.back() != nullptr);
-  return scene_stack_.back()->ProcessEvent(event);
+  return scene_.ProcessEvent(event);
 }
 
 void Window::Update(std::chrono::microseconds delta_time) {
-  for (Scene* scene : scene_stack_) {
-    scene->Update(delta_time);
-  }
+  scene_.BeforeUpdate();
+  render_pipeline_.DrawDebugUI();
+  scene_.Update(delta_time);
+  scene_.AfterUpdate();
 }
 
 void Window::Render() {
-  if (scene_stack_.size() > 0) {
-    render_pipeline_.Render(scene_stack_.back());
-  }
+  render_pipeline_.Render(&scene_);
   SDL_GL_SwapWindow(sdl_window_);
   profiling_log_->AdvanceFrame();
-}
-
-void Window::PushScene(Scene* scene) {
-  if (scene_stack_.size() > 0) {
-    scene_stack_.back()->Pause();
-  }
-  scene_stack_.push_back(scene);
-  scene->SetResourceManager(
-      resource_manager());
-  scene->Resume();
-}
-
-void Window::ReplaceScene(Scene* scene) {
-  // TODO: optimize so that the scene below the top scene does not get paused
-  //       and then immediately resumed
-  PopScene();
-  PushScene(scene);
-}
-
-void Window::PopScene() {
-  assert(scene_stack_.size() > 0);
-
-  scene_stack_.back()->Pause();
-  scene_stack_.pop_back();
-  if (scene_stack_.size() > 0) {
-    scene_stack_.back()->Resume();
-  }
 }
 
 }  // namespace ovis
