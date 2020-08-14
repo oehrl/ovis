@@ -6,9 +6,8 @@
 
 namespace ovis {
 
-ImGuiSceneController::ImGuiSceneController(ovis::Scene* scene,
-                                           ImGuiContext* context)
-    : SceneController(scene, "ImGui"), context_(context) {
+ImGuiSceneController::ImGuiSceneController(ImGuiContext* context)
+    : SceneController("ImGui"), context_(context) {
   ImGui::SetCurrentContext(context_);
 
   // Setup back-end capabilities flags

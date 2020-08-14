@@ -25,7 +25,7 @@ class SceneController {
   friend class Module;
 
  public:
-  SceneController(Scene* scene, const std::string& name);
+  SceneController(const std::string& name);
   virtual ~SceneController();
 
   inline Scene* scene() const { return m_scene; }

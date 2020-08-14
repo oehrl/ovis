@@ -9,9 +9,8 @@
 
 namespace ovis {
 
-SceneController::SceneController(Scene* scene, const std::string& name)
-    : m_scene(scene),
-      m_name(name)
+SceneController::SceneController(const std::string& name)
+    : m_name(name)
 #if OVIS_ENABLE_BUILT_IN_PROFILING
       ,
       update_profiler_(name + "Update")

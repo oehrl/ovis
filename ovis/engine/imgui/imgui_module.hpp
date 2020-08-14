@@ -12,10 +12,10 @@ class DearImGuiModule final : public Module {
   ~DearImGuiModule() override;
 
   std::unique_ptr<RenderPass> CreateRenderPass(
-      const std::string& render_pass_id) override;
+      const std::string& render_pass_id, RenderPipeline* render_pipeline) override;
 
   std::unique_ptr<SceneController> CreateSceneController(
-      const std::string& scene_controller_id) override;
+      const std::string& scene_controller_id, Scene* scene) override;
 
  private:
   ImGuiContext* context_;

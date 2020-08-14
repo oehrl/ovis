@@ -8,7 +8,7 @@ namespace ovis {
 
 class ImGuiSceneController : public ovis::SceneController {
  public:
-  ImGuiSceneController(ovis::Scene* scene, ImGuiContext* context);
+  ImGuiSceneController(ImGuiContext* context);
 
   void BeforeUpdate() override;
   void AfterUpdate() override;

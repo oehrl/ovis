@@ -38,7 +38,7 @@ void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
   }
 
   auto render_pass =
-      render_pass_factory->second->CreateRenderPass(render_pass_id);
+      render_pass_factory->second->CreateRenderPass(render_pass_id, this);
   if (render_pass == nullptr) {
     LogE("Failed to create render pass '{}'", render_pass_id);
     return;

@@ -34,8 +34,8 @@ void Scene::AddController(const std::string& scene_controller_id) {
     return;
   }
 
-  auto controller =
-      controller_factory->second->CreateSceneController(scene_controller_id);
+  auto controller = controller_factory->second->CreateSceneController(
+      scene_controller_id, this);
   if (controller == nullptr) {
     LogE("Failed to create scene controller '{}'", scene_controller_id);
     return;

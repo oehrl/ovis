@@ -15,6 +15,8 @@ namespace ovis {
 
 class RenderPass;
 class SceneController;
+class RenderPipeline;
+class Scene;
 
 class Module {
   MAKE_NON_COPY_OR_MOVABLE(Module);
@@ -34,12 +36,13 @@ class Module {
   // virtual void BeforeRendering() {}
   // virtual void AfterRendering() {}
 
-  virtual std::unique_ptr<RenderPass> CreateRenderPass(const std::string& id) {
+  virtual std::unique_ptr<RenderPass> CreateRenderPass(
+      const std::string& id, RenderPipeline* render_pipeline) {
     return nullptr;
   }
 
   virtual std::unique_ptr<SceneController> CreateSceneController(
-      const std::string& id) {
+      const std::string& id, Scene* scene) {
     return nullptr;
   }
 

@@ -25,7 +25,7 @@ DearImGuiModule::~DearImGuiModule() {
 }
 
 std::unique_ptr<RenderPass> DearImGuiModule::CreateRenderPass(
-    const std::string& render_pass_id) {
+    const std::string& render_pass_id, RenderPipeline*) {
   if (render_pass_id == "ImGui") {
     return std::make_unique<ImGuiRenderPass>(context_);
   } else {
@@ -34,9 +34,9 @@ std::unique_ptr<RenderPass> DearImGuiModule::CreateRenderPass(
 }
 
 std::unique_ptr<SceneController> DearImGuiModule::CreateSceneController(
-    const std::string& scene_controller_id) {
+    const std::string& scene_controller_id, Scene*) {
   if (scene_controller_id == "ImGui") {
-    return std::make_unique<ImGuiSceneController>(nullptr, context_);
+    return std::make_unique<ImGuiSceneController>(context_);
   } else {
     return nullptr;
   }
