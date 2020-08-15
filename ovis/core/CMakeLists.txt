@@ -7,7 +7,7 @@ add_library(
   down_cast.hpp
   file.hpp file.cpp
   flags.hpp
-  log.hpp
+  log.hpp log.cpp
   range.hpp
   resource_manager.hpp resource_manager.cpp
   resource.hpp
