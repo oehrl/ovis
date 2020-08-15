@@ -48,8 +48,11 @@ ImGuiSceneController::ImGuiSceneController(ImGuiContext* context)
 
 void ImGuiSceneController::BeforeUpdate() {
   ImGui::SetCurrentContext(context_);
-  ImGui::GetIO().DisplaySize.x = scene()->window()->width();
-  ImGui::GetIO().DisplaySize.y = scene()->window()->height();
+
+  const glm::ivec2 window_size = scene()->window()->GetSize();
+  ImGui::GetIO().DisplaySize.x = window_size.x;
+  ImGui::GetIO().DisplaySize.y = window_size.y;
+
   ImGui::NewFrame();
 }
 

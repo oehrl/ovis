@@ -58,8 +58,9 @@ class Window {
   inline ResourceManager* resource_manager() { return &resource_manager_; }
   inline RenderPipeline* render_pipeline() { return &render_pipeline_; }
   inline Scene* scene() { return &scene_; }
-  inline int width() const { return width_; }
-  inline int height() const { return height_; }
+
+  glm::ivec2 GetSize();
+  void Resize(int width, int height);
 
   bool SendEvent(const SDL_Event& event);
   void Update(std::chrono::microseconds delta_time);
@@ -70,8 +71,6 @@ class Window {
   SDL_Window* sdl_window_;
   Uint32 id_;
   bool is_open_ = true;
-  int width_;
-  int height_;
 
   GraphicsContext graphics_context_;
   RenderPipeline render_pipeline_;

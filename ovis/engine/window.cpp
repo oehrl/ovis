@@ -17,9 +17,10 @@ namespace ovis {
 std::vector<Window*> Window::all_windows_;
 
 Window::Window(const WindowDescription& desc)
-    : sdl_window_(SDL_CreateWindow(
-          desc.title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-          desc.width, desc.height, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
+    : sdl_window_(
+          SDL_CreateWindow(desc.title.c_str(), SDL_WINDOWPOS_UNDEFINED,
+                           SDL_WINDOWPOS_UNDEFINED, desc.width, desc.height,
+                           SDL_WINDOW_OPENGL)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
       render_pipeline_(&graphics_context_, &resource_manager_),
@@ -27,7 +28,6 @@ Window::Window(const WindowDescription& desc)
       profiling_log_(ProfilingLog::default_log()) {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
-  SDL_GetWindowSize(sdl_window_, &width_, &height_);
 
   resource_manager_.RegisterFileLoader(
       ".texture2d", std::bind(&ovis::LoadTexture2D, &graphics_context_,
@@ -64,16 +64,21 @@ Window::~Window() {
   SDL_DestroyWindow(sdl_window_);
 }
 
+glm::ivec2 Window::GetSize() {
+  glm::ivec2 window_size;
+  SDL_GetWindowSize(sdl_window_, &window_size.x, &window_size.y);
+  return window_size;
+}
+
+void Window::Resize(int width, int height) {
+  SDL_SetWindowSize(sdl_window_, width, height);
+}
+
 bool Window::SendEvent(const SDL_Event& event) {
   if (event.type == SDL_WINDOWEVENT) {
     switch (event.window.event) {
       case SDL_WINDOWEVENT_CLOSE:
         is_open_ = false;
-        break;
-
-      case SDL_WINDOWEVENT_RESIZED:
-        width_ = event.window.data1;
-        height_ = event.window.data2;
         break;
     }
   }
