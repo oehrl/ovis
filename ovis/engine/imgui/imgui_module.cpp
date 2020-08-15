@@ -11,6 +11,7 @@ DearImGuiModule::DearImGuiModule() : Module("DearImGuiModule") {
 #if !OVIS_EMSCRIPTEN
   ImGui::GetIO().BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
 #endif
+  ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
