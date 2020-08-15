@@ -71,6 +71,7 @@ class GraphicsContext final {
   }
 
  private:
+  SDL_Window* window_;
   SDL_GLContext m_context;
   std::set<GraphicsResource*> m_graphics_resources;
   std::unique_ptr<RenderTargetConfiguration>

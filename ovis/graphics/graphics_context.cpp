@@ -9,7 +9,8 @@
 namespace ovis {
 
 GraphicsContext::GraphicsContext(SDL_Window* window)
-    : m_context(nullptr),
+    : window_(window),
+      m_context(nullptr),
       m_bound_array_buffer(0),
       m_bound_element_array_buffer(0),
       m_bound_program(0),
@@ -76,6 +77,13 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
 
   ApplyBlendState(&blend_state_, draw_item.blend_state);
   ApplyDepthBufferState(&depth_buffer_state_, draw_item.depth_buffer_state);
+
+  // TODO: make this more efficient as it's done on every draw call
+  int drawable_width;
+  int drawable_height;
+  SDL_GL_GetDrawableSize(window_, &drawable_width, &drawable_height);
+  m_default_render_target_configuration->width_ = drawable_width;
+  m_default_render_target_configuration->height_ = drawable_height;
 
   auto targets = draw_item.render_target_configuration != nullptr
                      ? draw_item.render_target_configuration
