@@ -39,7 +39,6 @@ class Scene {
     resource_manager_ = resource_manager;
   }
 
-  void AddRegisteredControllers();
   void AddController(const std::string& id);
   void RemoveController(const std::string& id);
 
@@ -77,7 +76,8 @@ class Scene {
  private:
   void AddObject(SceneObject* object);
   void RemoveObject(SceneObject* object);
-
+  
+  void SortControllers();
   SceneController* GetControllerInternal(
       const std::string& controller_name) const;
 
@@ -88,7 +88,10 @@ class Scene {
     return false;
   }
 
-  std::unordered_map<std::string, std::unique_ptr<SceneController>> m_controllers;
+  std::unordered_map<std::string, std::unique_ptr<SceneController>> controllers_;
+  std::vector<SceneController*> controller_order_;
+  bool controllers_sorted_ = false;
+
   std::unordered_map<std::string, SceneObject*> objects_;
   std::unordered_map<std::string, std::unique_ptr<SceneObject>>
       created_objects_;

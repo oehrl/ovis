@@ -20,12 +20,6 @@ Scene::Scene(Window* window) : m_is_paused(true), window_(window) {}
 
 Scene::~Scene() {}
 
-void Scene::AddRegisteredControllers() {
-  for (const auto& default_scene_controller : *SceneController::scene_controller_factories()) {
-    AddController(default_scene_controller.first);
-  }
-}
-
 void Scene::AddController(const std::string& scene_controller_id) {
   const auto controller_factory =
       SceneController::scene_controller_factories()->find(scene_controller_id);
@@ -35,7 +29,7 @@ void Scene::AddController(const std::string& scene_controller_id) {
     return;
   }
 
-  if (m_controllers.count(scene_controller_id) != 0) {
+  if (controllers_.count(scene_controller_id) != 0) {
     LogE("Scene controller '{}' already added", scene_controller_id);
     return;
   }
@@ -47,13 +41,19 @@ void Scene::AddController(const std::string& scene_controller_id) {
     return;
   }
 
-  auto insert_return_value = m_controllers.insert(
+  auto insert_return_value = controllers_.insert(
       std::make_pair(scene_controller_id, std::move(controller)));
   SDL_assert(insert_return_value.second);
   insert_return_value.first->second->m_scene = this;
+  controllers_sorted_ = false;
 }
 
-void RemoveSceneController(const std::string& id) {}
+void Scene::RemoveController(const std::string& id) {
+  // TODO: implement
+  SDL_assert(false && "RemoveSceneController not implemented");
+  LogE("RemoveSceneController not implemented");
+  controllers_sorted_ = false;
+}
 
 SceneObject* Scene::CreateObject(const std::string& object_name) {
   auto result = created_objects_.insert(std::make_pair(
@@ -73,20 +73,29 @@ SceneObject* Scene::GetObject(const std::string& object_name) {
 }
 
 void Scene::BeforeUpdate() {
-  for (const auto& controller : m_controllers) {
-    controller.second->BeforeUpdate();
+  if (!controllers_sorted_) {
+    SortControllers();
+  }
+  for (const auto& controller : controller_order_) {
+    controller->BeforeUpdate();
   }
 }
 
 void Scene::AfterUpdate() {
-  for (const auto& controller : m_controllers) {
-    controller.second->AfterUpdate();
+  if (!controllers_sorted_) {
+    SortControllers();
+  }
+  for (const auto& controller : controller_order_) {
+    controller->AfterUpdate();
   }
 }
 
 void Scene::Update(std::chrono::microseconds delta_time) {
-  for (const auto& controller : m_controllers) {
-    controller.second->UpdateWrapper(delta_time);
+  if (!controllers_sorted_) {
+    SortControllers();
+  }
+  for (const auto& controller : controller_order_) {
+    controller->UpdateWrapper(delta_time);
   }
 }
 
@@ -101,7 +110,7 @@ bool Scene::ProcessEvent(const SDL_Event& event) {
     return true;
   }
 
-  for (const auto& scene_controller : m_controllers) {
+  for (const auto& scene_controller : controllers_) {
     if (scene_controller.second->ProcessEvent(event)) {
       return true;
     }
@@ -127,10 +136,68 @@ void Scene::RemoveObject(SceneObject* object) {
   objects_.erase(objects_.find(object->name()));
 }
 
+void Scene::SortControllers() {
+  // First depends on second beeing already rendered
+  std::multimap<std::string, std::string> dependencies;
+  std::set<std::string> controllers_left_;
+
+  for (const auto& name_controller_pair : controllers_) {
+    controllers_left_.insert(name_controller_pair.first);
+
+    for (auto update_before : name_controller_pair.second->update_before_list_) {
+      if (controllers_.count(update_before) == 0) {
+        LogW("Cannot update {0} before {1}, {1} not found!",
+             name_controller_pair.first, update_before);
+      } else {
+        dependencies.insert(
+            std::make_pair(update_before, name_controller_pair.first));
+      }
+    }
+
+    for (auto update_after : name_controller_pair.second->update_after_list_) {
+      if (controllers_.count(update_after) == 0) {
+        LogW("Cannot update {0} after {1}, {1} not found!",
+             name_controller_pair.first, update_after);
+      } else {
+        dependencies.insert(
+            std::make_pair(name_controller_pair.first, update_after));
+      }
+    }
+  }
+
+  LogV("Sorting controllers:");
+  controller_order_.clear();
+  controller_order_.reserve(controllers_.size());
+  while (controllers_left_.size() > 0) {
+    auto next =
+        std::find_if(controllers_left_.begin(), controllers_left_.end(),
+                     [&dependencies](const std::string& value) {
+                       return dependencies.count(value) == 0;
+                     });
+
+    SDL_assert(next != controllers_left_.end());
+    LogV(" {}", *next);
+
+    SDL_assert(controllers_.find(*next) != controllers_.end());
+    controller_order_.push_back(controllers_[*next].get());
+    for (auto i = dependencies.begin(), e = dependencies.end(); i != e;) {
+      if (i->second == *next) {
+        i = dependencies.erase(i);
+      } else {
+        ++i;
+      }
+    }
+    controllers_left_.erase(next);
+  }
+
+  LogV("Controllers sorted!");
+  controllers_sorted_ = true;
+}
+
 SceneController* Scene::GetControllerInternal(
     const std::string& controller_name) const {
-  auto controller = m_controllers.find(controller_name);
-  if (controller == m_controllers.end()) {
+  auto controller = controllers_.find(controller_name);
+  if (controller == controllers_.end()) {
     return nullptr;
   } else {
     return controller->second.get();

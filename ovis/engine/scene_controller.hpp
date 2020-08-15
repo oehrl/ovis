@@ -39,11 +39,17 @@ class SceneController {
 
   static std::vector<std::string> GetRegisteredControllers();
 
+protected:
+  void UpdateBefore(const std::string& controller_name);
+  void UpdateAfter(const std::string& controller_name);
+
  private:
   static std::unordered_map<std::string, Module*>* scene_controller_factories();
 
   Scene* m_scene;
   std::string m_name;
+  std::set<std::string> update_before_list_;
+  std::set<std::string> update_after_list_;
 
 #if OVIS_ENABLE_BUILT_IN_PROFILING
   CPUTimeProfiler update_profiler_;

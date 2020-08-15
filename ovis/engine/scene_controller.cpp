@@ -37,6 +37,14 @@ std::vector<std::string> SceneController::GetRegisteredControllers() {
   return registered_controllers;
 }
 
+void SceneController::UpdateBefore(const std::string& controller_name) {
+  update_before_list_.insert(controller_name);
+}
+
+void SceneController::UpdateAfter(const std::string& controller_name) {
+  update_after_list_.insert(controller_name);
+}
+
 std::unordered_map<std::string, Module*>*
 SceneController::scene_controller_factories() {
   static auto scene_controller_factories =
