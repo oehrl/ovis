@@ -16,7 +16,7 @@
 
 namespace ovis {
 
-Scene::Scene(Window* window) : m_is_paused(true), window_(window) {}
+Scene::Scene() : m_is_paused(true) {}
 
 Scene::~Scene() {}
 
@@ -110,13 +110,19 @@ bool Scene::ProcessEvent(const SDL_Event& event) {
     return true;
   }
 
-  for (const auto& scene_controller : controllers_) {
-    if (scene_controller.second->ProcessEvent(event)) {
+  for (const auto& controller : controller_order_) {
+    if (controller->ProcessEvent(event)) {
       return true;
     }
   }
 
   return AfterEventProcessing(event);
+}
+
+void Scene::DrawImGui() {
+  for (const auto& controller : controller_order_) {
+    controller->DrawImGui();
+  }
 }
 
 void Scene::Resume() {

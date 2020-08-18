@@ -61,9 +61,9 @@ void RenderPipeline::Render(Scene* scene) {
   }
 }
 
-void RenderPipeline::DrawDebugUI() {
+void RenderPipeline::DrawImGui() {
   for (auto* render_pass : render_pass_order_) {
-    render_pass->DrawDebugUI();
+    render_pass->DrawImGui();
   }
 }
 

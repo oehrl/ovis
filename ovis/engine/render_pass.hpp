@@ -35,7 +35,7 @@ class RenderPass {
   virtual void ReleaseResources() {}
   virtual void Render(Scene* scene) = 0;
 
-  virtual void DrawDebugUI() {}
+  virtual void DrawImGui() {}
 
   static std::vector<std::string> GetRegisteredRenderPasses();
 

@@ -3,6 +3,7 @@ add_library(
   
   engine.hpp engine.cpp
   window.hpp window.cpp
+  viewport.hpp viewport.cpp
   camera.hpp camera.cpp
   scene_component.hpp
   scene_controller.hpp scene_controller.cpp

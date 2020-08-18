@@ -46,7 +46,7 @@ class RenderPipeline final {
       std::string depth_render_target_id = "");
 
   void Render(Scene* scene);
-  void DrawDebugUI();
+  void DrawImGui();
 
  private:
   void SortRenderPasses();

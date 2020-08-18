@@ -23,12 +23,10 @@ Window::Window(const WindowDescription& desc)
                            SDL_WINDOW_OPENGL)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
-      render_pipeline_(&graphics_context_, &resource_manager_),
-      scene_(this),
-      profiling_log_(ProfilingLog::default_log()) {
+      scene_() {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
-
+  
   resource_manager_.RegisterFileLoader(
       ".texture2d", std::bind(&ovis::LoadTexture2D, &graphics_context_,
                               std::placeholders::_1, std::placeholders::_2,
@@ -50,9 +48,13 @@ Window::Window(const WindowDescription& desc)
   for (const auto& controller : desc.scene_controllers) {
     scene_.AddController(controller);
   }
+
+  InitializeRenderPipeline(&graphics_context_, &resource_manager_);
   for (const auto& render_pass : desc.render_passes) {
-    render_pipeline_.AddRenderPass(render_pass);
+    render_pipeline_->AddRenderPass(render_pass);
   }
+
+  SetScene(&scene_);
 }
 
 Window::~Window() {
@@ -88,15 +90,13 @@ bool Window::SendEvent(const SDL_Event& event) {
 
 void Window::Update(std::chrono::microseconds delta_time) {
   scene_.BeforeUpdate();
-  render_pipeline_.DrawDebugUI();
   scene_.Update(delta_time);
   scene_.AfterUpdate();
 }
 
 void Window::Render() {
-  render_pipeline_.Render(&scene_);
+  Viewport::Render();
   SDL_GL_SwapWindow(sdl_window_);
-  profiling_log_->AdvanceFrame();
 }
 
 }  // namespace ovis

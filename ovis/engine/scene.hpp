@@ -27,12 +27,11 @@ class Scene {
   friend class SceneObject;
 
  public:
-  Scene(Window* window);
+  Scene();
   virtual ~Scene();
 
   inline bool is_paused() const { return m_is_paused; }
   inline Camera& camera() { return camera_; }
-  inline Window* window() { return window_; }
 
   inline ResourceManager* resource_manager() const { return resource_manager_; }
   inline void SetResourceManager(ResourceManager* resource_manager) {
@@ -46,7 +45,7 @@ class Scene {
   inline ControllerType* GetController(
       const std::string& controller_name) const {
     static_assert(std::is_base_of<SceneController, ControllerType>::value, "");
-    return down_cast<ControllerType*>(GetControllerInternal(controller_name));
+    return down_cast<ControllerType>(GetControllerInternal(controller_name));
   }
 
   SceneObject* CreateObject(const std::string& object_name);
@@ -73,6 +72,8 @@ class Scene {
 
   bool ProcessEvent(const SDL_Event& event);
 
+  void DrawImGui();
+
  private:
   void AddObject(SceneObject* object);
   void RemoveObject(SceneObject* object);
@@ -96,7 +97,6 @@ class Scene {
   std::unordered_map<std::string, std::unique_ptr<SceneObject>>
       created_objects_;
   ResourceManager* resource_manager_;
-  Window* window_;
   Camera camera_;
   bool m_is_paused;
 };

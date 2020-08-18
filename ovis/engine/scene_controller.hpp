@@ -36,6 +36,7 @@ class SceneController {
   virtual void Update(std::chrono::microseconds delta_time);
 
   virtual bool ProcessEvent(const SDL_Event& event);
+  virtual void DrawImGui() {}
 
   static std::vector<std::string> GetRegisteredControllers();
 
