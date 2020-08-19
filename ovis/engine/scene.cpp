@@ -56,20 +56,28 @@ void Scene::RemoveController(const std::string& id) {
 }
 
 SceneObject* Scene::CreateObject(const std::string& object_name) {
-  auto result = created_objects_.insert(std::make_pair(
+  auto result = objects_.insert(std::make_pair(
       object_name, std::make_unique<SceneObject>(this, object_name)));
   SDL_assert(result.second);
   return result.first->second.get();
 }
 
 void Scene::DeleteObject(const std::string& object_name) {
-  SDL_assert(created_objects_.count(object_name) == 1);
-  created_objects_.erase(object_name);
+  SDL_assert(objects_.count(object_name) == 1);
+  objects_.erase(object_name);
 }
 
 SceneObject* Scene::GetObject(const std::string& object_name) {
   auto object = objects_.find(object_name);
-  return object->second;
+  return object->second.get();
+}
+
+void Scene::GetObjects(std::vector<SceneObject*>* scene_objects) const {
+  scene_objects->clear();
+  scene_objects->reserve(objects_.size());
+  for (auto& name_object_pair : objects_) {
+    scene_objects->push_back(name_object_pair.second.get());
+  }
 }
 
 void Scene::BeforeUpdate() {
@@ -131,17 +139,6 @@ void Scene::Resume() {
   }
 }
 
-void Scene::AddObject(SceneObject* object) {
-  SDL_assert(objects_.find(object->name()) == objects_.end());
-  objects_.insert(std::make_pair(object->name(), object));
-}
-
-void Scene::RemoveObject(SceneObject* object) {
-  SDL_assert(objects_.find(object->name()) != objects_.end() &&
-             objects_.find(object->name())->second == object);
-  objects_.erase(objects_.find(object->name()));
-}
-
 void Scene::SortControllers() {
   // First depends on second beeing already rendered
   std::multimap<std::string, std::string> dependencies;
@@ -150,7 +147,8 @@ void Scene::SortControllers() {
   for (const auto& name_controller_pair : controllers_) {
     controllers_left_.insert(name_controller_pair.first);
 
-    for (auto update_before : name_controller_pair.second->update_before_list_) {
+    for (auto update_before :
+         name_controller_pair.second->update_before_list_) {
       if (controllers_.count(update_before) == 0) {
         LogW("Cannot update {0} before {1}, {1} not found!",
              name_controller_pair.first, update_before);
@@ -175,11 +173,10 @@ void Scene::SortControllers() {
   controller_order_.clear();
   controller_order_.reserve(controllers_.size());
   while (controllers_left_.size() > 0) {
-    auto next =
-        std::find_if(controllers_left_.begin(), controllers_left_.end(),
-                     [&dependencies](const std::string& value) {
-                       return dependencies.count(value) == 0;
-                     });
+    auto next = std::find_if(controllers_left_.begin(), controllers_left_.end(),
+                             [&dependencies](const std::string& value) {
+                               return dependencies.count(value) == 0;
+                             });
 
     SDL_assert(next != controllers_left_.end());
     LogV(" {}", *next);

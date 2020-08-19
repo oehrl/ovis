@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_assert.h>
 
 #include <glm/vec2.hpp>
 
@@ -52,6 +53,13 @@ class Scene {
   void DeleteObject(const std::string& object_name);
   SceneObject* GetObject(const std::string& object_name);
 
+  void GetObjects(std::vector<SceneObject*>* scene_objects) const;
+  inline std::vector<SceneObject*> GetObjects() const {
+    std::vector<SceneObject*> objects;
+    GetObjects(&objects);
+    return objects;
+  }
+
   template <typename ComponentType>
   void GetSceneObjectsWithComponent(
       std::vector<SceneObject*>* scene_objects) const;
@@ -75,9 +83,6 @@ class Scene {
   void DrawImGui();
 
  private:
-  void AddObject(SceneObject* object);
-  void RemoveObject(SceneObject* object);
-  
   void SortControllers();
   SceneController* GetControllerInternal(
       const std::string& controller_name) const;
@@ -89,13 +94,12 @@ class Scene {
     return false;
   }
 
-  std::unordered_map<std::string, std::unique_ptr<SceneController>> controllers_;
+  std::unordered_map<std::string, std::unique_ptr<SceneController>>
+      controllers_;
   std::vector<SceneController*> controller_order_;
   bool controllers_sorted_ = false;
 
-  std::unordered_map<std::string, SceneObject*> objects_;
-  std::unordered_map<std::string, std::unique_ptr<SceneObject>>
-      created_objects_;
+  std::unordered_map<std::string, std::unique_ptr<SceneObject>> objects_;
   ResourceManager* resource_manager_;
   Camera camera_;
   bool m_is_paused;
@@ -114,7 +118,7 @@ inline void Scene::GetSceneObjectsWithComponent(
   scene_objects->clear();
 
   for (auto& name_object_pair : objects_) {
-    SceneObject* scene_object = name_object_pair.second;
+    SceneObject* scene_object = name_object_pair.second.get();
     if (scene_object->HasComponent<ComponentType>()) {
       scene_objects->push_back(scene_object);
     }
