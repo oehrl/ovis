@@ -11,6 +11,8 @@
 
 #include <glm/vec2.hpp>
 
+#include <nlohmann/json.hh>
+
 #include <ovis/core/down_cast.hpp>
 
 #include <ovis/engine/camera.hpp>
@@ -50,13 +52,15 @@ class Scene {
   }
 
   SceneObject* CreateObject(const std::string& object_name);
+  SceneObject* CreateObject(const nlohmann::json& serialized_object);
   void DeleteObject(const std::string& object_name);
   SceneObject* GetObject(const std::string& object_name);
+  bool ContainsObject(const std::string& object_name);
 
-  void GetObjects(std::vector<SceneObject*>* scene_objects) const;
-  inline std::vector<SceneObject*> GetObjects() const {
+  void GetObjects(std::vector<SceneObject*>* scene_objects, bool sort_by_name = false) const;
+  inline std::vector<SceneObject*> GetObjects(bool sort_by_name = false) const {
     std::vector<SceneObject*> objects;
-    GetObjects(&objects);
+    GetObjects(&objects, sort_by_name);
     return objects;
   }
 
