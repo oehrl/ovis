@@ -33,5 +33,5 @@ add_custom_command(
 target_link_options(
  OvisEngine
  PUBLIC
-  --preload-file ${CMAKE_BINARY_DIR}@/resources
+  --preload-file ${CMAKE_BINARY_DIR}/resources@/resources
 )
