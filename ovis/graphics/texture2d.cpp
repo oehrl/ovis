@@ -150,29 +150,29 @@ void Texture2D::Bind(int texture_unit) {
 
 bool LoadTexture2D(GraphicsContext* graphics_context,
                    ResourceManager* resource_manager,
-                   const rapidjson::Document& parameters, const std::string& id,
+                   const nlohmann::json& parameters, const std::string& id,
                    const std::string& directory) {
   Texture2DDescription texture2d_desc;
-  texture2d_desc.width = parameters["width"].GetInt();
-  texture2d_desc.height = parameters["height"].GetInt();
+  texture2d_desc.width = parameters["width"];
+  texture2d_desc.height = parameters["height"];
   texture2d_desc.mip_map_count = 0;
 
-  const auto& filter = parameters["filter"].GetString();
-  if (std::strcmp(filter, "point") == 0) {
+  std::string filter = parameters["filter"];
+  if (filter == "point") {
     texture2d_desc.filter = TextureFilter::POINT;
-  } else if (std::strcmp(filter, "bilinear") == 0) {
+  } else if (filter == "bilinear") {
     texture2d_desc.filter = TextureFilter::BILINEAR;
-  } else if (std::strcmp(filter, "trilinear") == 0) {
+  } else if (filter == "trilinear") {
     texture2d_desc.filter = TextureFilter::TRILINEAR;
   } else {
     LogE("Failed to load texture '{}': invalid filter ()", id, filter);
     return false;
   }
 
-  const auto& format = parameters["format"].GetString();
-  if (std::strcmp(format, "RGB_UINT8") == 0) {
+  std::string format = parameters["format"];
+  if (format == "RGB_UINT8") {
     texture2d_desc.format = TextureFormat::RGB_UINT8;
-  } else if (std::strcmp(format, "RGBA_UINT8") == 0) {
+  } else if (format == "RGBA_UINT8") {
     texture2d_desc.format = TextureFormat::RGBA_UINT8;
   } else {
     LogE("Failed to load texture '{}': invalid format ()", id, format);
@@ -180,7 +180,7 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
   }
 
   auto file_content =
-      LoadBinaryFile(directory + "/" + parameters["data_file"].GetString());
+      LoadBinaryFile(directory + "/" + parameters["data_file"].get<std::string>());
 
   if (file_content.has_value()) {
     resource_manager->RegisterResource<Texture2D>(
@@ -188,7 +188,7 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
     LogI("Sucessfully loaded texture: {}", id);
     return true;
   } else {
-    LogE("Cannot open {}", parameters["data_file"].GetString());
+    LogE("Cannot open {}", parameters["data_file"]);
     return false;
   }
 }

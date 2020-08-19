@@ -4,6 +4,8 @@
 #include <typeindex>
 #include <unordered_map>
 
+#include <nlohmann/json.hh>
+
 #include <ovis/core/class.hpp>
 
 #include <ovis/engine/scene_component.hpp>
@@ -51,6 +53,8 @@ class SceneObject {
   void RemoveComponent() {
     components_.erase(typeid(T));
   }
+
+  nlohmann::json Serialize() const;
 
  private:
   Scene* scene_;

@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
-#include <rapidjson/document.h>
+#include <nlohmann/json.hh>
 #include <ovis/graphics/texture.hpp>
 
 namespace ovis {
@@ -42,7 +42,7 @@ class Texture2D : public Texture {
 
 bool LoadTexture2D(GraphicsContext* graphics_context,
                    ResourceManager* resource_manager,
-                   const rapidjson::Document& parameters, const std::string& id,
+                   const nlohmann::json& parameters, const std::string& id,
                    const std::string& directory);
 
 }  // namespace ovis

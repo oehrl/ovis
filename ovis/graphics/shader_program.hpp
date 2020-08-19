@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <optional>
+#include <nlohmann/json.hh>
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/uniform_buffer.hpp>
@@ -63,7 +64,7 @@ class ShaderProgram : public GraphicsResource {
 
 bool LoadShaderProgram(GraphicsContext* graphics_context,
                        ResourceManager* resource_manager,
-                       const rapidjson::Document& parameters,
+                       const nlohmann::json& parameters,
                        const std::string& id, const std::string& directory);
 
 }  // namespace ovis

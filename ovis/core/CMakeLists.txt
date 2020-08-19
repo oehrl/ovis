@@ -23,7 +23,7 @@ target_include_directories(
 target_link_libraries(
   OvisCore
   PUBLIC
-    rapidjson
+    nlohmann_json
     fmt::fmt
 )
 
