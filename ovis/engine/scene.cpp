@@ -2,12 +2,13 @@
 // Created by Simon Oehrl on 05/05/16.
 //
 
-#include <algorithm>
 #include <map>
+#include <string>
 
 #include <SDL2/SDL_assert.h>
 
 #include <ovis/core/log.hpp>
+#include <ovis/core/utf8.hpp>
 
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/scene.hpp>
@@ -62,6 +63,10 @@ SceneObject* Scene::CreateObject(const std::string& object_name) {
   return result.first->second.get();
 }
 
+SceneObject* Scene::CreateObject(const nlohmann::json& serialized_object) {
+  return CreateObject(serialized_object["name"].get<std::string>());
+}
+
 void Scene::DeleteObject(const std::string& object_name) {
   SDL_assert(objects_.count(object_name) == 1);
   objects_.erase(object_name);
@@ -72,11 +77,22 @@ SceneObject* Scene::GetObject(const std::string& object_name) {
   return object->second.get();
 }
 
-void Scene::GetObjects(std::vector<SceneObject*>* scene_objects) const {
+bool Scene::ContainsObject(const std::string& object_name) {
+  return objects_.count(object_name) == 1;
+}
+
+void Scene::GetObjects(std::vector<SceneObject*>* scene_objects,
+                       bool sort_by_name) const {
   scene_objects->clear();
   scene_objects->reserve(objects_.size());
   for (auto& name_object_pair : objects_) {
     scene_objects->push_back(name_object_pair.second.get());
+  }
+  if (sort_by_name) {
+    std::sort(scene_objects->begin(), scene_objects->end(),
+              [](SceneObject* left, SceneObject* right) {
+                return to_lower(left->name()) < to_lower(right->name());
+              });
   }
 }
 
