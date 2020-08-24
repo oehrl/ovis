@@ -1,0 +1,72 @@
+add_library(
+  Lua
+
+  src/lbaselib.c
+  src/lctype.h  
+  src/ldo.h     
+  src/lgc.h     
+  src/llex.h     
+  src/loadlib.c 
+  src/lopnames.h 
+  src/lstate.c   
+  src/ltable.c   
+  src/lua.c     
+  src/lualib.h  
+  src/lvm.h
+  src/lapi.c     
+  src/lcode.c    
+  src/ldblib.c   
+  src/ldump.c    
+  src/linit.c   
+  src/llimits.h  
+  src/lobject.c  
+  src/loslib.c  
+  src/lstate.h  
+  src/ltable.h  
+  src/lua.h      
+  src/lundump.c  
+  src/lzio.c
+  src/lapi.h    
+  src/lcode.h    
+  src/ldebug.c   
+  src/lfunc.c    
+  src/liolib.c   
+  src/lmathlib.c
+  src/lobject.h  
+  src/lparser.c  
+  src/lstring.c  
+  src/ltablib.c 
+  src/lua.hpp   
+  src/lundump.h 
+  src/lzio.h
+  src/lauxlib.c  
+  src/lcorolib.c
+  src/ldebug.h  
+  src/lfunc.h   
+  src/ljumptab.h 
+  src/lmem.c     
+  src/lopcodes.c
+  src/lparser.h 
+  src/lstring.h  
+  src/ltm.c      
+  src/luac.c     
+  src/lutf8lib.c
+  src/lauxlib.h  
+  src/lctype.c   
+  src/ldo.c      
+  src/lgc.c      
+  src/llex.c    
+  src/lmem.h    
+  src/lopcodes.h
+  src/lprefix.h  
+  src/lstrlib.c 
+  src/ltm.h     
+  src/luaconf.h  
+  src/lvm.c
+)
+
+target_include_directories(
+  Lua
+  PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)

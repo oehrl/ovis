@@ -1,3 +1,4 @@
 add_subdirectory(fmt)
 add_subdirectory(dear_imgui)
 add_subdirectory(nlohmann_json)
+add_subdirectory(lua)
