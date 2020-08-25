@@ -8,7 +8,7 @@
 
 #include <ovis/core/class.hpp>
 
-#include <ovis/engine/scene_component.hpp>
+#include <ovis/engine/scene_object_component.hpp>
 
 namespace ovis {
 
@@ -23,43 +23,24 @@ class SceneObject {
 
   inline std::string name() const { return name_; }
 
-  template <typename T, typename... Args>
-  T* AddComponent(Args&&... arguments) {
-    if (components_.count(typeid(T)) == 0) {
-      // components_.insert(std::make_pair(
-      //     typeid(T),
-      //     std::move(component)));
-      components_[typeid(T)] = 
-          std::make_unique<SceneComponent<T>>(std::move<Args>(arguments)...);
-      return down_cast<SceneComponent<T>>(components_[typeid(T)].get())->component();
-      // TODO: use insert! 
-    } else {
-      return nullptr;
-    }
+  SceneObjectComponent* AddComponent(const std::string& component_id);
+  bool HasComponent(const std::string& component_id) const;
+  SceneObjectComponent* GetComponent(const std::string& component_id);
+  void GetComponentIds(std::vector<std::string>* component_ids) const;
+  inline std::vector<std::string> GetComponentIds() const {
+    std::vector<std::string> component_ids;
+    GetComponentIds(&component_ids);
+    return component_ids;
   }
-
-  template <typename T>
-  bool HasComponent() const {
-    return components_.count(typeid(T)) > 0;
-  }
-
-  template <typename T>
-  T* GetComponent() {
-    return down_cast<SceneComponent<T>>(components_[typeid(T)].get())
-        ->component();
-  }
-
-  template <typename T>
-  void RemoveComponent() {
-    components_.erase(typeid(T));
-  }
+  void RemoveComponent(const std::string& component_id);
 
   nlohmann::json Serialize() const;
+  void Deserialize(const nlohmann::json& serialized_object);
 
  private:
   Scene* scene_;
   std::string name_;
-  std::unordered_map<std::type_index, std::unique_ptr<SceneComponentBase>>
+  std::unordered_map<std::string, std::unique_ptr<SceneObjectComponent>>
       components_;
 };
 

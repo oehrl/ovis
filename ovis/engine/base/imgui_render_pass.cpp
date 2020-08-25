@@ -5,7 +5,7 @@
 
 #include <ovis/graphics/graphics_context.hpp>
 
-#include <ovis/engine/imgui/imgui_render_pass.hpp>
+#include <ovis/engine/base/imgui_render_pass.hpp>
 #include <ovis/engine/scene.hpp>
 
 namespace ovis {
