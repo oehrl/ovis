@@ -5,7 +5,7 @@ add_library(
   window.hpp window.cpp
   viewport.hpp viewport.cpp
   camera.hpp camera.cpp
-  scene_component.hpp
+  scene_object_component.hpp scene_object_component.cpp
   scene_controller.hpp scene_controller.cpp
   scene_object.hpp scene_object.cpp
   scene.hpp scene.cpp
@@ -13,9 +13,10 @@ add_library(
   render_pipeline.hpp render_pipeline.cpp
   render_pass.hpp render_pass.cpp
 
-  imgui/imgui_module.hpp imgui/imgui_module.cpp
-  imgui/imgui_render_pass.hpp imgui/imgui_render_pass.cpp
-  imgui/imgui_scene_controller.hpp imgui/imgui_scene_controller.cpp
+  base/base_module.hpp base/base_module.cpp
+  base/imgui_render_pass.hpp base/imgui_render_pass.cpp
+  base/imgui_scene_controller.hpp base/imgui_scene_controller.cpp
+  base/transform2d_component.hpp base/transform2d_component.cpp
 )
 target_link_libraries(
   OvisEngine

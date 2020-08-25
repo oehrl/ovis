@@ -6,16 +6,16 @@
 #include <unordered_map>
 #include <vector>
 
-#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_assert.h>
+#include <SDL2/SDL_events.h>
+#include <nlohmann/json.hh>
 
 #include <glm/vec2.hpp>
-
-#include <nlohmann/json.hh>
 
 #include <ovis/core/down_cast.hpp>
 
 #include <ovis/engine/camera.hpp>
+#include <ovis/engine/scene_object.hpp>
 
 namespace ovis {
 
@@ -57,21 +57,21 @@ class Scene {
   SceneObject* GetObject(const std::string& object_name);
   bool ContainsObject(const std::string& object_name);
 
-  void GetObjects(std::vector<SceneObject*>* scene_objects, bool sort_by_name = false) const;
+  void GetObjects(std::vector<SceneObject*>* scene_objects,
+                  bool sort_by_name = false) const;
   inline std::vector<SceneObject*> GetObjects(bool sort_by_name = false) const {
     std::vector<SceneObject*> objects;
     GetObjects(&objects, sort_by_name);
     return objects;
   }
 
-  template <typename ComponentType>
   void GetSceneObjectsWithComponent(
+      const std::string& component_id,
       std::vector<SceneObject*>* scene_objects) const;
 
-  template <typename ComponentType>
-  inline std::vector<SceneObject*> GetSceneObjectsWithComponent() const {
+  inline std::vector<SceneObject*> GetSceneObjectsWithComponent(const std::string& component_id) const {
     std::vector<SceneObject*> scene_objects;
-    GetSceneObjectsWithComponent<ComponentType>(&scene_objects);
+    GetSceneObjectsWithComponent(component_id, &scene_objects);
     return scene_objects;
   }
 
@@ -108,25 +108,5 @@ class Scene {
   Camera camera_;
   bool m_is_paused;
 };
-
-}  // namespace ovis
-
-#include <ovis/engine/scene_object.hpp>
-
-namespace ovis {
-
-template <typename ComponentType>
-inline void Scene::GetSceneObjectsWithComponent(
-    std::vector<SceneObject*>* scene_objects) const {
-  SDL_assert(scene_objects != nullptr);
-  scene_objects->clear();
-
-  for (auto& name_object_pair : objects_) {
-    SceneObject* scene_object = name_object_pair.second.get();
-    if (scene_object->HasComponent<ComponentType>()) {
-      scene_objects->push_back(scene_object);
-    }
-  }
-}
 
 }  // namespace ovis

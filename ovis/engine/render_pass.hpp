@@ -44,7 +44,7 @@ class RenderPass {
   void RenderAfter(const std::string& renderer_name);
 
  private:
-  static std::unordered_map<std::string, Module*>* render_pass_factories();
+  static std::unordered_map<std::string, Module*>* factories();
 
   RenderPipeline* render_pipeline_ = nullptr;
   GraphicsContext* graphics_context_ = nullptr;

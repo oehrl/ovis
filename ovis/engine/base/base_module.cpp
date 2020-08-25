@@ -1,10 +1,11 @@
-#include <ovis/engine/imgui/imgui_module.hpp>
-#include <ovis/engine/imgui/imgui_render_pass.hpp>
-#include <ovis/engine/imgui/imgui_scene_controller.hpp>
+#include <ovis/engine/base/base_module.hpp>
+#include <ovis/engine/base/imgui_render_pass.hpp>
+#include <ovis/engine/base/imgui_scene_controller.hpp>
+#include <ovis/engine/base/transform2d_component.hpp>
 
 namespace ovis {
 
-DearImGuiModule::DearImGuiModule() : Module("DearImGuiModule") {
+BaseModule::BaseModule() : Module("BaseModule") {
   IMGUI_CHECKVERSION();
   context_ = ImGui::CreateContext();
 
@@ -12,10 +13,10 @@ DearImGuiModule::DearImGuiModule() : Module("DearImGuiModule") {
   ImGui::GetIO().BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
 #endif
   ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  ImGui::GetIO().IniFilename = "/user/imgui.ini";
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
-
 
   // Setup back-end capabilities flags
   ImGuiIO& io = ImGui::GetIO();
@@ -52,16 +53,16 @@ DearImGuiModule::DearImGuiModule() : Module("DearImGuiModule") {
   io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
   io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
-
   RegisterRenderPass("ImGui");
   RegisterSceneController("ImGui");
+  RegisterSceneObjectComponent("Transform2D");
 }
 
-DearImGuiModule::~DearImGuiModule() {
+BaseModule::~BaseModule() {
   ImGui::DestroyContext(context_);
 }
 
-std::unique_ptr<RenderPass> DearImGuiModule::CreateRenderPass(
+std::unique_ptr<RenderPass> BaseModule::CreateRenderPass(
     const std::string& render_pass_id, RenderPipeline*) {
   if (render_pass_id == "ImGui") {
     return std::make_unique<ImGuiRenderPass>(context_);
@@ -70,10 +71,19 @@ std::unique_ptr<RenderPass> DearImGuiModule::CreateRenderPass(
   }
 }
 
-std::unique_ptr<SceneController> DearImGuiModule::CreateSceneController(
+std::unique_ptr<SceneController> BaseModule::CreateSceneController(
     const std::string& scene_controller_id, Scene*) {
   if (scene_controller_id == "ImGui") {
     return std::make_unique<ImGuiSceneController>(context_);
+  } else {
+    return nullptr;
+  }
+}
+
+std::unique_ptr<SceneObjectComponent> BaseModule::CreateSceneObjectComponent(
+    const std::string& component_id, SceneObject* scene_object) {
+  if (component_id == "Transform2D") {
+    return std::make_unique<Transform2DComponent>();
   } else {
     return nullptr;
   }

@@ -1,6 +1,6 @@
 #include <imgui.h>
 
-#include <ovis/engine/imgui/imgui_scene_controller.hpp>
+#include <ovis/engine/base/imgui_scene_controller.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/window.hpp>
 

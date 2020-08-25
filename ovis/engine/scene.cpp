@@ -23,9 +23,9 @@ Scene::~Scene() {}
 
 void Scene::AddController(const std::string& scene_controller_id) {
   const auto controller_factory =
-      SceneController::scene_controller_factories()->find(scene_controller_id);
+      SceneController::factories()->find(scene_controller_id);
   if (controller_factory ==
-      SceneController::scene_controller_factories()->end()) {
+      SceneController::factories()->end()) {
     LogE("Cannot find scene controller '{}'", scene_controller_id);
     return;
   }
@@ -93,6 +93,20 @@ void Scene::GetObjects(std::vector<SceneObject*>* scene_objects,
               [](SceneObject* left, SceneObject* right) {
                 return to_lower(left->name()) < to_lower(right->name());
               });
+  }
+}
+
+inline void Scene::GetSceneObjectsWithComponent(
+    const std::string& component_id,
+    std::vector<SceneObject*>* scene_objects) const {
+  SDL_assert(scene_objects != nullptr);
+  scene_objects->clear();
+
+  for (auto& name_object_pair : objects_) {
+    SceneObject* scene_object = name_object_pair.second.get();
+    if (scene_object->HasComponent(component_id)) {
+      scene_objects->push_back(scene_object);
+    }
   }
 }
 

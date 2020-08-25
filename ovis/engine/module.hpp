@@ -17,6 +17,8 @@ class RenderPass;
 class SceneController;
 class RenderPipeline;
 class Scene;
+class SceneObject;
+class SceneObjectComponent;
 
 class Module {
   MAKE_NON_COPY_OR_MOVABLE(Module);
@@ -46,18 +48,18 @@ class Module {
     return nullptr;
   }
 
+  virtual std::unique_ptr<SceneObjectComponent> CreateSceneObjectComponent(
+      const std::string& id, SceneObject* scene_object) {
+    return nullptr;
+  }
+
  protected:
   void RegisterRenderPass(const std::string& id);
   void RegisterSceneController(const std::string& id);
+  void RegisterSceneObjectComponent(const std::string& id);
 
  private:
   std::string name_;
 };
-
-#define OVIS_ADD_MODULE(ModuleName)                                  \
-  static_assert(std::is_base_of<::ovis::Module, ModuleName>::value); \
-  namespace {                                                        \
-  static ModuleName ovis_module_ModuleName;                          \
-  }
 
 }  // namespace ovis

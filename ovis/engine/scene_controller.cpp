@@ -28,10 +28,9 @@ bool SceneController::ProcessEvent(const SDL_Event& /*event*/) {
 }
 
 std::vector<std::string> SceneController::GetRegisteredControllers() {
-  auto factories = scene_controller_factories();
   std::vector<std::string> registered_controllers;
-  registered_controllers.reserve(factories->size());
-  for (const auto& controller_factory : *factories) {
+  registered_controllers.reserve(factories()->size());
+  for (const auto& controller_factory : *factories()) {
     registered_controllers.push_back(controller_factory.first);
   }
   return registered_controllers;
@@ -46,10 +45,10 @@ void SceneController::UpdateAfter(const std::string& controller_name) {
 }
 
 std::unordered_map<std::string, Module*>*
-SceneController::scene_controller_factories() {
-  static auto scene_controller_factories =
+SceneController::factories() {
+  static auto factories =
       new std::unordered_map<std::string, Module*>();
-  return scene_controller_factories;
+  return factories;
 }
 
 }  // namespace ovis

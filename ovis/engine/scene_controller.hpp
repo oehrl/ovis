@@ -45,7 +45,7 @@ protected:
   void UpdateAfter(const std::string& controller_name);
 
  private:
-  static std::unordered_map<std::string, Module*>* scene_controller_factories();
+  static std::unordered_map<std::string, Module*>* factories();
 
   Scene* m_scene;
   std::string m_name;
