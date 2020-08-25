@@ -15,54 +15,58 @@ nlohmann::json SceneObjectComponent::Serialize() const {
   for (const auto& property_name : property_names) {
     auto type = GetPropertyType(property_name);
 
-    // switch (type) {
-    //   case PropertyType::BOOLEAN:
-    //     SDL_assert(std::holds_alternative<bool>(GetProperty(property_name)));
-    //     document[property_name] = std::get<bool>(GetProperty(property_name));
-    //     break;
+    switch (type) {
+      case PropertyType::BOOLEAN:
+        SDL_assert(std::holds_alternative<bool>(GetProperty(property_name)));
+        document[property_name] = std::get<bool>(GetProperty(property_name));
+        break;
 
-    //   case PropertyType::STRING:
-    //     SDL_assert(std::holds_alternative<std::string>(GetProperty(property_name)));
-    //     document[property_name] =
-    //         std::get<std::string>(GetProperty(property_name));
-    //     break;
+      case PropertyType::STRING:
+        SDL_assert(
+            std::holds_alternative<std::string>(GetProperty(property_name)));
+        document[property_name] =
+            std::get<std::string>(GetProperty(property_name));
+        break;
 
-    //   case PropertyType::INTEGER:
-    //     SDL_assert(std::holds_alternative<int>(GetProperty(property_name)));
-    //     document[property_name] = std::get<int>(GetProperty(property_name));
-    //     break;
+      case PropertyType::INTEGER:
+        SDL_assert(std::holds_alternative<int>(GetProperty(property_name)));
+        document[property_name] = std::get<int>(GetProperty(property_name));
+        break;
 
-    //   case PropertyType::FLOAT:
-    //     SDL_assert(std::holds_alternative<float>(GetProperty(property_name)));
-    //     document[property_name] = std::get<float>(GetProperty(property_name));
-    //     break;
+      case PropertyType::FLOAT:
+        SDL_assert(std::holds_alternative<float>(GetProperty(property_name)));
+        document[property_name] = std::get<float>(GetProperty(property_name));
+        break;
 
-    //   case PropertyType::VECTOR2: {
-    //     SDL_assert(std::holds_alternative<glm::vec2>(GetProperty(property_name)));
-    //     const auto value = std::get<glm::vec2>(GetProperty(property_name));
-    //     document[property_name] = {value.x, value.y};
-    //     break;
-    //   }
+      case PropertyType::VECTOR2: {
+        SDL_assert(
+            std::holds_alternative<glm::vec2>(GetProperty(property_name)));
+        const auto value = std::get<glm::vec2>(GetProperty(property_name));
+        document[property_name] = {value.x, value.y};
+        break;
+      }
 
-    //   case PropertyType::VECTOR3: {
-    //     SDL_assert(std::holds_alternative<glm::vec3>(GetProperty(property_name)));
-    //     const auto value = std::get<glm::vec3>(GetProperty(property_name));
-    //     document[property_name] = {value.x, value.y, value.z};
-    //     break;
-    //   }
+      case PropertyType::VECTOR3: {
+        SDL_assert(
+            std::holds_alternative<glm::vec3>(GetProperty(property_name)));
+        const auto value = std::get<glm::vec3>(GetProperty(property_name));
+        document[property_name] = {value.x, value.y, value.z};
+        break;
+      }
 
-    //   case PropertyType::VECTOR4: {
-    //     SDL_assert(std::holds_alternative<glm::vec4>(GetProperty(property_name)));
-    //     const auto value = std::get<glm::vec4>(GetProperty(property_name));
-    //     document[property_name] = {value.x, value.y, value.z, value.w};
-    //     break;
-    //   }
+      case PropertyType::VECTOR4: {
+        SDL_assert(
+            std::holds_alternative<glm::vec4>(GetProperty(property_name)));
+        const auto value = std::get<glm::vec4>(GetProperty(property_name));
+        document[property_name] = {value.x, value.y, value.z, value.w};
+        break;
+      }
 
-    //   case PropertyType::UNDEFINED:
-    //     [[fallthrough]];
-    //   default:
-    //     break;
-    // }
+      case PropertyType::UNDEFINED:
+        [[fallthrough]];
+      default:
+        break;
+    }
   }
 
   return document;
@@ -71,6 +75,7 @@ nlohmann::json SceneObjectComponent::Serialize() const {
 void SceneObjectComponent::Deserialize(const nlohmann::json& data) {
   for (const auto& property_name : GetPropertyNames()) {
     auto type = GetPropertyType(property_name);
+    SDL_assert(data.contains(property_name));
     const auto& value = data[property_name];
 
     switch (type) {
@@ -145,66 +150,81 @@ void SceneObjectComponent::Deserialize(const nlohmann::json& data) {
   }
 }
 
-void SceneObjectComponent::DrawPropertyEditor() {
+bool SceneObjectComponent::DrawEditorForProperties() {
+  bool anything_changed = false;
   for (const auto& property_name : GetPropertyNames()) {
-    auto type = GetPropertyType(property_name);
-
-    switch (type) {
-      case PropertyType::BOOLEAN: {
-        bool value = std::get<bool>(GetProperty(property_name));
-        if (ImGui::Checkbox(property_name.c_str(), &value)) {
-          SetProperty(property_name, value);
-        }
-        break;
-      }
-
-      case PropertyType::STRING: {
-        ImGui::Text("%s", property_name.c_str());
-        break;
-      }
-
-      case PropertyType::INTEGER: {
-        ImGui::Text("%s", property_name.c_str());
-        break;
-      }
-
-      case PropertyType::FLOAT: {
-        float value = std::get<float>(GetProperty(property_name));
-        if (ImGui::InputFloat(property_name.c_str(), &value)) {
-          SetProperty(property_name, value);
-        }
-        break;
-      }
-
-      case PropertyType::VECTOR2: {
-        glm::vec2 value = std::get<glm::vec2>(GetProperty(property_name));
-        if (ImGui::InputFloat2(property_name.c_str(), glm::value_ptr(value))) {
-          SetProperty(property_name, value);
-        }
-        break;
-      }
-
-      case PropertyType::VECTOR3: {
-        glm::vec3 value = std::get<glm::vec3>(GetProperty(property_name));
-        if (ImGui::InputFloat3(property_name.c_str(), glm::value_ptr(value))) {
-          SetProperty(property_name, value);
-        }
-        break;
-      }
-
-      case PropertyType::VECTOR4: {
-        glm::vec4 value = std::get<glm::vec4>(GetProperty(property_name));
-        if (ImGui::InputFloat4(property_name.c_str(), glm::value_ptr(value))) {
-          SetProperty(property_name, value);
-        }
-        break;
-      }
-
-      case PropertyType::UNDEFINED:
-        [[fallthrough]];
-      default:
-        ImGui::Text("%s", property_name.c_str());
+    if (DrawEditorForProperty(property_name)) {
+      anything_changed = true;
     }
+  }
+  return anything_changed;
+}
+
+bool SceneObjectComponent::DrawEditorForProperty(
+    const std::string& property_name) {
+  const auto type = GetPropertyType(property_name);
+
+  switch (type) {
+    case PropertyType::BOOLEAN: {
+      bool value = std::get<bool>(GetProperty(property_name));
+      if (ImGui::Checkbox(property_name.c_str(), &value)) {
+        SetProperty(property_name, value);
+        return true;
+      }
+      return false;
+    }
+
+    case PropertyType::STRING: {
+      ImGui::Text("%s", property_name.c_str());
+      return false;
+    }
+
+    case PropertyType::INTEGER: {
+      ImGui::Text("%s", property_name.c_str());
+      return false;
+    }
+
+    case PropertyType::FLOAT: {
+      float value = std::get<float>(GetProperty(property_name));
+      if (ImGui::InputFloat(property_name.c_str(), &value)) {
+        SetProperty(property_name, value);
+        return true;
+      }
+      return false;
+    }
+
+    case PropertyType::VECTOR2: {
+      glm::vec2 value = std::get<glm::vec2>(GetProperty(property_name));
+      if (ImGui::InputFloat2(property_name.c_str(), glm::value_ptr(value))) {
+        SetProperty(property_name, value);
+        return true;
+      }
+      return false;
+    }
+
+    case PropertyType::VECTOR3: {
+      glm::vec3 value = std::get<glm::vec3>(GetProperty(property_name));
+      if (ImGui::InputFloat3(property_name.c_str(), glm::value_ptr(value))) {
+        SetProperty(property_name, value);
+        return true;
+      }
+      return false;
+    }
+
+    case PropertyType::VECTOR4: {
+      glm::vec4 value = std::get<glm::vec4>(GetProperty(property_name));
+      if (ImGui::InputFloat4(property_name.c_str(), glm::value_ptr(value))) {
+        SetProperty(property_name, value);
+        return true;
+      }
+      return false;
+    }
+
+    case PropertyType::UNDEFINED:
+      [[fallthrough]];
+    default:
+      ImGui::Text("%s", property_name.c_str());
+      return false;
   }
 }
 
