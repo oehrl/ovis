@@ -49,7 +49,8 @@ class SceneObjectComponent {
   virtual nlohmann::json Serialize() const;
   virtual void Deserialize(const nlohmann::json& data);
 
-  virtual void DrawPropertyEditor();
+  virtual bool DrawEditorForProperties();
+  virtual bool DrawEditorForProperty(const std::string& property_name);
 
   static std::vector<std::string> GetRegisteredComponents();
 
