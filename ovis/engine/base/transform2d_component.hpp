@@ -14,8 +14,6 @@ class Transform2DComponent : public SceneObjectComponent {
   void SetProperty(const std::string& property_name,
                    const PropertyValue& value) override;
 
-  nlohmann::json Serialize() const override;
-
  private:
   Transform transform_;
 };

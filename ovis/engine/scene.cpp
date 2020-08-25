@@ -24,8 +24,7 @@ Scene::~Scene() {}
 void Scene::AddController(const std::string& scene_controller_id) {
   const auto controller_factory =
       SceneController::factories()->find(scene_controller_id);
-  if (controller_factory ==
-      SceneController::factories()->end()) {
+  if (controller_factory == SceneController::factories()->end()) {
     LogE("Cannot find scene controller '{}'", scene_controller_id);
     return;
   }
@@ -63,8 +62,11 @@ SceneObject* Scene::CreateObject(const std::string& object_name) {
   return result.first->second.get();
 }
 
-SceneObject* Scene::CreateObject(const nlohmann::json& serialized_object) {
-  return CreateObject(serialized_object["name"].get<std::string>());
+SceneObject* Scene::CreateObject(const std::string& object_name,
+                                 const nlohmann::json& serialized_object) {
+  auto object = CreateObject(object_name);
+  object->Deserialize(serialized_object);
+  return object;
 }
 
 void Scene::DeleteObject(const std::string& object_name) {

@@ -52,7 +52,7 @@ class Scene {
   }
 
   SceneObject* CreateObject(const std::string& object_name);
-  SceneObject* CreateObject(const nlohmann::json& serialized_object);
+  SceneObject* CreateObject(const std::string& object_name, const nlohmann::json& serialized_object);
   void DeleteObject(const std::string& object_name);
   SceneObject* GetObject(const std::string& object_name);
   bool ContainsObject(const std::string& object_name);

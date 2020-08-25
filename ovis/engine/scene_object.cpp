@@ -49,7 +49,8 @@ SceneObjectComponent* SceneObject::GetComponent(
   }
 }
 
-void SceneObject::GetComponents(std::vector<std::string>* component_ids) {
+void SceneObject::GetComponentIds(
+    std::vector<std::string>* component_ids) const {
   SDL_assert(component_ids != nullptr);
 
   component_ids->clear();
@@ -66,8 +67,18 @@ void SceneObject::RemoveComponent(const std::string& component_id) {
 }
 
 nlohmann::json SceneObject::Serialize() const {
-  nlohmann::json document = {{"name", name_}};
-  return document;
+  nlohmann::json serialized_object = nlohmann::json::object();
+  for (const auto& component : components_) {
+    serialized_object["components"][component.first] = nlohmann::json::object();
+  }
+  return serialized_object;
+}
+
+void SceneObject::Deserialize(const nlohmann::json& serialized_object) {
+  SDL_assert(serialized_object.is_object());
+  for (const auto& component : serialized_object) {
+    SDL_assert(component.is_string());
+  }
 }
 
 }  // namespace ovis

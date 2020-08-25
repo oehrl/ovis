@@ -48,6 +48,4 @@ void Transform2DComponent::SetProperty(const std::string& property_name,
   }
 }
 
-nlohmann::json Transform2DComponent::Serialize() const {}
-
 }  // namespace ovis
