@@ -10,10 +10,16 @@ enum class TextureFormat {
   RGB_UINT8,
   RGBA_UINT8,
   RGBA_FLOAT32,
+  RGBA_S3TC_DXT1,
+  RGBA_S3TC_DXT5,
   DEPTH_UINT16,
   DEPTH_UINT24,
   DEPTH_FLOAT32,
 };
+
+inline bool IsTextureFormatCompressed(TextureFormat format) {
+  return format == TextureFormat::RGBA_S3TC_DXT1 || format == TextureFormat::RGBA_S3TC_DXT5;
+}
 
 enum class TextureFilter {
   POINT,

@@ -30,11 +30,27 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
   SDL_assert(m_context != nullptr);
   SDL_GL_MakeCurrent(window, m_context);
 
-  LogI("OpenGL version: {}", glGetString(GL_VERSION));
-
 #if _WIN32
   glewInit();
 #endif
+
+  LogI("OpenGL version: {}", glGetString(GL_VERSION));
+  LogI("OpenGL:");
+  GLint extension_count;
+  glGetIntegerv(GL_NUM_EXTENSIONS, &extension_count);
+  for (GLint i = 0; i < extension_count; i++) {
+    LogI("  {}", glGetStringi(GL_EXTENSIONS, i));
+  }
+
+  LogI("Compressed data formats:");
+  GLint compressed_data_formats_count;
+  glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &compressed_data_formats_count);
+  std::vector<GLint> compressed_texture_formats(compressed_data_formats_count);
+  glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, compressed_texture_formats.data());
+  for (GLint i = 0; i < compressed_data_formats_count; i++) {
+    LogI("  {}", compressed_texture_formats[i]);
+  }
+
 
   glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_caps.max_vertex_attribs);
   SDL_assert(m_caps.max_vertex_attribs >= 8);

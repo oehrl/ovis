@@ -43,7 +43,7 @@ class ResourceManager {
   std::unordered_multimap<std::string, ResourceLoadingFunction>
       resource_loaders_;
   std::unordered_map<std::string, std::shared_ptr<ResourceBase>> resources_;
-  std::vector<std::string> search_paths_;
+  std::vector<std::string> search_paths_ = {""};
 };
 
 template <typename T>
