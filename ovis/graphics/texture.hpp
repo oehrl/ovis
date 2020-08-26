@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 
@@ -18,7 +19,8 @@ enum class TextureFormat {
 };
 
 inline bool IsTextureFormatCompressed(TextureFormat format) {
-  return format == TextureFormat::RGBA_S3TC_DXT1 || format == TextureFormat::RGBA_S3TC_DXT5;
+  return format == TextureFormat::RGBA_S3TC_DXT1 ||
+         format == TextureFormat::RGBA_S3TC_DXT5;
 }
 
 enum class TextureFilter {
@@ -33,6 +35,10 @@ class Texture : public GraphicsResource {
  public:
   Texture(GraphicsContext* context);
   virtual ~Texture() override;
+
+  inline void* internal_handle() const {
+    return reinterpret_cast<void*>(static_cast<uintptr_t>(name_));
+  }
 
  protected:
   inline GLuint name() const { return name_; }
