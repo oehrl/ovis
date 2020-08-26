@@ -13,7 +13,7 @@ class Viewport {
   Viewport() = default;
   virtual ~Viewport() = default;
 
-  void InitializeRenderPipeline(GraphicsContext* context, ResourceManager* resource_manager);
+  virtual void InitializeRenderPipeline(GraphicsContext* context, ResourceManager* resource_manager);
   virtual glm::ivec2 GetSize() = 0;
 
   inline Scene* scene() const { return scene_; }
