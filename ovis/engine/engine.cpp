@@ -4,6 +4,7 @@
 #endif
 #include <ovis/engine/engine.hpp>
 #include <ovis/engine/window.hpp>
+#include <ovis/core/profiling.hpp>
 
 namespace ovis {
 
@@ -44,6 +45,8 @@ bool Update() {
   for (auto window : Window::all_windows()) {
     window->Render();
   }
+
+  ProfilingLog::default_log()->AdvanceFrame();
 
   return true;
 }

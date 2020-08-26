@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.12)
 project(ovis)
 
 if (${CMAKE_CXX_COMPILER} MATCHES "emscripten")
   set(OVIS_EMSCRIPTEN TRUE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -g4 -s DEMANGLE_SUPPORT=1 -s ASSERTIONS=1 -s WASM=0 -s TOTAL_MEMORY=536870912")  
+  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -g4 -s DEMANGLE_SUPPORT=1 -s ASSERTIONS=1 -s WASM=0 -s TOTAL_MEMORY=536870912")  
 else()
   set(OVIS_EMSCRIPTEN FALSE)
 endif()

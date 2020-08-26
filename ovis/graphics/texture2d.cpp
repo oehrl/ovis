@@ -114,6 +114,7 @@ void Texture2D::Initialize(GLenum* internal_format, GLenum* source_format,
       *source_type = GL_UNSIGNED_BYTE;
       break;
 
+#if !OVIS_EMSCRIPTEN
     case TextureFormat::RGBA_S3TC_DXT1:
       *internal_format = 0x83F0;
       break;
@@ -145,9 +146,10 @@ void Texture2D::Initialize(GLenum* internal_format, GLenum* source_format,
       *source_format = GL_DEPTH_COMPONENT;
       *source_type = GL_FLOAT;
       break;
+#endif
 
     default:
-      SDL_assert(false);
+      SDL_assert(false && "Invalid texture format");
       break;
   }
 
@@ -186,33 +188,33 @@ void Texture2D::Bind(int texture_unit) {
 
 bool LoadTexture2D(GraphicsContext* graphics_context,
                    ResourceManager* resource_manager,
-                   const rapidjson::Document& parameters, const std::string& id,
+                   const nlohmann::json& parameters, const std::string& id,
                    const std::string& directory) {
   Texture2DDescription texture2d_desc;
-  texture2d_desc.width = parameters["width"].GetInt();
-  texture2d_desc.height = parameters["height"].GetInt();
-  texture2d_desc.mip_map_count = parameters["mip_level_data_files"].Size();
+  texture2d_desc.width = parameters["width"];
+  texture2d_desc.height = parameters["height"];
+  texture2d_desc.mip_map_count = parameters["mip_level_data_files"];
 
-  const auto& filter = parameters["filter"].GetString();
-  if (std::strcmp(filter, "point") == 0) {
+  std::string filter = parameters["filter"];
+  if (filter == "point") {
     texture2d_desc.filter = TextureFilter::POINT;
-  } else if (std::strcmp(filter, "bilinear") == 0) {
+  } else if (filter == "bilinear") {
     texture2d_desc.filter = TextureFilter::BILINEAR;
-  } else if (std::strcmp(filter, "trilinear") == 0) {
+  } else if (filter == "trilinear") {
     texture2d_desc.filter = TextureFilter::TRILINEAR;
   } else {
     LogE("Failed to load texture '{}': invalid filter ()", id, filter);
     return false;
   }
 
-  const auto& format = parameters["format"].GetString();
-  if (std::strcmp(format, "RGB_UINT8") == 0) {
+  std::string format = parameters["format"];
+  if (format == "RGB_UINT8") {
     texture2d_desc.format = TextureFormat::RGB_UINT8;
-  } else if (std::strcmp(format, "RGBA_UINT8") == 0) {
+  } else if (format == "RGBA_UINT8") {
     texture2d_desc.format = TextureFormat::RGBA_UINT8;
-  } else if (std::strcmp(format, "S3TC_DXT1") == 0) {
+  } else if (format == "S3TC_DXT1") {
     texture2d_desc.format = TextureFormat::RGBA_S3TC_DXT1;
-  } else if (std::strcmp(format, "S3TC_DXT5") == 0) {
+  } else if (format == "S3TC_DXT5") {
     texture2d_desc.format = TextureFormat::RGBA_S3TC_DXT5;
   } else {
     LogE("Failed to load texture '{}': invalid format ({})", id, format);
@@ -220,8 +222,8 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
   }
 
   std::vector<Blob> mip_map_data;
-  for (rapidjson::SizeType i = 0; i < texture2d_desc.mip_map_count; ++i) {
-    std::string filename = parameters["mip_level_data_files"][i].GetString();
+  for (size_t i = 0; i < texture2d_desc.mip_map_count; ++i) {
+    std::string filename = parameters["mip_level_data_files"][i];
     auto data = LoadBinaryFile(std::filesystem::path(id).parent_path().string() + "/" + filename);
     if (!data.has_value()) {
       LogE("Failed to load MIP level {} of texture '{}' ({})", i, id, filename);

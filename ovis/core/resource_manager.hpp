@@ -7,8 +7,7 @@
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
+#include <nlohmann/json.hh>
 #include <ovis/core/down_cast.hpp>
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
@@ -19,7 +18,7 @@ namespace ovis {
 class ResourceManager;
 
 using ResourceLoadingFunction =
-    std::function<bool(ResourceManager*, const rapidjson::Document&,
+    std::function<bool(ResourceManager*, const nlohmann::json&,
                        const std::string&, const std::string&)>;
 
 class ResourceManager {
@@ -73,9 +72,7 @@ ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
     } else {
       LogV("File '{}' exists", resource_path);
 
-      rapidjson::IStreamWrapper iws{resource_parameter_file};
-      rapidjson::Document parameter_document;
-      parameter_document.ParseStream(iws);
+      nlohmann::json parameter_document = nlohmann::json::parse(resource_parameter_file);
 
       bool is_loaded = false;
       for (auto it = resource_loaders.first;

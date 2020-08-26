@@ -15,6 +15,7 @@
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/texture2d.hpp>
+#include <ovis/core/log.hpp>
 
 namespace ovis {
 

@@ -2,9 +2,6 @@
 #include <iostream>
 #include <vector>
 
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
-
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/range.hpp>
@@ -51,7 +48,8 @@ ShaderProgram::ShaderProgram(GraphicsContext* context,
       // Internal attributes (e.g., VertexID) do not have an attribute location
       if (attribute_location >= 0) {
         m_attribute_names[attribute_location] = attribute_name_buffer.data();
-        m_attribute_locations[attribute_name_buffer.data()] = attribute_location;
+        m_attribute_locations[attribute_name_buffer.data()] =
+            attribute_location;
       }
     }
   }
@@ -76,9 +74,9 @@ void ShaderProgram::AttachShader(const std::string& source,
     SDL_assert(shader != 0);
 
     std::string final_shader_source;
-#if OVIS_EMPSCRIPTEN
+#if OVIS_EMSCRIPTEN
     final_shader_source += "#version 100\n";
-    final_shader_source += "#define OVIS_EMSCRIPTEN 1";
+    final_shader_source += "#define OVIS_EMSCRIPTEN 1\n";
     if (shader_type == GL_VERTEX_SHADER) {
       final_shader_source += "#define in attribute\n";
       final_shader_source += "#define out varying\n";
@@ -95,7 +93,8 @@ void ShaderProgram::AttachShader(const std::string& source,
     //   final_shader_source += "#define in varying\n";
     // }
     // if (shader_type == GL_FRAGMENT_SHADER) {
-    //    final_shader_source += "layout(location = 0) out vec4 gl_FragColor;\n";
+    //    final_shader_source += "layout(location = 0) out vec4
+    //    gl_FragColor;\n";
     //  }
 #endif
     final_shader_source += source;
@@ -122,7 +121,8 @@ void ShaderProgram::AttachShader(const std::string& source,
   }
 }
 
-std::optional<std::size_t> ShaderProgram::GetAttributeLocation(const std::string& attribute_name) {
+std::optional<std::size_t> ShaderProgram::GetAttributeLocation(
+    const std::string& attribute_name) {
   auto attribute_iterator = m_attribute_locations.find("a_" + attribute_name);
   if (attribute_iterator == m_attribute_locations.end()) {
     return {};
@@ -141,27 +141,26 @@ void ShaderProgram::Bind() {
 
 bool LoadShaderProgram(GraphicsContext* graphics_context,
                        ResourceManager* resource_manager,
-                       const rapidjson::Document& parameters,
-                       const std::string& id, const std::string& directory) {
+                       const nlohmann::json& parameters, const std::string& id,
+                       const std::string& directory) {
   ShaderProgramDescription sp_desc;
 
   const auto vertex_shader_source = LoadTextFile(
-      directory + "/" + parameters["vertex_shader_source"].GetString());
+      directory + "/" + parameters["vertex_shader_source"].get<std::string>());
 
   if (vertex_shader_source.has_value()) {
     sp_desc.vertex_shader_source = *vertex_shader_source;
   } else {
-    LogE("Cannot open: {}/{}", directory,
-         parameters["vertex_shader_source"].GetString());
+    LogE("Cannot open: {}/{}", directory, parameters["vertex_shader_source"]);
   }
 
-  const auto fragment_shader_source = LoadTextFile(
-      directory + "/" + parameters["fragment_shader_source"].GetString());
+  const auto fragment_shader_source =
+      LoadTextFile(directory + "/" +
+                   parameters["fragment_shader_source"].get<std::string>());
   if (fragment_shader_source.has_value()) {
     sp_desc.fragment_shader_source = *fragment_shader_source;
   } else {
-    LogE("Cannot open: {}/{}", directory,
-         parameters["fragment_shader_source"].GetString());
+    LogE("Cannot open: {}/{}", directory, parameters["fragment_shader_source"]);
   }
 
   if (vertex_shader_source.has_value() && fragment_shader_source.has_value()) {

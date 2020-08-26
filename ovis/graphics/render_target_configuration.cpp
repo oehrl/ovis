@@ -55,8 +55,13 @@ void RenderTargetConfiguration::ClearColor(size_t color_attachment_index,
     context()->scissoring_enabled_ = false;
   }
   Bind();
+#if OVIS_EMSCRIPTEN
+  glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+  glClear(GL_COLOR_BUFFER_BIT);
+#else
   glClearBufferfv(GL_COLOR, color_attachment_index,
                   glm::value_ptr(clear_color));
+#endif
 }
 
 void RenderTargetConfiguration::ClearDepth(float depth) {
@@ -69,7 +74,12 @@ void RenderTargetConfiguration::ClearDepth(float depth) {
     context()->depth_buffer_state_.write_enabled = true;
   }
   Bind();
+#if OVIS_EMSCRIPTEN
+  glClearDepthf(depth);
+  glClear(GL_DEPTH_BUFFER_BIT);
+#else
   glClearBufferfv(GL_DEPTH, 0, &depth);
+#endif
 }
 
 RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
@@ -85,7 +95,9 @@ void RenderTargetConfiguration::Bind() {
   if (context()->m_bound_frame_buffer != m_frame_buffer) {
     glBindFramebuffer(GL_FRAMEBUFFER, m_frame_buffer);
     context()->m_bound_frame_buffer = m_frame_buffer;
+#if !OVIS_EMSCRIPTEN
     glDrawBuffers(draw_buffers_.size(), draw_buffers_.data());
+#endif
   }
 }
 
