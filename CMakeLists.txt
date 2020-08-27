@@ -8,24 +8,35 @@ else()
   set(OVIS_EMSCRIPTEN FALSE)
 endif()
 
-add_subdirectory(extern)
-
-# if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-#     #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -fno-rtti")
-#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wall -Wextra -Wpedantic -Werror")
-# elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-#     #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -fno-rtti")
-#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-# elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
-#     # using Intel C++
-# elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-#     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /W4 /W4")
-#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /W4")
-#     set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /ignore:4221")
-# endif()
+set(CMAKE_CXX_STANDARD 17)
 
 if (OVIS_EMSCRIPTEN)
   add_definitions("-DOVIS_EMSCRIPTEN=1")
+
+  if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR NOT DEFINED CMAKE_BUILD_TYPE)
+    message(STATUS "Ovis: Building in debug mode, disable optimziations.")
+    add_compile_options(
+      -g
+      -O0
+      "SHELL:-s DISABLE_EXCEPTION_CATCHING=0"
+      "SHELL:-s DEMANGLE_SUPPORT=1"
+    )
+    add_link_options(
+      -g
+      -O0
+      "SHELL:-s DISABLE_EXCEPTION_CATCHING=0"
+      "SHELL:-s DEMANGLE_SUPPORT=1"
+    )
+  else ()
+    add_compile_options(
+      -O3
+    )
+    add_link_options(
+      -O3
+    )
+  endif ()
 endif()
+
+add_subdirectory(extern)
 set(OVIS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(ovis)

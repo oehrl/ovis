@@ -31,19 +31,12 @@ if (OVIS_EMSCRIPTEN)
   target_compile_options(
     OvisCore
     PUBLIC
-      -std=c++1z
-      -g
       "SHELL:-s USE_SDL=2"
-      "SHELL:-s DISABLE_EXCEPTION_CATCHING=0"
-      "SHELL:-s DEMANGLE_SUPPORT=1"
   )
   target_link_options(
     OvisCore
     PUBLIC
-      -g
       "SHELL:-s USE_SDL=2"
-      "SHELL:-s DISABLE_EXCEPTION_CATCHING=0"
-      "SHELL:-s DEMANGLE_SUPPORT=1"
   )
 else ()
   find_package(SDL2 REQUIRED)
