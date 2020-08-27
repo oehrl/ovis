@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lua.hpp>
+#include <sol/sol.hpp>
 
 #include <ovis/engine/module.hpp>
 
@@ -15,7 +15,7 @@ class ScriptingModule final : public Module {
       const std::string& scene_controller_id, Scene* scene) override;
 
  private:
-  lua_State* lua_state_; 
+  sol::state sol_state_;
 };
 
 }  // namespace ovis

@@ -8,4 +8,5 @@ target_link_libraries(
   PUBLIC
     OvisEngine
     Lua
+    sol2_single
 )
