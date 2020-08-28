@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <typeindex>
 #include <vector>
+
 #include <SDL2/SDL_assert.h>
 
 namespace ovis {
@@ -104,12 +105,9 @@ class ResourcePointer {
 
  public:
   ResourcePointer() = default;
-  ResourcePointer(std::shared_ptr<Resource<T>> resource)
-      : resource_(std::move(resource)) {}
-  template <typename Derived,
-            typename = std::enable_if_t<std::is_base_of<T, Derived>::value>>
-  ResourcePointer(const ResourcePointer<Derived>& other)
-      : resource_(other.resource_) {}
+  ResourcePointer(std::shared_ptr<Resource<T>> resource) : resource_(std::move(resource)) {}
+  template <typename Derived, typename = std::enable_if_t<std::is_base_of<T, Derived>::value>>
+  ResourcePointer(const ResourcePointer<Derived>& other) : resource_(other.resource_) {}
 
   inline const T* get() const { return resource_ ? resource_->get() : nullptr; }
   inline T* get() { return resource_ ? resource_->get() : nullptr; }
@@ -142,9 +140,7 @@ class Resource final : public ResourceBase {
 
   inline bool is_loaded() const { return is_loaded_; }
 
-  inline T* get() {
-    return is_loaded_ ? reinterpret_cast<T*>(data_.data()) : nullptr;
-  }
+  inline T* get() { return is_loaded_ ? reinterpret_cast<T*>(data_.data()) : nullptr; }
 
   template <typename... Args>
   void Create(Args... constructor_arguments) {

@@ -10,8 +10,7 @@ struct Rect {
   T height;
 
   bool operator==(const Rect& other) const {
-    return top == other.top && left == other.left && width == other.width &&
-           height == other.height;
+    return top == other.top && left == other.left && width == other.width && height == other.height;
   }
 
   bool operator!=(const Rect& other) const { return !(*this == other); }

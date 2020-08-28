@@ -6,7 +6,6 @@
 
 #if OVIS_ENABLE_BUILT_IN_PROFILING
 #include <ovis/core/profiling.hpp>
-
 #include <ovis/graphics/gpu_time_profiler.hpp>
 #endif
 
@@ -71,8 +70,7 @@ class RenderPass {
   }
 
   inline void CreateResourcesWrapper() {
-    gpu_render_profiler_ =
-        std::make_unique<GPUTimeProfiler>(context(), name() + "::Render");
+    gpu_render_profiler_ = std::make_unique<GPUTimeProfiler>(context(), name() + "::Render");
     CreateResources();
   }
   inline void ReleaseResourcesWrapper() {

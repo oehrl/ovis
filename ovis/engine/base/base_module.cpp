@@ -62,8 +62,7 @@ BaseModule::~BaseModule() {
   ImGui::DestroyContext(context_);
 }
 
-std::unique_ptr<RenderPass> BaseModule::CreateRenderPass(
-    const std::string& render_pass_id, RenderPipeline*) {
+std::unique_ptr<RenderPass> BaseModule::CreateRenderPass(const std::string& render_pass_id, RenderPipeline*) {
   if (render_pass_id == "ImGui") {
     return std::make_unique<ImGuiRenderPass>(context_);
   } else {
@@ -71,8 +70,7 @@ std::unique_ptr<RenderPass> BaseModule::CreateRenderPass(
   }
 }
 
-std::unique_ptr<SceneController> BaseModule::CreateSceneController(
-    const std::string& scene_controller_id, Scene*) {
+std::unique_ptr<SceneController> BaseModule::CreateSceneController(const std::string& scene_controller_id, Scene*) {
   if (scene_controller_id == "ImGui") {
     return std::make_unique<ImGuiSceneController>(context_);
   } else {
@@ -80,8 +78,8 @@ std::unique_ptr<SceneController> BaseModule::CreateSceneController(
   }
 }
 
-std::unique_ptr<SceneObjectComponent> BaseModule::CreateSceneObjectComponent(
-    const std::string& component_id, SceneObject* scene_object) {
+std::unique_ptr<SceneObjectComponent> BaseModule::CreateSceneObjectComponent(const std::string& component_id,
+                                                                             SceneObject* scene_object) {
   if (component_id == "Transform2D") {
     return std::make_unique<Transform2DComponent>();
   } else {

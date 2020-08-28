@@ -1,10 +1,12 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <optional>
+
 #include <nlohmann/json.hh>
+
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/uniform_buffer.hpp>
@@ -22,14 +24,11 @@ class ShaderProgram : public GraphicsResource {
   friend class GraphicsContext;
 
  public:
-  ShaderProgram(GraphicsContext* context,
-                const ShaderProgramDescription& description);
+  ShaderProgram(GraphicsContext* context, const ShaderProgramDescription& description);
 
   virtual ~ShaderProgram() override;
 
-  inline const ShaderProgramDescription& description() const {
-    return m_description;
-  }
+  inline const ShaderProgramDescription& description() const { return m_description; }
 
   template <typename... T>
   inline void SetUniform(const std::string& uniform_name, T&&... value) {
@@ -62,9 +61,7 @@ class ShaderProgram : public GraphicsResource {
   void Bind();
 };
 
-bool LoadShaderProgram(GraphicsContext* graphics_context,
-                       ResourceManager* resource_manager,
-                       const nlohmann::json& parameters,
-                       const std::string& id, const std::string& directory);
+bool LoadShaderProgram(GraphicsContext* graphics_context, ResourceManager* resource_manager,
+                       const nlohmann::json& parameters, const std::string& id, const std::string& directory);
 
 }  // namespace ovis

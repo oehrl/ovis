@@ -9,7 +9,6 @@
 
 #include <ovis/core/log.hpp>
 #include <ovis/core/utf8.hpp>
-
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_controller.hpp>
@@ -22,8 +21,7 @@ Scene::Scene() : m_is_paused(true) {}
 Scene::~Scene() {}
 
 void Scene::AddController(const std::string& scene_controller_id) {
-  const auto controller_factory =
-      SceneController::factories()->find(scene_controller_id);
+  const auto controller_factory = SceneController::factories()->find(scene_controller_id);
   if (controller_factory == SceneController::factories()->end()) {
     LogE("Cannot find scene controller '{}'", scene_controller_id);
     return;
@@ -34,15 +32,13 @@ void Scene::AddController(const std::string& scene_controller_id) {
     return;
   }
 
-  auto controller = controller_factory->second->CreateSceneController(
-      scene_controller_id, this);
+  auto controller = controller_factory->second->CreateSceneController(scene_controller_id, this);
   if (controller == nullptr) {
     LogE("Failed to create scene controller '{}'", scene_controller_id);
     return;
   }
 
-  auto insert_return_value = controllers_.insert(
-      std::make_pair(scene_controller_id, std::move(controller)));
+  auto insert_return_value = controllers_.insert(std::make_pair(scene_controller_id, std::move(controller)));
   SDL_assert(insert_return_value.second);
   insert_return_value.first->second->m_scene = this;
   controllers_sorted_ = false;
@@ -56,14 +52,12 @@ void Scene::RemoveController(const std::string& id) {
 }
 
 SceneObject* Scene::CreateObject(const std::string& object_name) {
-  auto result = objects_.insert(std::make_pair(
-      object_name, std::make_unique<SceneObject>(this, object_name)));
+  auto result = objects_.insert(std::make_pair(object_name, std::make_unique<SceneObject>(this, object_name)));
   SDL_assert(result.second);
   return result.first->second.get();
 }
 
-SceneObject* Scene::CreateObject(const std::string& object_name,
-                                 const nlohmann::json& serialized_object) {
+SceneObject* Scene::CreateObject(const std::string& object_name, const nlohmann::json& serialized_object) {
   auto object = CreateObject(object_name);
   object->Deserialize(serialized_object);
   return object;
@@ -83,8 +77,7 @@ bool Scene::ContainsObject(const std::string& object_name) {
   return objects_.count(object_name) == 1;
 }
 
-void Scene::GetObjects(std::vector<SceneObject*>* scene_objects,
-                       bool sort_by_name) const {
+void Scene::GetObjects(std::vector<SceneObject*>* scene_objects, bool sort_by_name) const {
   scene_objects->clear();
   scene_objects->reserve(objects_.size());
   for (auto& name_object_pair : objects_) {
@@ -92,15 +85,12 @@ void Scene::GetObjects(std::vector<SceneObject*>* scene_objects,
   }
   if (sort_by_name) {
     std::sort(scene_objects->begin(), scene_objects->end(),
-              [](SceneObject* left, SceneObject* right) {
-                return to_lower(left->name()) < to_lower(right->name());
-              });
+              [](SceneObject* left, SceneObject* right) { return to_lower(left->name()) < to_lower(right->name()); });
   }
 }
 
-inline void Scene::GetSceneObjectsWithComponent(
-    const std::string& component_id,
-    std::vector<SceneObject*>* scene_objects) const {
+inline void Scene::GetSceneObjectsWithComponent(const std::string& component_id,
+                                                std::vector<SceneObject*>* scene_objects) const {
   SDL_assert(scene_objects != nullptr);
   scene_objects->clear();
 
@@ -179,24 +169,19 @@ void Scene::SortControllers() {
   for (const auto& name_controller_pair : controllers_) {
     controllers_left_.insert(name_controller_pair.first);
 
-    for (auto update_before :
-         name_controller_pair.second->update_before_list_) {
+    for (auto update_before : name_controller_pair.second->update_before_list_) {
       if (controllers_.count(update_before) == 0) {
-        LogW("Cannot update {0} before {1}, {1} not found!",
-             name_controller_pair.first, update_before);
+        LogW("Cannot update {0} before {1}, {1} not found!", name_controller_pair.first, update_before);
       } else {
-        dependencies.insert(
-            std::make_pair(update_before, name_controller_pair.first));
+        dependencies.insert(std::make_pair(update_before, name_controller_pair.first));
       }
     }
 
     for (auto update_after : name_controller_pair.second->update_after_list_) {
       if (controllers_.count(update_after) == 0) {
-        LogW("Cannot update {0} after {1}, {1} not found!",
-             name_controller_pair.first, update_after);
+        LogW("Cannot update {0} after {1}, {1} not found!", name_controller_pair.first, update_after);
       } else {
-        dependencies.insert(
-            std::make_pair(name_controller_pair.first, update_after));
+        dependencies.insert(std::make_pair(name_controller_pair.first, update_after));
       }
     }
   }
@@ -206,9 +191,7 @@ void Scene::SortControllers() {
   controller_order_.reserve(controllers_.size());
   while (controllers_left_.size() > 0) {
     auto next = std::find_if(controllers_left_.begin(), controllers_left_.end(),
-                             [&dependencies](const std::string& value) {
-                               return dependencies.count(value) == 0;
-                             });
+                             [&dependencies](const std::string& value) { return dependencies.count(value) == 0; });
 
     SDL_assert(next != controllers_left_.end());
     LogV(" {}", *next);
@@ -229,8 +212,7 @@ void Scene::SortControllers() {
   controllers_sorted_ = true;
 }
 
-SceneController* Scene::GetControllerInternal(
-    const std::string& controller_name) const {
+SceneController* Scene::GetControllerInternal(const std::string& controller_name) const {
   auto controller = controllers_.find(controller_name);
   if (controller == controllers_.end()) {
     return nullptr;

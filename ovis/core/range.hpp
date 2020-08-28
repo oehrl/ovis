@@ -15,13 +15,9 @@ class IntegralRange {
     Iterator(const Iterator&) = default;
     Iterator& operator=(const Iterator&) = default;
 
-    inline bool operator==(const Iterator& rhs) {
-      return m_value == rhs.m_value;
-    }
+    inline bool operator==(const Iterator& rhs) { return m_value == rhs.m_value; }
 
-    inline bool operator!=(const Iterator& rhs) {
-      return m_value != rhs.m_value;
-    }
+    inline bool operator!=(const Iterator& rhs) { return m_value != rhs.m_value; }
 
     inline T operator*() const { return m_value; }
     inline T operator->() const { return m_value; }
@@ -42,8 +38,7 @@ class IntegralRange {
   };
 
  public:
-  inline IntegralRange(T begin, T end)
-      : m_begin(std::move(begin)), m_end(std::move(end)) {}
+  inline IntegralRange(T begin, T end) : m_begin(std::move(begin)), m_end(std::move(end)) {}
 
   inline Iterator begin() { return {m_begin}; }
 
@@ -73,14 +68,13 @@ class IndexedRange {
     friend class Iterator;
 
    public:
-    inline IndexedValue(T iterator, I index)
-        : m_iterator(iterator), m_index(index) {}
+    inline IndexedValue(T iterator, I index) : m_iterator(iterator), m_index(index) {}
 
     inline I index() const { return m_index; }
 
     inline auto& value() const { return *m_iterator; }
 
-    inline auto operator-> () const { return &value(); }
+    inline auto operator->() const { return &value(); }
 
    private:
     T m_iterator;
@@ -96,13 +90,9 @@ class IndexedRange {
 
     Iterator& operator=(const Iterator&) = default;
 
-    inline bool operator==(const Iterator& rhs) {
-      return m_value.m_iterator == rhs.m_value.m_iterator;
-    }
+    inline bool operator==(const Iterator& rhs) { return m_value.m_iterator == rhs.m_value.m_iterator; }
 
-    inline bool operator!=(const Iterator& rhs) {
-      return m_value.m_iterator != rhs.m_value.m_iterator;
-    }
+    inline bool operator!=(const Iterator& rhs) { return m_value.m_iterator != rhs.m_value.m_iterator; }
 
     inline const IndexedValue& operator*() const { return m_value; }
 
@@ -126,8 +116,7 @@ class IndexedRange {
   };
 
  public:
-  inline IndexedRange(const T& begin, const T& end)
-      : m_begin(begin), m_end(end) {}
+  inline IndexedRange(const T& begin, const T& end) : m_begin(begin), m_end(end) {}
 
   inline Iterator begin() { return {m_begin}; }
 
@@ -143,14 +132,12 @@ IndexedRange<T> IndexRange(T begin, T end) {
   return {begin, end};
 }
 
-template <typename I = std::size_t, typename C,
-          typename T = decltype(std::declval<C>().begin())>
+template <typename I = std::size_t, typename C, typename T = decltype(std::declval<C>().begin())>
 IndexedRange<T, I> IndexRange(C& container) {
   return {container.begin(), container.end()};
 }
 
-template <typename I = std::size_t, typename C,
-          typename T = decltype(std::declval<C>().begin())>
+template <typename I = std::size_t, typename C, typename T = decltype(std::declval<C>().begin())>
 IndexedRange<T, I> IndexRange(C&& container) {
   return {container.begin(), container.end()};
 }

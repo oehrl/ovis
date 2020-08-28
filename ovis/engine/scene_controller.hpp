@@ -1,7 +1,6 @@
 #pragma once
 
 #include <chrono>
-
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -40,7 +39,7 @@ class SceneController {
 
   static std::vector<std::string> GetRegisteredControllers();
 
-protected:
+ protected:
   void UpdateBefore(const std::string& controller_name);
   void UpdateAfter(const std::string& controller_name);
 

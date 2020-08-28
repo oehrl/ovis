@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <set>
 #include <vector>
-#include <optional>
+
 #include <SDL2/SDL.h>
-#include <ovis/math/rect.hpp>
+
 #include <ovis/core/class.hpp>
+#include <ovis/math/rect.hpp>
 #include <ovis/graphics/blend_state.hpp>
 #include <ovis/graphics/depth_buffer_state.hpp>
 #include <ovis/graphics/gl.hpp>
@@ -65,8 +67,7 @@ class GraphicsContext final {
 
   void Draw(const DrawItem& draw_item);
 
-  inline RenderTargetConfiguration* default_render_target_configuration()
-      const {
+  inline RenderTargetConfiguration* default_render_target_configuration() const {
     return m_default_render_target_configuration.get();
   }
 
@@ -74,8 +75,7 @@ class GraphicsContext final {
   SDL_Window* window_;
   SDL_GLContext m_context;
   std::set<GraphicsResource*> m_graphics_resources;
-  std::unique_ptr<RenderTargetConfiguration>
-      m_default_render_target_configuration;
+  std::unique_ptr<RenderTargetConfiguration> m_default_render_target_configuration;
 
   struct {
     GLint max_vertex_attribs;
@@ -99,8 +99,7 @@ class GraphicsContext final {
                    // necessary oO
   Rect<int> current_viewport_;
 
-  inline void BindTexture(GLenum texture_type, GLuint texture_name,
-                          GLuint texture_unit) {
+  inline void BindTexture(GLenum texture_type, GLuint texture_name, GLuint texture_unit) {
     SDL_assert(texture_unit < m_bound_textures.size());
     if (m_bound_textures[texture_unit] != texture_name) {
       ActivateTextureUnit(texture_unit);

@@ -3,7 +3,6 @@
 #include <optional>
 
 #include <ovis/core/profiling.hpp>
-
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 

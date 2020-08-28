@@ -4,10 +4,8 @@
 
 namespace ovis {
 
-void Viewport::InitializeRenderPipeline(GraphicsContext* context,
-                                        ResourceManager* resource_manager) {
-  render_pipeline_ =
-      std::make_unique<RenderPipeline>(context, resource_manager);
+void Viewport::InitializeRenderPipeline(GraphicsContext* context, ResourceManager* resource_manager) {
+  render_pipeline_ = std::make_unique<RenderPipeline>(context, resource_manager);
 }
 
 void Viewport::Render() {

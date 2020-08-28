@@ -2,8 +2,7 @@
 
 namespace ovis {
 
-GPUQuery::GPUQuery(GraphicsContext* context)
-    : GraphicsResource(context), name_(0) {
+GPUQuery::GPUQuery(GraphicsContext* context) : GraphicsResource(context), name_(0) {
 #if !OVIS_EMSCRIPTEN
   glGenQueries(1, &name_);
   SDL_assert(name_ != 0);
@@ -16,8 +15,7 @@ GPUQuery::~GPUQuery() {
 #endif
 }
 
-GPUElapsedTimeQuery::GPUElapsedTimeQuery(GraphicsContext* context)
-    : GPUQuery(context) {}
+GPUElapsedTimeQuery::GPUElapsedTimeQuery(GraphicsContext* context) : GPUQuery(context) {}
 
 void GPUElapsedTimeQuery::Begin() {
   SDL_assert(!started_);
@@ -34,8 +32,7 @@ void GPUElapsedTimeQuery::End() {
   started_ = false;
 }
 
-GPUTimeProfiler::GPUTimeProfiler(GraphicsContext* context,
-                                 const std::string& id)
+GPUTimeProfiler::GPUTimeProfiler(GraphicsContext* context, const std::string& id)
     : Profiler(ProfilingLog::default_log(), "GPU::" + id, "ms"), query_(context) {}
 
 GPUTimeProfiler::~GPUTimeProfiler() {

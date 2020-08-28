@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+
 #include <sdl_mixer.h>
 
 namespace ovis {

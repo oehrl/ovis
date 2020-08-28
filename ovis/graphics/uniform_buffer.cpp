@@ -55,16 +55,14 @@ std::size_t GetUniformSize(GLenum type) {
 }
 }  // namespace
 
-UniformBuffer::UniformBuffer(GraphicsContext* context,
-                             const UniformBufferDescription& description)
+UniformBuffer::UniformBuffer(GraphicsContext* context, const UniformBufferDescription& description)
     : GraphicsResource(context) {
   GLuint program_name = description.shader_program->m_program_name;
   GLint num_uniforms = 0;
   glGetProgramiv(program_name, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
   GLint max_uniform_name_length = 0;
-  glGetProgramiv(program_name, GL_ACTIVE_UNIFORM_MAX_LENGTH,
-                 &max_uniform_name_length);
+  glGetProgramiv(program_name, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_uniform_name_length);
 
   std::vector<GLchar> uniform_name_buffer(max_uniform_name_length, '\0');
 
@@ -75,22 +73,17 @@ UniformBuffer::UniformBuffer(GraphicsContext* context,
   for (auto i : IRange(num_uniforms)) {
     m_uniform_descriptions[i].offset = current_size;
 
-    glGetActiveUniform(program_name, i, max_uniform_name_length, nullptr,
-                       &m_uniform_descriptions[i].size,
-                       &m_uniform_descriptions[i].type,
-                       uniform_name_buffer.data());
+    glGetActiveUniform(program_name, i, max_uniform_name_length, nullptr, &m_uniform_descriptions[i].size,
+                       &m_uniform_descriptions[i].type, uniform_name_buffer.data());
 
     m_uniform_descriptions[i].name = uniform_name_buffer.data();
 
-    m_uniform_descriptions[i].location =
-        glGetUniformLocation(program_name, uniform_name_buffer.data());
+    m_uniform_descriptions[i].location = glGetUniformLocation(program_name, uniform_name_buffer.data());
     SDL_assert(m_uniform_descriptions[i].location >= 0);
 
-    current_size += GetUniformSize(m_uniform_descriptions[i].type) *
-                    m_uniform_descriptions[i].size;
+    current_size += GetUniformSize(m_uniform_descriptions[i].type) * m_uniform_descriptions[i].size;
 
-    if (m_uniform_descriptions[i].type == GL_SAMPLER_2D ||
-        m_uniform_descriptions[i].type == GL_SAMPLER_CUBE) {
+    if (m_uniform_descriptions[i].type == GL_SAMPLER_2D || m_uniform_descriptions[i].type == GL_SAMPLER_CUBE) {
       m_uniform_descriptions[i].base_texture_unit = texture_count;
       texture_count += m_uniform_descriptions[i].size;
     } else {
@@ -132,18 +125,15 @@ void UniformBuffer::Bind() {
         break;
 
       case GL_FLOAT_MAT2:
-        glUniformMatrix2fv(location, count, GL_FALSE,
-                           reinterpret_cast<const GLfloat*>(data));
+        glUniformMatrix2fv(location, count, GL_FALSE, reinterpret_cast<const GLfloat*>(data));
         break;
 
       case GL_FLOAT_MAT3:
-        glUniformMatrix3fv(location, count, GL_FALSE,
-                           reinterpret_cast<const GLfloat*>(data));
+        glUniformMatrix3fv(location, count, GL_FALSE, reinterpret_cast<const GLfloat*>(data));
         break;
 
       case GL_FLOAT_MAT4:
-        glUniformMatrix4fv(location, count, GL_FALSE,
-                           reinterpret_cast<const GLfloat*>(data));
+        glUniformMatrix4fv(location, count, GL_FALSE, reinterpret_cast<const GLfloat*>(data));
         break;
 
       case GL_INT:

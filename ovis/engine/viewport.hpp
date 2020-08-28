@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <ovis/core/resource_manager.hpp>
 
+#include <ovis/core/resource_manager.hpp>
 #include <ovis/engine/render_pipeline.hpp>
 #include <ovis/engine/scene.hpp>
 

@@ -3,7 +3,9 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
+
 #include <nlohmann/json.hh>
+
 #include <ovis/graphics/texture.hpp>
 
 namespace ovis {
@@ -38,13 +40,12 @@ class Cubemap : public Texture {
   friend class RenderTargetCubemap;
 
  public:
-  Cubemap(GraphicsContext* context, const CubemapDescription& description,
-          const void* pixels = nullptr);
+  Cubemap(GraphicsContext* context, const CubemapDescription& description, const void* pixels = nullptr);
 
   void GenerateMipMaps();
 
-  void Write(CubemapSide side, std::size_t level, std::size_t x, std::size_t y,
-             std::size_t width, std::size_t height, const void* data);
+  void Write(CubemapSide side, std::size_t level, std::size_t x, std::size_t y, std::size_t width, std::size_t height,
+             const void* data);
 
   inline const CubemapDescription& description() const { return m_description; }
 
@@ -54,9 +55,7 @@ class Cubemap : public Texture {
   virtual void Bind(int texture_unit) override;
 };
 
-bool LoadCubemap(GraphicsContext* graphics_context,
-                 ResourceManager* resource_manager,
-                 const nlohmann::json& parameters, const std::string& id,
-                 const std::string& directory);
+bool LoadCubemap(GraphicsContext* graphics_context, ResourceManager* resource_manager, const nlohmann::json& parameters,
+                 const std::string& id, const std::string& directory);
 
 }  // namespace ovis

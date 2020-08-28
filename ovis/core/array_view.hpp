@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstddef>
 #include <array>
+#include <cstddef>
 #include <vector>
 
 namespace ovis {
@@ -11,11 +11,9 @@ class array_view {
  public:
   inline array_view() : data_(nullptr), size_(0) {}
   inline array_view(T* data, std::size_t size) : data_(data), size_(size) {}
-  inline array_view(const std::vector<T>& vector)
-      : data_(vector.data()), size_(vector.size()) {}
+  inline array_view(const std::vector<T>& vector) : data_(vector.data()), size_(vector.size()) {}
   template <std::size_t size>
-  inline array_view(const std::array<T, size>& array)
-      : data_(array.data()), size_(size) {}
+  inline array_view(const std::array<T, size>& array) : data_(array.data()), size_(size) {}
 
   array_view(const array_view<T>&) = default;
   array_view<T>& operator=(const array_view<T>&) = default;

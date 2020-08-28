@@ -9,7 +9,7 @@ namespace ovis {
 class ImGuiSceneController : public ovis::SceneController {
  public:
   ImGuiSceneController(ImGuiContext* context);
-  
+
   bool ProcessEvent(const SDL_Event& event) override;
 
  private:

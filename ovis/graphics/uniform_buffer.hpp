@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+
 #include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat2x2.hpp>
@@ -12,10 +13,11 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+
+#include <ovis/core/log.hpp>
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/texture2d.hpp>
-#include <ovis/core/log.hpp>
 
 namespace ovis {
 
@@ -39,8 +41,7 @@ class UniformBuffer : public GraphicsResource {
   };
 
  public:
-  UniformBuffer(GraphicsContext* context,
-                const UniformBufferDescription& description);
+  UniformBuffer(GraphicsContext* context, const UniformBufferDescription& description);
   virtual ~UniformBuffer() override;
 
   template <typename... T>
@@ -61,43 +62,37 @@ class UniformBuffer : public GraphicsResource {
   inline void SetUniform(std::size_t uniform_index, const glm::vec2& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_FLOAT_VEC2);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::vec3& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_FLOAT_VEC3);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::vec4& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_FLOAT_VEC4);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::mat2& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_FLOAT_MAT2);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::mat3& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_FLOAT_MAT3);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::mat4& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_FLOAT_MAT4);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, Sint32 value) {
@@ -109,22 +104,19 @@ class UniformBuffer : public GraphicsResource {
   inline void SetUniform(std::size_t uniform_index, const glm::ivec2& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_INT_VEC2);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::ivec3& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_INT_VEC3);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, const glm::ivec4& value) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
     SDL_assert(m_uniform_descriptions[uniform_index].type == GL_INT_VEC4);
-    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value),
-           sizeof(value));
+    memcpy(GetUniformPointer(uniform_index), glm::value_ptr(value), sizeof(value));
   }
 
   inline void SetUniform(std::size_t uniform_index, bool value) {
@@ -158,21 +150,15 @@ class UniformBuffer : public GraphicsResource {
   inline void SetTexture(const std::string& sampler_name, Texture2D* texture) {
     SDL_assert(m_uniform_indices.find(sampler_name) != m_uniform_indices.end());
     SDL_assert(m_uniform_indices[sampler_name] < m_uniform_descriptions.size());
-    SDL_assert(m_uniform_descriptions[m_uniform_indices[sampler_name]].type ==
-               GL_SAMPLER_2D);
-    SetTexture(m_uniform_descriptions[m_uniform_indices[sampler_name]]
-                   .base_texture_unit,
-               texture);
+    SDL_assert(m_uniform_descriptions[m_uniform_indices[sampler_name]].type == GL_SAMPLER_2D);
+    SetTexture(m_uniform_descriptions[m_uniform_indices[sampler_name]].base_texture_unit, texture);
   }
 
   inline void SetTexture(const std::string& sampler_name, Cubemap* texture) {
     SDL_assert(m_uniform_indices.find(sampler_name) != m_uniform_indices.end());
     SDL_assert(m_uniform_indices[sampler_name] < m_uniform_descriptions.size());
-    SDL_assert(m_uniform_descriptions[m_uniform_indices[sampler_name]].type ==
-               GL_SAMPLER_CUBE);
-    SetTexture(m_uniform_descriptions[m_uniform_indices[sampler_name]]
-                   .base_texture_unit,
-               texture);
+    SDL_assert(m_uniform_descriptions[m_uniform_indices[sampler_name]].type == GL_SAMPLER_CUBE);
+    SetTexture(m_uniform_descriptions[m_uniform_indices[sampler_name]].base_texture_unit, texture);
   }
 
   inline void SetTexture(const std::size_t sampler_index, Texture* texture) {
@@ -186,14 +172,11 @@ class UniformBuffer : public GraphicsResource {
   std::vector<GLbyte> m_uniform_buffer;
   std::vector<Texture*> m_textures;
 
-  inline void* GetUniformBufferPointer(std::size_t offset) {
-    return m_uniform_buffer.data() + offset;
-  }
+  inline void* GetUniformBufferPointer(std::size_t offset) { return m_uniform_buffer.data() + offset; }
 
   inline void* GetUniformPointer(std::size_t uniform_index) {
     SDL_assert(uniform_index < m_uniform_descriptions.size());
-    return GetUniformBufferPointer(
-        m_uniform_descriptions[uniform_index].offset);
+    return GetUniformBufferPointer(m_uniform_descriptions[uniform_index].offset);
   }
 
   void Bind();

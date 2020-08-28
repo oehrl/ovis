@@ -1,14 +1,11 @@
-#include <cassert>
-
 #include <algorithm>
+#include <cassert>
 
 #include <ovis/core/log.hpp>
 #include <ovis/core/profiling.hpp>
-
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/texture2d.hpp>
-
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -17,29 +14,24 @@ namespace ovis {
 std::vector<Window*> Window::all_windows_;
 
 Window::Window(const WindowDescription& desc)
-    : sdl_window_(
-          SDL_CreateWindow(desc.title.c_str(), SDL_WINDOWPOS_UNDEFINED,
-                           SDL_WINDOWPOS_UNDEFINED, desc.width, desc.height,
-                           SDL_WINDOW_OPENGL)),
+    : sdl_window_(SDL_CreateWindow(desc.title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, desc.width,
+                                   desc.height, SDL_WINDOW_OPENGL)),
       id_(SDL_GetWindowID(sdl_window_)),
       graphics_context_(sdl_window_),
       scene_() {
   assert(sdl_window_ != nullptr);
   all_windows_.push_back(this);
-  
+
   resource_manager_.RegisterFileLoader(
-      ".texture2d", std::bind(&ovis::LoadTexture2D, &graphics_context_,
-                              std::placeholders::_1, std::placeholders::_2,
+      ".texture2d", std::bind(&ovis::LoadTexture2D, &graphics_context_, std::placeholders::_1, std::placeholders::_2,
                               std::placeholders::_3, std::placeholders::_4));
 
   resource_manager_.RegisterFileLoader(
-      ".cubemap", std::bind(&ovis::LoadCubemap, &graphics_context_,
-                            std::placeholders::_1, std::placeholders::_2,
+      ".cubemap", std::bind(&ovis::LoadCubemap, &graphics_context_, std::placeholders::_1, std::placeholders::_2,
                             std::placeholders::_3, std::placeholders::_4));
 
   resource_manager_.RegisterFileLoader(
-      ".shader", std::bind(&ovis::LoadShaderProgram, &graphics_context_,
-                           std::placeholders::_1, std::placeholders::_2,
+      ".shader", std::bind(&ovis::LoadShaderProgram, &graphics_context_, std::placeholders::_1, std::placeholders::_2,
                            std::placeholders::_3, std::placeholders::_4));
 
   for (const auto& search_path : desc.resource_search_paths) {

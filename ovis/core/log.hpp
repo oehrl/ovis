@@ -23,15 +23,11 @@ static const char LOG_LEVEL_CHARS[] = {'V', 'D', 'I', 'W', 'E'};
 class Log {
  public:
   template <typename... T>
-  static inline void Write(LogLevel level, std::string_view format_string,
-                           T&&... args) {
+  static inline void Write(LogLevel level, std::string_view format_string, T&&... args) {
     std::ostringstream format_buffer;
-    const char log_level_char =
-        detail::LOG_LEVEL_CHARS[static_cast<int>(level)];
-    fmt::format_to(std::ostream_iterator<char>(format_buffer),
-                   "{}: ", log_level_char);
-    fmt::format_to(std::ostream_iterator<char>(format_buffer), format_string,
-                   std::forward<T>(args)...);
+    const char log_level_char = detail::LOG_LEVEL_CHARS[static_cast<int>(level)];
+    fmt::format_to(std::ostream_iterator<char>(format_buffer), "{}: ", log_level_char);
+    fmt::format_to(std::ostream_iterator<char>(format_buffer), format_string, std::forward<T>(args)...);
 
     std::string formatted_string = format_buffer.str();
     for (auto& listener : log_listeners_) {

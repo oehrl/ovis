@@ -1,7 +1,6 @@
 #pragma once
 
 #include <chrono>
-
 #include <memory>
 #include <string>
 #include <vector>
@@ -10,9 +9,7 @@
 
 #include <ovis/core/class.hpp>
 #include <ovis/core/resource_manager.hpp>
-
 #include <ovis/graphics/graphics_context.hpp>
-
 #include <ovis/engine/render_pass.hpp>
 #include <ovis/engine/render_pipeline.hpp>
 #include <ovis/engine/scene.hpp>
@@ -29,10 +26,8 @@ struct WindowDescription {
   int width = 1280;
   int height = 720;
   std::vector<std::string> resource_search_paths;
-  std::vector<std::string> render_passes =
-      RenderPass::GetRegisteredRenderPasses();
-  std::vector<std::string> scene_controllers =
-      SceneController::GetRegisteredControllers();
+  std::vector<std::string> render_passes = RenderPass::GetRegisteredRenderPasses();
+  std::vector<std::string> scene_controllers = SceneController::GetRegisteredControllers();
 };
 
 class Window : public Viewport {
@@ -42,9 +37,7 @@ class Window : public Viewport {
   Window(const WindowDescription& description);
   ~Window();
 
-  inline static const std::vector<Window*>& all_windows() {
-    return all_windows_;
-  }
+  inline static const std::vector<Window*>& all_windows() { return all_windows_; }
   inline static Window* GetWindowById(Uint32 id) {
     for (auto window : all_windows()) {
       if (window->id() == id) {

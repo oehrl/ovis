@@ -4,15 +4,12 @@
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
 #include <ovis/core/resource_manager.hpp>
-
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/texture2d.hpp>
 
 namespace ovis {
 
-Texture2D::Texture2D(GraphicsContext* context,
-                     const Texture2DDescription& description,
-                     const void* pixels)
+Texture2D::Texture2D(GraphicsContext* context, const Texture2DDescription& description, const void* pixels)
     : Texture(context), m_description(description) {
   Bind(0);
 
@@ -72,16 +69,12 @@ Texture2D::Texture2D(GraphicsContext* context,
                    static_cast<GLsizei>(description.width),
                    static_cast<GLsizei>(description.height));
 #else
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
-                 static_cast<GLsizei>(description.width),
-                 static_cast<GLsizei>(description.height), 0, source_format,
-                 source_type, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, static_cast<GLsizei>(description.width),
+                 static_cast<GLsizei>(description.height), 0, source_format, source_type, pixels);
 #endif
   } else {
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
-                 static_cast<GLsizei>(description.width),
-                 static_cast<GLsizei>(description.height), 0, source_format,
-                 source_type, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, static_cast<GLsizei>(description.width),
+                 static_cast<GLsizei>(description.height), 0, source_format, source_type, pixels);
   }
   if (description.mip_map_count != 1) {
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -91,14 +84,12 @@ Texture2D::Texture2D(GraphicsContext* context,
   GLenum mag_filter;
   switch (description.filter) {
     case TextureFilter::POINT:
-      min_filter = description.mip_map_count > 1 ? GL_NEAREST_MIPMAP_NEAREST
-                                                 : GL_NEAREST;
+      min_filter = description.mip_map_count > 1 ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST;
       mag_filter = GL_NEAREST;
       break;
 
     case TextureFilter::BILINEAR:
-      min_filter =
-          description.mip_map_count > 1 ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR;
+      min_filter = description.mip_map_count > 1 ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR;
       mag_filter = GL_LINEAR;
       break;
 
@@ -116,8 +107,8 @@ Texture2D::Texture2D(GraphicsContext* context,
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
 }
 
-void Texture2D::Write(std::size_t level, std::size_t x, std::size_t y,
-                      std::size_t width, std::size_t height, const void* data) {
+void Texture2D::Write(std::size_t level, std::size_t x, std::size_t y, std::size_t width, std::size_t height,
+                      const void* data) {
   Bind(0);
 
   GLenum source_format;
@@ -138,20 +129,16 @@ void Texture2D::Write(std::size_t level, std::size_t x, std::size_t y,
       break;
   }
 
-  glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLsizei>(level),
-                  static_cast<GLsizei>(x), static_cast<GLsizei>(y),
-                  static_cast<GLsizei>(width), static_cast<GLsizei>(height),
-                  source_format, source_type, data);
+  glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLsizei>(level), static_cast<GLsizei>(x), static_cast<GLsizei>(y),
+                  static_cast<GLsizei>(width), static_cast<GLsizei>(height), source_format, source_type, data);
 }
 
 void Texture2D::Bind(int texture_unit) {
   context()->BindTexture(GL_TEXTURE_2D, name(), texture_unit);
 }
 
-bool LoadTexture2D(GraphicsContext* graphics_context,
-                   ResourceManager* resource_manager,
-                   const nlohmann::json& parameters, const std::string& id,
-                   const std::string& directory) {
+bool LoadTexture2D(GraphicsContext* graphics_context, ResourceManager* resource_manager,
+                   const nlohmann::json& parameters, const std::string& id, const std::string& directory) {
   Texture2DDescription texture2d_desc;
   texture2d_desc.width = parameters["width"];
   texture2d_desc.height = parameters["height"];
@@ -179,12 +166,10 @@ bool LoadTexture2D(GraphicsContext* graphics_context,
     return false;
   }
 
-  auto file_content =
-      LoadBinaryFile(directory + "/" + parameters["data_file"].get<std::string>());
+  auto file_content = LoadBinaryFile(directory + "/" + parameters["data_file"].get<std::string>());
 
   if (file_content.has_value()) {
-    resource_manager->RegisterResource<Texture2D>(
-        id, graphics_context, texture2d_desc, file_content->data());
+    resource_manager->RegisterResource<Texture2D>(id, graphics_context, texture2d_desc, file_content->data());
     LogI("Sucessfully loaded texture: {}", id);
     return true;
   } else {

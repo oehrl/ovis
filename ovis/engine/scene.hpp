@@ -1,19 +1,16 @@
 #pragma once
 
 #include <chrono>
-
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include <SDL2/SDL_assert.h>
 #include <SDL2/SDL_events.h>
+#include <glm/vec2.hpp>
 #include <nlohmann/json.hh>
 
-#include <glm/vec2.hpp>
-
 #include <ovis/core/down_cast.hpp>
-
 #include <ovis/engine/camera.hpp>
 #include <ovis/engine/scene_object.hpp>
 
@@ -37,16 +34,13 @@ class Scene {
   inline Camera& camera() { return camera_; }
 
   inline ResourceManager* resource_manager() const { return resource_manager_; }
-  inline void SetResourceManager(ResourceManager* resource_manager) {
-    resource_manager_ = resource_manager;
-  }
+  inline void SetResourceManager(ResourceManager* resource_manager) { resource_manager_ = resource_manager; }
 
   void AddController(const std::string& id);
   void RemoveController(const std::string& id);
 
   template <typename ControllerType = SceneController>
-  inline ControllerType* GetController(
-      const std::string& controller_name) const {
+  inline ControllerType* GetController(const std::string& controller_name) const {
     static_assert(std::is_base_of<SceneController, ControllerType>::value, "");
     return down_cast<ControllerType>(GetControllerInternal(controller_name));
   }
@@ -57,17 +51,14 @@ class Scene {
   SceneObject* GetObject(const std::string& object_name);
   bool ContainsObject(const std::string& object_name);
 
-  void GetObjects(std::vector<SceneObject*>* scene_objects,
-                  bool sort_by_name = false) const;
+  void GetObjects(std::vector<SceneObject*>* scene_objects, bool sort_by_name = false) const;
   inline std::vector<SceneObject*> GetObjects(bool sort_by_name = false) const {
     std::vector<SceneObject*> objects;
     GetObjects(&objects, sort_by_name);
     return objects;
   }
 
-  void GetSceneObjectsWithComponent(
-      const std::string& component_id,
-      std::vector<SceneObject*>* scene_objects) const;
+  void GetSceneObjectsWithComponent(const std::string& component_id, std::vector<SceneObject*>* scene_objects) const;
 
   inline std::vector<SceneObject*> GetSceneObjectsWithComponent(const std::string& component_id) const {
     std::vector<SceneObject*> scene_objects;
@@ -88,18 +79,12 @@ class Scene {
 
  private:
   void SortControllers();
-  SceneController* GetControllerInternal(
-      const std::string& controller_name) const;
+  SceneController* GetControllerInternal(const std::string& controller_name) const;
 
-  virtual bool BeforeEventProcessing(const SDL_Event& /*event*/) {
-    return false;
-  }
-  virtual bool AfterEventProcessing(const SDL_Event& /*event*/) {
-    return false;
-  }
+  virtual bool BeforeEventProcessing(const SDL_Event& /*event*/) { return false; }
+  virtual bool AfterEventProcessing(const SDL_Event& /*event*/) { return false; }
 
-  std::unordered_map<std::string, std::unique_ptr<SceneController>>
-      controllers_;
+  std::unordered_map<std::string, std::unique_ptr<SceneController>> controllers_;
   std::vector<SceneController*> controller_order_;
   bool controllers_sorted_ = false;
 

@@ -6,21 +6,36 @@ AlignConsecutiveAssignments: false
 FixNamespaceComments: true
 Cpp11BracedListStyle: true
 AllowShortFunctionsOnASingleLine: Inline
+ColumnLimit: 120
+IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '<ovis/core\.*'
-    Priority:        5
-  - Regex:           '<ovis/graphics\.*'
-    Priority:        6
-  - Regex:           '<ovis/scene\.*'
-    Priority:        7
-  - Regex:           '<ovis/engine\.*'
-    Priority:        8
-  - Regex:           '\.hpp'
-    Priority:        4
-  - Regex:           '\.h'
+
+  - Regex:           '^<ovis\/core'
     Priority:        3
-  - Regex:           '<c\.*'
-    Priority:        1
-  - Regex:           '\.*'
+
+  - Regex:           '^<ovis\/math'
+    Priority:        3
+    SortPriority:    4
+
+  - Regex:           '^<ovis\/graphics'
+    Priority:        3
+    SortPriority:    5
+
+  - Regex:           '^<ovis\/audio'
+    Priority:        3
+    SortPriority:    6
+
+  - Regex:           '^<ovis\/engine'
+    Priority:        3
+    SortPriority:    7
+
+  - Regex:           '^<ovis\/scripting'
+    Priority:        3
+    SortPriority:    8
+
+  - Regex:           '\.(hpp|hh|h)>$'
     Priority:        2
+
+  - Regex:           '.*'
+    Priority:        1
 ...

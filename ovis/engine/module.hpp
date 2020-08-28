@@ -1,8 +1,7 @@
 #pragma once
 
-#include <chrono>
-
 #include <algorithm>
+#include <chrono>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -38,18 +37,16 @@ class Module {
   // virtual void BeforeRendering() {}
   // virtual void AfterRendering() {}
 
-  virtual std::unique_ptr<RenderPass> CreateRenderPass(
-      const std::string& id, RenderPipeline* render_pipeline) {
+  virtual std::unique_ptr<RenderPass> CreateRenderPass(const std::string& id, RenderPipeline* render_pipeline) {
     return nullptr;
   }
 
-  virtual std::unique_ptr<SceneController> CreateSceneController(
-      const std::string& id, Scene* scene) {
+  virtual std::unique_ptr<SceneController> CreateSceneController(const std::string& id, Scene* scene) {
     return nullptr;
   }
 
-  virtual std::unique_ptr<SceneObjectComponent> CreateSceneObjectComponent(
-      const std::string& id, SceneObject* scene_object) {
+  virtual std::unique_ptr<SceneObjectComponent> CreateSceneObjectComponent(const std::string& id,
+                                                                           SceneObject* scene_object) {
     return nullptr;
   }
 

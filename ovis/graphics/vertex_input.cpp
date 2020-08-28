@@ -6,12 +6,10 @@
 
 namespace ovis {
 
-VertexInput::VertexInput(GraphicsContext* context,
-                         const VertexInputDescription& description)
+VertexInput::VertexInput(GraphicsContext* context, const VertexInputDescription& description)
     : GraphicsResource(context), m_description(description) {
   for (const auto& vertex_attribute : description.vertex_attributes) {
-    SDL_assert(vertex_attribute.buffer_index <
-               description.vertex_buffers.size());
+    SDL_assert(vertex_attribute.buffer_index < description.vertex_buffers.size());
   }
 
   m_attribute_gl_descriptions.resize(context->m_caps.max_vertex_attribs);
@@ -22,12 +20,10 @@ VertexInput::VertexInput(GraphicsContext* context,
   for (const auto& vertex_attribute : m_description.vertex_attributes) {
     // GLint location = m_description.shader_program->GetAttributeLocation(
     //     vertex_attribute.name);
-    VertexBuffer* vertex_buffer =
-        m_description.vertex_buffers[vertex_attribute.buffer_index];
+    VertexBuffer* vertex_buffer = m_description.vertex_buffers[vertex_attribute.buffer_index];
 
     auto& attribute = m_attribute_gl_descriptions[vertex_attribute.location];
-    attribute.offset =
-        reinterpret_cast<const GLvoid*>(vertex_attribute.offset_in_bytes);
+    attribute.offset = reinterpret_cast<const GLvoid*>(vertex_attribute.offset_in_bytes);
     attribute.stride = vertex_buffer->description().vertex_size_in_bytes;
     attribute.array_buffer = vertex_buffer->name();
 
@@ -262,8 +258,7 @@ void VertexInput::Bind() {
         glBindBuffer(GL_ARRAY_BUFFER, gl_desc->array_buffer);
         context()->m_bound_array_buffer = gl_desc->array_buffer;
       }
-      glVertexAttribPointer(gl_desc.index(), gl_desc->size, gl_desc->type,
-                            gl_desc->normalized, gl_desc->stride,
+      glVertexAttribPointer(gl_desc.index(), gl_desc->size, gl_desc->type, gl_desc->normalized, gl_desc->stride,
                             gl_desc->offset);
       context()->EnableVertexAttribArray(gl_desc.index());
     } else {

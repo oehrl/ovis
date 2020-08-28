@@ -2,7 +2,6 @@
 
 #include <chrono>
 #include <cstddef>
-
 #include <fstream>
 #include <string>
 #include <vector>
@@ -37,10 +36,8 @@ class ProfilingLog final {
 
   void AddProfiler(Profiler* profiler);
   void RemoveProfiler(Profiler* profiler);
-  void Write(std::uint64_t frame_id, const std::string& profiler_id,
-             double measurement_value, const std::string& unit);
-  void Write(const std::string& profiler_id, double measurement_value,
-             const std::string& unit);
+  void Write(std::uint64_t frame_id, const std::string& profiler_id, double measurement_value, const std::string& unit);
+  void Write(const std::string& profiler_id, double measurement_value, const std::string& unit);
 };
 
 class Profiler {
@@ -52,7 +49,7 @@ class Profiler {
 
   inline const std::string& id() const { return id_; }
   inline const std::string& unit() const { return unit_; }
-  
+
   void ExtractLastMeasurements(double* buffer, size_t buffer_size, size_t* extracted_value_count);
 
  protected:

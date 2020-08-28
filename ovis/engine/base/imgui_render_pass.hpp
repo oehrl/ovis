@@ -1,17 +1,14 @@
 #include <memory>
 
+#include <glm/vec2.hpp>
 #include <imgui.h>
 
-#include <glm/vec2.hpp>
-
 #include <ovis/core/resource.hpp>
-
 #include <ovis/graphics/index_buffer.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/texture2d.hpp>
 #include <ovis/graphics/vertex_buffer.hpp>
 #include <ovis/graphics/vertex_input.hpp>
-
 #include <ovis/engine/render_pass.hpp>
 
 namespace ovis {

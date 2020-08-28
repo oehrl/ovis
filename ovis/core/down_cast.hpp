@@ -16,8 +16,7 @@ inline DestType* down_cast(SourceType* pointer) {
 }
 
 template <typename DestType, typename SourceType>
-inline std::shared_ptr<DestType> down_cast(
-    const std::shared_ptr<SourceType>& pointer) {
+inline std::shared_ptr<DestType> down_cast(const std::shared_ptr<SourceType>& pointer) {
 #if OVIS_USE_DYNAMIC_CAST
   return std::dynamic_pointer_cast<DestType>(pointer);
 #else
@@ -26,8 +25,7 @@ inline std::shared_ptr<DestType> down_cast(
 }
 
 template <typename DestType, typename SourceType>
-inline std::shared_ptr<DestType> down_cast(
-    std::shared_ptr<SourceType>&& pointer) {
+inline std::shared_ptr<DestType> down_cast(std::shared_ptr<SourceType>&& pointer) {
 #if OVIS_USE_DYNAMIC_CAST
   return std::dynamic_pointer_cast<DestType>(std::move(pointer));
 #else

@@ -6,8 +6,7 @@ namespace ovis {
 
 size_t Log::AddListener(LogListener listener) {
   auto insert_position =
-      std::find_if(log_listeners_.begin(), log_listeners_.end(),
-                   [](const auto& listener) { return !listener; });
+      std::find_if(log_listeners_.begin(), log_listeners_.end(), [](const auto& listener) { return !listener; });
   auto position = log_listeners_.insert(insert_position, listener);
   return position - log_listeners_.begin();
 }

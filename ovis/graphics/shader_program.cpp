@@ -6,17 +6,13 @@
 #include <ovis/core/log.hpp>
 #include <ovis/core/range.hpp>
 #include <ovis/core/resource_manager.hpp>
-
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/shader_program.hpp>
 
 namespace ovis {
 
-ShaderProgram::ShaderProgram(GraphicsContext* context,
-                             const ShaderProgramDescription& description)
-    : GraphicsResource(context),
-      m_description(description),
-      m_program_name(glCreateProgram()) {
+ShaderProgram::ShaderProgram(GraphicsContext* context, const ShaderProgramDescription& description)
+    : GraphicsResource(context), m_description(description), m_program_name(glCreateProgram()) {
   AttachShader(description.vertex_shader_source, GL_VERTEX_SHADER);
   AttachShader(description.fragment_shader_source, GL_FRAGMENT_SHADER);
 
@@ -31,31 +27,27 @@ ShaderProgram::ShaderProgram(GraphicsContext* context,
     glGetProgramiv(m_program_name, GL_ACTIVE_ATTRIBUTES, &num_attributes);
 
     GLint max_attribute_name_length = 0;
-    glGetProgramiv(m_program_name, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
-                   &max_attribute_name_length);
+    glGetProgramiv(m_program_name, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_attribute_name_length);
 
     std::vector<GLchar> attribute_name_buffer(max_attribute_name_length, '\0');
 
     for (auto i : IRange(num_attributes)) {
       GLint size = 0;
       GLenum type;
-      glGetActiveAttrib(m_program_name, i, max_attribute_name_length, nullptr,
-                        &size, &type, attribute_name_buffer.data());
+      glGetActiveAttrib(m_program_name, i, max_attribute_name_length, nullptr, &size, &type,
+                        attribute_name_buffer.data());
 
-      GLint attribute_location =
-          glGetAttribLocation(m_program_name, attribute_name_buffer.data());
+      GLint attribute_location = glGetAttribLocation(m_program_name, attribute_name_buffer.data());
 
       // Internal attributes (e.g., VertexID) do not have an attribute location
       if (attribute_location >= 0) {
         m_attribute_names[attribute_location] = attribute_name_buffer.data();
-        m_attribute_locations[attribute_name_buffer.data()] =
-            attribute_location;
+        m_attribute_locations[attribute_name_buffer.data()] = attribute_location;
       }
     }
   }
 
-  m_uniform_buffer =
-      std::make_unique<UniformBuffer>(context, UniformBufferDescription{this});
+  m_uniform_buffer = std::make_unique<UniformBuffer>(context, UniformBufferDescription{this});
 }
 
 ShaderProgram::~ShaderProgram() {
@@ -67,8 +59,7 @@ ShaderProgram::~ShaderProgram() {
   glDeleteProgram(m_program_name);
 }
 
-void ShaderProgram::AttachShader(const std::string& source,
-                                 GLenum shader_type) {
+void ShaderProgram::AttachShader(const std::string& source, GLenum shader_type) {
   if (source.length() > 0) {
     GLuint shader = glCreateShader(shader_type);
     SDL_assert(shader != 0);
@@ -112,8 +103,7 @@ void ShaderProgram::AttachShader(const std::string& source,
       GLint info_log_length = 0;
       glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &info_log_length);
       std::vector<GLchar> info_log_buffer(info_log_length, '\0');
-      glGetShaderInfoLog(shader, info_log_length, nullptr,
-                         info_log_buffer.data());
+      glGetShaderInfoLog(shader, info_log_length, nullptr, info_log_buffer.data());
       LogE("{}", info_log_buffer.data());
     }
 
@@ -121,8 +111,7 @@ void ShaderProgram::AttachShader(const std::string& source,
   }
 }
 
-std::optional<std::size_t> ShaderProgram::GetAttributeLocation(
-    const std::string& attribute_name) {
+std::optional<std::size_t> ShaderProgram::GetAttributeLocation(const std::string& attribute_name) {
   auto attribute_iterator = m_attribute_locations.find("a_" + attribute_name);
   if (attribute_iterator == m_attribute_locations.end()) {
     return {};
@@ -139,14 +128,12 @@ void ShaderProgram::Bind() {
   m_uniform_buffer->Bind();
 }
 
-bool LoadShaderProgram(GraphicsContext* graphics_context,
-                       ResourceManager* resource_manager,
-                       const nlohmann::json& parameters, const std::string& id,
-                       const std::string& directory) {
+bool LoadShaderProgram(GraphicsContext* graphics_context, ResourceManager* resource_manager,
+                       const nlohmann::json& parameters, const std::string& id, const std::string& directory) {
   ShaderProgramDescription sp_desc;
 
-  const auto vertex_shader_source = LoadTextFile(
-      directory + "/" + parameters["vertex_shader_source"].get<std::string>());
+  const auto vertex_shader_source =
+      LoadTextFile(directory + "/" + parameters["vertex_shader_source"].get<std::string>());
 
   if (vertex_shader_source.has_value()) {
     sp_desc.vertex_shader_source = *vertex_shader_source;
@@ -155,8 +142,7 @@ bool LoadShaderProgram(GraphicsContext* graphics_context,
   }
 
   const auto fragment_shader_source =
-      LoadTextFile(directory + "/" +
-                   parameters["fragment_shader_source"].get<std::string>());
+      LoadTextFile(directory + "/" + parameters["fragment_shader_source"].get<std::string>());
   if (fragment_shader_source.has_value()) {
     sp_desc.fragment_shader_source = *fragment_shader_source;
   } else {
@@ -164,8 +150,7 @@ bool LoadShaderProgram(GraphicsContext* graphics_context,
   }
 
   if (vertex_shader_source.has_value() && fragment_shader_source.has_value()) {
-    resource_manager->RegisterResource<ShaderProgram>(id, graphics_context,
-                                                      sp_desc);
+    resource_manager->RegisterResource<ShaderProgram>(id, graphics_context, sp_desc);
     LogI("Sucessfully loaded shader program: {}", id);
     return true;
   } else {

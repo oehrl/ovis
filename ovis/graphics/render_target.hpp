@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/vec4.hpp>
+
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 #include <ovis/graphics/texture.hpp>

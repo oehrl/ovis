@@ -1,16 +1,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <ovis/core/range.hpp>
-
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/render_target.hpp>
 #include <ovis/graphics/render_target_configuration.hpp>
 
 namespace ovis {
 
-RenderTargetConfiguration::RenderTargetConfiguration(
-    GraphicsContext* context,
-    const RenderTargetConfigurationDescription& description)
+RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
+                                                     const RenderTargetConfigurationDescription& description)
     : GraphicsResource(context) {
   glGenFramebuffers(1, &m_frame_buffer);
 
@@ -18,8 +16,7 @@ RenderTargetConfiguration::RenderTargetConfiguration(
   draw_buffers_.reserve(description.color_attachments.size());
   for (auto color_attachment : IndexRange(description.color_attachments)) {
     if (color_attachment.value() != nullptr) {
-      color_attachment.value()->Attach(GL_COLOR_ATTACHMENT0 +
-                                       color_attachment.index());
+      color_attachment.value()->Attach(GL_COLOR_ATTACHMENT0 + color_attachment.index());
       width_ = color_attachment.value()->GetWidth();
       height_ = color_attachment.value()->GetHeight();
       draw_buffers_.push_back(GL_COLOR_ATTACHMENT0 + color_attachment.index());
@@ -48,8 +45,7 @@ RenderTargetConfiguration::~RenderTargetConfiguration() {
   }
 }
 
-void RenderTargetConfiguration::ClearColor(size_t color_attachment_index,
-                                           const glm::vec4& clear_color) {
+void RenderTargetConfiguration::ClearColor(size_t color_attachment_index, const glm::vec4& clear_color) {
   if (context()->scissoring_enabled_) {
     glDisable(GL_SCISSOR_TEST);
     context()->scissoring_enabled_ = false;
@@ -59,8 +55,7 @@ void RenderTargetConfiguration::ClearColor(size_t color_attachment_index,
   glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
   glClear(GL_COLOR_BUFFER_BIT);
 #else
-  glClearBufferfv(GL_COLOR, color_attachment_index,
-                  glm::value_ptr(clear_color));
+  glClearBufferfv(GL_COLOR, color_attachment_index, glm::value_ptr(clear_color));
 #endif
 }
 
@@ -82,9 +77,7 @@ void RenderTargetConfiguration::ClearDepth(float depth) {
 #endif
 }
 
-RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context,
-                                                     std::size_t width,
-                                                     std::size_t height)
+RenderTargetConfiguration::RenderTargetConfiguration(GraphicsContext* context, std::size_t width, std::size_t height)
     : GraphicsResource(context),
       m_frame_buffer(0),
       width_(width),

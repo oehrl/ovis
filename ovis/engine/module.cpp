@@ -1,7 +1,6 @@
 #include <cassert>
 
 #include <ovis/core/log.hpp>
-
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/render_pass.hpp>
 #include <ovis/engine/scene_controller.hpp>
@@ -26,9 +25,7 @@ void Module::RegisterSceneController(const std::string& id) {
 }
 
 void Module::RegisterSceneObjectComponent(const std::string& id) {
-  if (!SceneObjectComponent::factories()
-           ->insert(std::make_pair(id, this))
-           .second) {
+  if (!SceneObjectComponent::factories()->insert(std::make_pair(id, this)).second) {
     LogE("The scene object component '{}' was already registered", id);
   }
 }

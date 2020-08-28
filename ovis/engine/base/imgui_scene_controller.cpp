@@ -6,8 +6,7 @@
 
 namespace ovis {
 
-ImGuiSceneController::ImGuiSceneController(ImGuiContext* context)
-    : SceneController("ImGui"), context_(context) {
+ImGuiSceneController::ImGuiSceneController(ImGuiContext* context) : SceneController("ImGui"), context_(context) {
   ImGui::SetCurrentContext(context_);
 }
 

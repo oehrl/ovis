@@ -1,6 +1,5 @@
-#include <ctime>
-
 #include <algorithm>
+#include <ctime>
 #include <iomanip>
 #include <sstream>
 
@@ -11,9 +10,7 @@ namespace {
 std::string GetFilenameFriendlyCurrentTimeString() {
   std::time_t current_time = std::time(nullptr);
   std::stringstream stream;
-  stream << std::put_time(
-      std::localtime(&current_time),
-      "ovis-profiling_%Y-%m-%d_%H-%M-%S_%A_%d_%B_%H-%M.log");
+  stream << std::put_time(std::localtime(&current_time), "ovis-profiling_%Y-%m-%d_%H-%M-%S_%A_%d_%B_%H-%M.log");
   return stream.str();
 }
 
@@ -22,8 +19,8 @@ ProfilingLog default_profiling_log{GetFilenameFriendlyCurrentTimeString()};
 
 ProfilingLog::ProfilingLog(const std::string& filename, char delimiter)
     : profiling_log_(filename), delimiter_{delimiter} {
-  profiling_log_ << "Frame" << delimiter_ << "Profiler ID" << delimiter_
-                 << "Value" << delimiter_ << "Unit" << std::endl;
+  profiling_log_ << "Frame" << delimiter_ << "Profiler ID" << delimiter_ << "Value" << delimiter_ << "Unit"
+                 << std::endl;
 }
 
 ProfilingLog::~ProfilingLog() {
@@ -46,20 +43,19 @@ void ProfilingLog::RemoveProfiler(Profiler* profiler) {
   profilers_.erase(profiler_it);
 }
 
-void ProfilingLog::Write(std::uint64_t frame_id, const std::string& profiler_id,
-                         double measurement_value, const std::string& unit) {
-  profiling_log_ << frame_id << delimiter_ << profiler_id << delimiter_
-                 << measurement_value << delimiter_ << unit << '\n';
+void ProfilingLog::Write(std::uint64_t frame_id, const std::string& profiler_id, double measurement_value,
+                         const std::string& unit) {
+  profiling_log_ << frame_id << delimiter_ << profiler_id << delimiter_ << measurement_value << delimiter_ << unit
+                 << '\n';
   profiling_log_.flush();
 }
 
-void ProfilingLog::Write(const std::string& profiler_id,
-                         double measurement_value, const std::string& unit) {
+void ProfilingLog::Write(const std::string& profiler_id, double measurement_value, const std::string& unit) {
   Write(current_frame_id_, profiler_id, measurement_value, unit);
 }
 
-Profiler::Profiler(ProfilingLog* profiling_log, const std::string& id,
-                   const std::string& unit, size_t measurement_buffer_size)
+Profiler::Profiler(ProfilingLog* profiling_log, const std::string& id, const std::string& unit,
+                   size_t measurement_buffer_size)
     : id_(id), unit_(unit), profiling_log_(profiling_log) {
   profiling_log_->AddProfiler(this);
   measurement_points_.reserve(measurement_buffer_size);
@@ -79,8 +75,7 @@ void Profiler::AddMeasurement(double measurement) {
   AppendMeasurement(measurement);
 }
 
-void Profiler::ExtractLastMeasurements(double* buffer, size_t buffer_size,
-                                       size_t* extracted_value_count) {
+void Profiler::ExtractLastMeasurements(double* buffer, size_t buffer_size, size_t* extracted_value_count) {
   //     1st half    2nd half
   //  _______|_____  ___|__
   // |             ||      |
@@ -88,26 +83,23 @@ void Profiler::ExtractLastMeasurements(double* buffer, size_t buffer_size,
   //                  |
   //        index_of_oldest_measurement_
   // -> first: extract second half:
-  const size_t number_of_elements_in_second_half =
-      measurement_points_.size() - index_of_oldest_measurement_;
+  const size_t number_of_elements_in_second_half = measurement_points_.size() - index_of_oldest_measurement_;
   const size_t number_of_elements_to_extract_from_second_half =
       std::min(number_of_elements_in_second_half, buffer_size);
   memcpy(buffer, measurement_points_.data() + index_of_oldest_measurement_,
          number_of_elements_in_second_half * sizeof(double));
 
   // -> second: extract first half
-  const size_t remaining_buffer_size =
-      buffer_size - number_of_elements_to_extract_from_second_half;
+  const size_t remaining_buffer_size = buffer_size - number_of_elements_to_extract_from_second_half;
   const size_t number_of_elements_in_first_half = index_of_oldest_measurement_;
   const size_t number_of_elements_to_extract_from_first_half =
       std::min(number_of_elements_in_first_half, remaining_buffer_size);
-  memcpy(buffer + number_of_elements_to_extract_from_second_half,
-         measurement_points_.data(),
+  memcpy(buffer + number_of_elements_to_extract_from_second_half, measurement_points_.data(),
          number_of_elements_in_first_half * sizeof(double));
 
   if (extracted_value_count != nullptr) {
-    *extracted_value_count = number_of_elements_to_extract_from_second_half +
-                             number_of_elements_to_extract_from_first_half;
+    *extracted_value_count =
+        number_of_elements_to_extract_from_second_half + number_of_elements_to_extract_from_first_half;
   }
 }
 
@@ -124,7 +116,6 @@ void Profiler::AppendMeasurement(double measurement) {
 }
 
 CPUTimeProfiler::CPUTimeProfiler(const std::string& id)
-    : Profiler(ProfilingLog::default_log(), "CPU::" + id, "ms"),
-      measurement_started_(false) {}
+    : Profiler(ProfilingLog::default_log(), "CPU::" + id, "ms"), measurement_started_(false) {}
 
 }  // namespace ovis

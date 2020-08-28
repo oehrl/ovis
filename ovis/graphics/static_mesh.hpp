@@ -4,7 +4,6 @@
 #include <glm/vec3.hpp>
 
 #include <ovis/core/log.hpp>
-
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/index_buffer.hpp>
 #include <ovis/graphics/vertex_buffer.hpp>
@@ -23,13 +22,11 @@ struct StaticMeshDescription {
 
 template <typename VertexType, typename IndexType>
 class StaticMesh {
-  static_assert(std::is_same<IndexType, std::uint8_t>::value ||
-                std::is_same<IndexType, std::uint16_t>::value ||
+  static_assert(std::is_same<IndexType, std::uint8_t>::value || std::is_same<IndexType, std::uint16_t>::value ||
                 std::is_same<IndexType, std::uint32_t>::value);
 
  public:
-  StaticMesh(GraphicsContext* graphics_context,
-             StaticMeshDescription description);
+  StaticMesh(GraphicsContext* graphics_context, StaticMeshDescription description);
 
   inline const VertexType* vertices() const { return vertices_.data(); }
   inline VertexType* vertices() { return vertices_.data(); }
@@ -47,12 +44,11 @@ class StaticMesh {
   void Draw(ShaderProgram* shader_program);
   void Draw(DrawItem draw_configuration);
 
-  void DrawPart(ShaderProgram* shader_program, Uint32 start, Uint32 count,
-                Uint32 base_vertex = 0);
-  void DrawPart(DrawItem draw_configuration, Uint32 start, Uint32 count,
-                Uint32 base_vertex = 0);
+  void DrawPart(ShaderProgram* shader_program, Uint32 start, Uint32 count, Uint32 base_vertex = 0);
+  void DrawPart(DrawItem draw_configuration, Uint32 start, Uint32 count, Uint32 base_vertex = 0);
 
-      private : GraphicsContext* graphics_context_;
+ private:
+  GraphicsContext* graphics_context_;
   std::vector<VertexType> vertices_;
   std::vector<IndexType> indices_;
   std::unique_ptr<VertexBuffer> vertex_buffer_;
@@ -62,8 +58,7 @@ class StaticMesh {
 };
 
 template <typename VertexType, typename IndexType>
-StaticMesh<VertexType, IndexType>::StaticMesh(GraphicsContext* graphics_context,
-                                              StaticMeshDescription description)
+StaticMesh<VertexType, IndexType>::StaticMesh(GraphicsContext* graphics_context, StaticMeshDescription description)
     : graphics_context_(graphics_context),
       vertices_(description.vertex_count),
       indices_(description.index_count),
@@ -71,8 +66,7 @@ StaticMesh<VertexType, IndexType>::StaticMesh(GraphicsContext* graphics_context,
   VertexBufferDescription vb_desc;
   vb_desc.size_in_bytes = sizeof(VertexType) * description.vertex_count;
   vb_desc.vertex_size_in_bytes = sizeof(VertexType);
-  vertex_buffer_ = std::make_unique<VertexBuffer>(graphics_context, vb_desc,
-                                                  vertices_.data());
+  vertex_buffer_ = std::make_unique<VertexBuffer>(graphics_context, vb_desc, vertices_.data());
 
   VertexInputDescription vi_desc;
   vi_desc.vertex_attributes = description.vertex_attributes;
@@ -88,29 +82,24 @@ StaticMesh<VertexType, IndexType>::StaticMesh(GraphicsContext* graphics_context,
   } else if (sizeof(IndexType) == 4) {
     ib_desc.index_format = IndexFormat::UINT32;
   }
-  index_buffer_ =
-      std::make_unique<IndexBuffer>(graphics_context, ib_desc, indices_.data());
+  index_buffer_ = std::make_unique<IndexBuffer>(graphics_context, ib_desc, indices_.data());
 }
 
 template <typename VertexType, typename IndexType>
-void StaticMesh<VertexType, IndexType>::UpdateVertexBuffer(size_t start,
-                                                           size_t count) {
+void StaticMesh<VertexType, IndexType>::UpdateVertexBuffer(size_t start, size_t count) {
   SDL_assert(start + count <= vertices_.size());
   const size_t offset_in_bytes = start * sizeof(VertexType);
-  const size_t length_in_bytes =
-      (count > 0 ? count : vertices_.size()) * sizeof(VertexType);
+  const size_t length_in_bytes = (count > 0 ? count : vertices_.size()) * sizeof(VertexType);
   LogD("offset: {}", offset_in_bytes);
   LogD("length_in_bytes: {}", length_in_bytes);
   vertex_buffer_->Write(offset_in_bytes, length_in_bytes, &vertices_[start]);
 }
 
 template <typename VertexType, typename IndexType>
-void StaticMesh<VertexType, IndexType>::UpdateIndexBuffer(size_t start,
-                                                          size_t count) {
+void StaticMesh<VertexType, IndexType>::UpdateIndexBuffer(size_t start, size_t count) {
   SDL_assert(start + count <= indices_.size());
   const size_t offset_in_bytes = start * sizeof(IndexType);
-  const size_t length_in_bytes =
-      (count > 0 ? count : indices_.size()) * sizeof(IndexType);
+  const size_t length_in_bytes = (count > 0 ? count : indices_.size()) * sizeof(IndexType);
   LogD("offset: {}", offset_in_bytes);
   LogD("length_in_bytes: {}", length_in_bytes);
   index_buffer_->Write(offset_in_bytes, length_in_bytes, &indices_[start]);
@@ -127,8 +116,7 @@ void StaticMesh<VertexType, IndexType>::Draw(DrawItem draw_configuration) {
 }
 
 template <typename VertexType, typename IndexType>
-void StaticMesh<VertexType, IndexType>::DrawPart(ShaderProgram* shader_program,
-                                                 Uint32 start, Uint32 count,
+void StaticMesh<VertexType, IndexType>::DrawPart(ShaderProgram* shader_program, Uint32 start, Uint32 count,
                                                  Uint32 base_vertex) {
   DrawItem draw_item;
   draw_item.shader_program = shader_program;
@@ -136,8 +124,7 @@ void StaticMesh<VertexType, IndexType>::DrawPart(ShaderProgram* shader_program,
 }
 
 template <typename VertexType, typename IndexType>
-void StaticMesh<VertexType, IndexType>::DrawPart(DrawItem draw_configuration,
-                                                 Uint32 start, Uint32 count,
+void StaticMesh<VertexType, IndexType>::DrawPart(DrawItem draw_configuration, Uint32 start, Uint32 count,
                                                  Uint32 base_vertex) {
   draw_configuration.primitive_topology = description_.primitive_topology;
   draw_configuration.vertex_input = vertex_input();
@@ -157,8 +144,7 @@ template <VertexAttribute...>
 struct Vertex;
 
 template <VertexAttribute ATTRIBUTE, VertexAttribute... ATTRIBUTES>
-struct Vertex<ATTRIBUTE, ATTRIBUTES...> : public Vertex<ATTRIBUTE>,
-                                          public Vertex<ATTRIBUTES...> {};
+struct Vertex<ATTRIBUTE, ATTRIBUTES...> : public Vertex<ATTRIBUTE>, public Vertex<ATTRIBUTES...> {};
 
 template <>
 struct Vertex<VertexAttribute::POSITION2D> {
@@ -209,13 +195,11 @@ template <typename VertexType, typename IndexType>
 class SimpleMesh;
 
 template <typename IndexType, VertexAttribute... ATTRIBUTES>
-class SimpleMesh<Vertex<ATTRIBUTES...>, IndexType>
-    : public StaticMesh<Vertex<ATTRIBUTES...>, IndexType> {
+class SimpleMesh<Vertex<ATTRIBUTES...>, IndexType> : public StaticMesh<Vertex<ATTRIBUTES...>, IndexType> {
  public:
   SimpleMesh(GraphicsContext* context, const SimpleMeshDescription& description)
       : StaticMesh<Vertex<ATTRIBUTES...>, IndexType>(
-            context, {description.vertex_count, description.index_count,
-                      description.primitive_topology,
+            context, {description.vertex_count, description.index_count, description.primitive_topology,
                       GetVertexAttributesDescription({ATTRIBUTES...})}) {}
 };
 

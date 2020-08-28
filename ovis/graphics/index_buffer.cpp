@@ -3,15 +3,11 @@
 
 namespace ovis {
 
-IndexBuffer::IndexBuffer(GraphicsContext* context,
-                         const IndexBufferDescription& description,
-                         const void* index_data)
+IndexBuffer::IndexBuffer(GraphicsContext* context, const IndexBufferDescription& description, const void* index_data)
     : GraphicsBuffer(context), m_description(description) {
-  SDL_assert(description.index_format != IndexFormat::UINT16 ||
-             description.size_in_bytes % 2 == 0);
+  SDL_assert(description.index_format != IndexFormat::UINT16 || description.size_in_bytes % 2 == 0);
   Bind();
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, description.size_in_bytes, index_data,
-               GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, description.size_in_bytes, index_data, GL_STATIC_DRAW);
 
   switch (description.index_format) {
     case IndexFormat::UINT8:
@@ -38,11 +34,9 @@ IndexBuffer::~IndexBuffer() {
   }
 }
 
-void IndexBuffer::Write(std::size_t offset_in_bytes,
-                        std::size_t length_in_bytes, const void* index_data) {
+void IndexBuffer::Write(std::size_t offset_in_bytes, std::size_t length_in_bytes, const void* index_data) {
   Bind();
-  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset_in_bytes, length_in_bytes,
-                  index_data);
+  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset_in_bytes, length_in_bytes, index_data);
 }
 
 void IndexBuffer::Bind() {

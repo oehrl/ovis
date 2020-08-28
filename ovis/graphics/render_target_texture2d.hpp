@@ -12,8 +12,7 @@ struct RenderTargetTexture2DDescription {
 
 class RenderTargetTexture2D : public RenderTarget {
  public:
-  RenderTargetTexture2D(GraphicsContext* context,
-                        const RenderTargetTexture2DDescription& description);
+  RenderTargetTexture2D(GraphicsContext* context, const RenderTargetTexture2DDescription& description);
   virtual ~RenderTargetTexture2D() override = default;
 
   inline Texture2D* texture() { return &m_texture; }

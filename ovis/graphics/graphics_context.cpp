@@ -1,5 +1,4 @@
 #include <ovis/core/log.hpp>
-
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/index_buffer.hpp>
 #include <ovis/graphics/render_target_configuration.hpp>
@@ -45,8 +44,7 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
   SDL_assert(m_caps.num_texture_units >= 8);
   m_bound_textures.resize(m_caps.num_texture_units, 0);
 
-  glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
-                &m_caps.num_vertex_texture_units);
+  glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &m_caps.num_vertex_texture_units);
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -56,8 +54,7 @@ GraphicsContext::GraphicsContext(SDL_Window* window)
   LogD("SDL_GL_GetDrawableSize {}x{}", drawable_width, drawable_height);
   current_viewport_ = {0, 0, drawable_width, drawable_height};
 
-  m_default_render_target_configuration.reset(
-      new RenderTargetConfiguration(this, drawable_width, drawable_height));
+  m_default_render_target_configuration.reset(new RenderTargetConfiguration(this, drawable_width, drawable_height));
 
 #if !defined(__IPHONEOS__) && !defined(__EMSCRIPTEN__)
   GLuint vertex_array;
@@ -85,12 +82,10 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
   m_default_render_target_configuration->width_ = drawable_width;
   m_default_render_target_configuration->height_ = drawable_height;
 
-  auto targets = draw_item.render_target_configuration != nullptr
-                     ? draw_item.render_target_configuration
-                     : default_render_target_configuration();
+  auto targets = draw_item.render_target_configuration != nullptr ? draw_item.render_target_configuration
+                                                                  : default_render_target_configuration();
   targets->Bind();
-  if (targets->width() != current_viewport_.width ||
-      targets->height() != current_viewport_.height) {
+  if (targets->width() != current_viewport_.width || targets->height() != current_viewport_.height) {
     glViewport(0, 0, targets->width(), targets->height());
     current_viewport_.width = targets->width();
     current_viewport_.height = targets->height();
@@ -101,8 +96,7 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
       glEnable(GL_SCISSOR_TEST);
       scissoring_enabled_ = true;
       if (*draw_item.scissor_rect != current_scissor_rect_) {
-        glScissor(draw_item.scissor_rect->left, draw_item.scissor_rect->top,
-                  draw_item.scissor_rect->width,
+        glScissor(draw_item.scissor_rect->left, draw_item.scissor_rect->top, draw_item.scissor_rect->width,
                   draw_item.scissor_rect->height);
         current_scissor_rect_ = *draw_item.scissor_rect;
       }
@@ -125,15 +119,13 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
   if (draw_item.vertex_input != nullptr) {
     draw_item.vertex_input->Bind();
   }
-  const GLenum primitive_topology =
-      static_cast<GLenum>(draw_item.primitive_topology);
+  const GLenum primitive_topology = static_cast<GLenum>(draw_item.primitive_topology);
 
   if (draw_item.index_buffer == nullptr) {
 #ifdef DEBUG
     glValidateProgram(draw_item.shader_program->m_program_name);
     GLint validation_status = 0;
-    glGetProgramiv(draw_item.shader_program->m_program_name, GL_VALIDATE_STATUS,
-                   &validation_status);
+    glGetProgramiv(draw_item.shader_program->m_program_name, GL_VALIDATE_STATUS, &validation_status);
     SDL_assert(validation_status == GL_TRUE);
 #endif
 
@@ -144,23 +136,18 @@ void GraphicsContext::Draw(const DrawItem& draw_item) {
 #ifdef DEBUG
     glValidateProgram(draw_item.shader_program->m_program_name);
     GLint validation_status = 0;
-    glGetProgramiv(draw_item.shader_program->m_program_name, GL_VALIDATE_STATUS,
-                   &validation_status);
+    glGetProgramiv(draw_item.shader_program->m_program_name, GL_VALIDATE_STATUS, &validation_status);
     SDL_assert(validation_status == GL_TRUE);
 #endif
 
-    const GLenum index_type =
-        static_cast<GLenum>(draw_item.index_buffer->description().index_format);
-    const auto index_offset_in_bytes =
-        draw_item.start * draw_item.index_buffer->bytes_per_index();
+    const GLenum index_type = static_cast<GLenum>(draw_item.index_buffer->description().index_format);
+    const auto index_offset_in_bytes = draw_item.start * draw_item.index_buffer->bytes_per_index();
 #if !OVIS_EMSCRIPTEN
     glDrawElementsBaseVertex(primitive_topology, draw_item.count, index_type,
-                             reinterpret_cast<GLvoid*>(index_offset_in_bytes),
-                             draw_item.base_vertex);
+                             reinterpret_cast<GLvoid*>(index_offset_in_bytes), draw_item.base_vertex);
 #else
     SDL_assert(draw_item.base_vertex == 0);
-    glDrawElements(primitive_topology, draw_item.count, index_type,
-                   reinterpret_cast<GLvoid*>(index_offset_in_bytes));
+    glDrawElements(primitive_topology, draw_item.count, index_type, reinterpret_cast<GLvoid*>(index_offset_in_bytes));
 #endif
   }
 }

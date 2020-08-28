@@ -2,9 +2,9 @@
 #if OVIS_EMSCRIPTEN
 #include <emscripten.h>
 #endif
+#include <ovis/core/profiling.hpp>
 #include <ovis/engine/engine.hpp>
 #include <ovis/engine/window.hpp>
-#include <ovis/core/profiling.hpp>
 
 namespace ovis {
 
@@ -31,8 +31,7 @@ bool Update() {
   static auto time_point_of_last_update = high_resolution_clock::now();
 
   auto now = high_resolution_clock::now();
-  auto delta_time =
-      duration_cast<microseconds>(now - time_point_of_last_update);
+  auto delta_time = duration_cast<microseconds>(now - time_point_of_last_update);
   time_point_of_last_update += delta_time;
 
   if (!ProcessEvents()) {

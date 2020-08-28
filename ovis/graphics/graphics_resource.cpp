@@ -1,7 +1,7 @@
-#include <ovis/graphics/graphics_resource.hpp>
-
 #include <SDL2/SDL_assert.h>
+
 #include <ovis/graphics/graphics_context.hpp>
+#include <ovis/graphics/graphics_resource.hpp>
 
 namespace ovis {
 
@@ -10,8 +10,7 @@ GraphicsResource::~GraphicsResource() {
   context_->m_graphics_resources.erase(this);
 }
 
-GraphicsResource::GraphicsResource(GraphicsContext* context)
-    : context_(context) {
+GraphicsResource::GraphicsResource(GraphicsContext* context) : context_(context) {
   SDL_assert(context != nullptr);
   SDL_assert(context->m_graphics_resources.count(this) == 0);
   context->m_graphics_resources.insert(this);

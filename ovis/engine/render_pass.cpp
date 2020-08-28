@@ -29,10 +29,8 @@ void RenderPass::RenderAfter(const std::string& render_pass_name) {
   render_after_list_.insert(render_pass_name);
 }
 
-std::unordered_map<std::string, Module*>*
-RenderPass::factories() {
-  static std::unordered_map<std::string, Module*>* factories =
-      new std::unordered_map<std::string, Module*>();
+std::unordered_map<std::string, Module*>* RenderPass::factories() {
+  static std::unordered_map<std::string, Module*>* factories = new std::unordered_map<std::string, Module*>();
   return factories;
 }
 

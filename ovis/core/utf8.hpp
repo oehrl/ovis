@@ -1,8 +1,7 @@
 #pragma once
 
-#include <cctype>
-
 #include <algorithm>
+#include <cctype>
 #include <string>
 
 #include <ovis/core/log.hpp>

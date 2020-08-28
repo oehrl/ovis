@@ -7,7 +7,9 @@
 #include <typeindex>
 #include <typeinfo>
 #include <unordered_map>
+
 #include <nlohmann/json.hh>
+
 #include <ovis/core/down_cast.hpp>
 #include <ovis/core/file.hpp>
 #include <ovis/core/log.hpp>
@@ -18,13 +20,11 @@ namespace ovis {
 class ResourceManager;
 
 using ResourceLoadingFunction =
-    std::function<bool(ResourceManager*, const nlohmann::json&,
-                       const std::string&, const std::string&)>;
+    std::function<bool(ResourceManager*, const nlohmann::json&, const std::string&, const std::string&)>;
 
 class ResourceManager {
  public:
-  void RegisterFileLoader(const std::string& extension,
-                          const ResourceLoadingFunction& loading_function);
+  void RegisterFileLoader(const std::string& extension, const ResourceLoadingFunction& loading_function);
 
   template <typename T = ResourceBase>
   ResourcePointer<T> Load(const std::string& filename);
@@ -39,8 +39,7 @@ class ResourceManager {
 
  private:
   // std::mutex resources_mutex_;
-  std::unordered_multimap<std::string, ResourceLoadingFunction>
-      resource_loaders_;
+  std::unordered_multimap<std::string, ResourceLoadingFunction> resource_loaders_;
   std::unordered_map<std::string, std::shared_ptr<ResourceBase>> resources_;
   std::vector<std::string> search_paths_;
 };
@@ -75,11 +74,9 @@ ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
       nlohmann::json parameter_document = nlohmann::json::parse(resource_parameter_file);
 
       bool is_loaded = false;
-      for (auto it = resource_loaders.first;
-           it != resource_loaders.second && !is_loaded; ++it) {
+      for (auto it = resource_loaders.first; it != resource_loaders.second && !is_loaded; ++it) {
         const std::string resource_directory = ExtractDirectory(resource_path);
-        if (it->second(this, parameter_document, filename,
-                       resource_directory)) {
+        if (it->second(this, parameter_document, filename, resource_directory)) {
           is_loaded = true;
           break;
         }
@@ -97,8 +94,7 @@ ResourcePointer<T> ResourceManager::Load(const std::string& filename) {
 }
 
 template <typename T, typename... Args>
-bool ResourceManager::RegisterResource(const std::string& id,
-                                       Args&&... constructor_arguments) {
+bool ResourceManager::RegisterResource(const std::string& id, Args&&... constructor_arguments) {
   // std::lock_guard<std::mutex> lock(resources_mutex_);
   if (resources_.count(id) == 0) {
     auto resource = std::make_shared<Resource<T>>();
@@ -115,8 +111,7 @@ ResourcePointer<T> ResourceManager::GetResource(const std::string& id) {
   if (resource_iterator == resources_.end()) {
     return ResourcePointer<T>{};
   } else {
-    return ResourcePointer<T>{
-        down_cast<Resource<T>>(resource_iterator->second)};
+    return ResourcePointer<T>{down_cast<Resource<T>>(resource_iterator->second)};
   }
 }
 

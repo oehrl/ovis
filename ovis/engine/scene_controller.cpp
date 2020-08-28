@@ -3,7 +3,6 @@
 #include <SDL2/SDL_assert.h>
 
 #include <ovis/core/log.hpp>
-
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_controller.hpp>
 
@@ -18,8 +17,7 @@ SceneController::SceneController(const std::string& name)
 {
 }
 
-SceneController::~SceneController() {
-}
+SceneController::~SceneController() {}
 
 void SceneController::Update(std::chrono::microseconds /*delta_time*/) {}
 
@@ -44,10 +42,8 @@ void SceneController::UpdateAfter(const std::string& controller_name) {
   update_after_list_.insert(controller_name);
 }
 
-std::unordered_map<std::string, Module*>*
-SceneController::factories() {
-  static auto factories =
-      new std::unordered_map<std::string, Module*>();
+std::unordered_map<std::string, Module*>* SceneController::factories() {
+  static auto factories = new std::unordered_map<std::string, Module*>();
   return factories;
 }
 

@@ -7,7 +7,6 @@
 #include <nlohmann/json.hh>
 
 #include <ovis/core/class.hpp>
-
 #include <ovis/engine/scene_object_component.hpp>
 
 namespace ovis {
@@ -40,8 +39,7 @@ class SceneObject {
  private:
   Scene* scene_;
   std::string name_;
-  std::unordered_map<std::string, std::unique_ptr<SceneObjectComponent>>
-      components_;
+  std::unordered_map<std::string, std::unique_ptr<SceneObjectComponent>> components_;
 };
 
 }  // namespace ovis

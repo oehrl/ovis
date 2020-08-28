@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+
 #include <ovis/graphics/gl.hpp>
 #include <ovis/graphics/graphics_resource.hpp>
 
@@ -83,8 +84,7 @@ class VertexInput final : public GraphicsResource {
   };
 
  public:
-  VertexInput(GraphicsContext* context,
-              const VertexInputDescription& description);
+  VertexInput(GraphicsContext* context, const VertexInputDescription& description);
 
   virtual ~VertexInput() override;
 

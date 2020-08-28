@@ -3,7 +3,9 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
+
 #include <nlohmann/json.hh>
+
 #include <ovis/graphics/texture.hpp>
 
 namespace ovis {
@@ -22,17 +24,13 @@ class Texture2D : public Texture {
   friend class RenderTargetTexture2D;
 
  public:
-  Texture2D(GraphicsContext* context, const Texture2DDescription& description,
-            const void* pixels = nullptr);
+  Texture2D(GraphicsContext* context, const Texture2DDescription& description, const void* pixels = nullptr);
 
   void GenerateMipMaps();
 
-  void Write(std::size_t level, std::size_t x, std::size_t y, std::size_t width,
-             std::size_t height, const void* data);
+  void Write(std::size_t level, std::size_t x, std::size_t y, std::size_t width, std::size_t height, const void* data);
 
-  inline const Texture2DDescription& description() const {
-    return m_description;
-  }
+  inline const Texture2DDescription& description() const { return m_description; }
 
  private:
   Texture2DDescription m_description;
@@ -40,9 +38,7 @@ class Texture2D : public Texture {
   virtual void Bind(int texture_unit) override;
 };
 
-bool LoadTexture2D(GraphicsContext* graphics_context,
-                   ResourceManager* resource_manager,
-                   const nlohmann::json& parameters, const std::string& id,
-                   const std::string& directory);
+bool LoadTexture2D(GraphicsContext* graphics_context, ResourceManager* resource_manager,
+                   const nlohmann::json& parameters, const std::string& id, const std::string& directory);
 
 }  // namespace ovis

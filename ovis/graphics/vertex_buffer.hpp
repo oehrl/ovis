@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+
 #include <ovis/graphics/graphics_buffer.hpp>
 
 namespace ovis {
@@ -14,18 +15,13 @@ class VertexBuffer final : public GraphicsBuffer {
   friend class VertexInput;
 
  public:
-  VertexBuffer(GraphicsContext* context,
-               const VertexBufferDescription& description,
-               const void* vertex_data = nullptr);
+  VertexBuffer(GraphicsContext* context, const VertexBufferDescription& description, const void* vertex_data = nullptr);
 
   virtual ~VertexBuffer() override;
 
-  void Write(std::size_t offset_in_bytes, std::size_t length_in_bytes,
-             const void* vertex_data);
+  void Write(std::size_t offset_in_bytes, std::size_t length_in_bytes, const void* vertex_data);
 
-  inline const VertexBufferDescription& description() const {
-    return m_description;
-  }
+  inline const VertexBufferDescription& description() const { return m_description; }
 
  private:
   VertexBufferDescription m_description;
