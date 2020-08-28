@@ -1,0 +1,7 @@
+#pragma once
+
+namespace middleclass {
+
+static constexpr char const* SOURCE = R"(@MIDDLECLASS_SOURCE@)";
+
+}

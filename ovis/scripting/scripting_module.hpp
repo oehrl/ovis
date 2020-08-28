@@ -14,7 +14,7 @@ class ScriptingModule final : public Module {
   std::unique_ptr<SceneController> CreateSceneController(const std::string& scene_controller_id, Scene* scene) override;
 
  private:
-  sol::state sol_state_;
+  sol::state lua_;
 };
 
 }  // namespace ovis
