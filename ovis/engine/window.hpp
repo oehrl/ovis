@@ -55,7 +55,7 @@ class Window : public Viewport {
   void Resize(int width, int height);
 
   bool SendEvent(const SDL_Event& event);
-  void Update(std::chrono::microseconds delta_time);
+  virtual void Update(std::chrono::microseconds delta_time);
   void Render() override;
 
  private:
