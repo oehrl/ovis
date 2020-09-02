@@ -21,6 +21,7 @@ ScriptingModule::ScriptingModule() : Module("ScriptingModule") {
 ScriptingModule::~ScriptingModule() {}
 
 void ScriptingModule::AddSceneController(const std::string& id, const std::string& source) {
+  ovis::LogD("Scene controller '{}' source: {}", id, source);
   lua_.script(source);
   RegisterSceneController(id, [this, id](Scene*) { return std::make_unique<ScriptSceneController>(id, &lua_); });
   registered_scene_controllers_.insert(id);
@@ -28,6 +29,7 @@ void ScriptingModule::AddSceneController(const std::string& id, const std::strin
 
 void ScriptingModule::RemoveSceneController(const std::string& id) {
   if (registered_scene_controllers_.count(id) != 0) {
+    DeregisterSceneController(id);
     lua_[id] = sol::lua_nil;
     registered_scene_controllers_.erase(id);
   } else {
