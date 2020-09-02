@@ -45,9 +45,12 @@ void Scene::AddController(const std::string& scene_controller_id) {
 }
 
 void Scene::RemoveController(const std::string& id) {
-  // TODO: implement
-  SDL_assert(false && "RemoveSceneController not implemented");
-  LogE("RemoveSceneController not implemented");
+  const auto scene_controller = controllers_.find(id);
+  if (scene_controller == controllers_.end()) {
+    LogE("The scene coes not contain the controller '{}'", id);
+  } else {
+    controllers_.erase(scene_controller);
+  }
   controllers_sorted_ = false;
 }
 
