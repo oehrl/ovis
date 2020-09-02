@@ -34,6 +34,33 @@ void Module::RegisterSceneObjectComponent(const std::string& id,
 void Module::RegisterFileLoader(const std::string& extension,
                                 const ResourceLoadingFunction& resource_loading_function) {}
 
+void Module::DeregisterRenderPass(const std::string& id) {
+  const auto factory = render_pass_factory_functions()->find(id);
+  if (factory == render_pass_factory_functions()->end()) {
+    LogE("The render pass '{}' was not registered!", id);
+  } else {
+    render_pass_factory_functions()->erase(factory);
+  }
+}
+
+void Module::DeregisterSceneController(const std::string& id) {
+  const auto factory = scene_controller_factory_functions()->find(id);
+  if (factory == scene_controller_factory_functions()->end()) {
+    LogE("The scene controller '{}' was not registered!", id);
+  } else {
+    scene_controller_factory_functions()->erase(factory);
+  }
+}
+
+void Module::DeregisterSceneObjectComponent(const std::string& id) {
+  const auto factory = scene_object_component_factory_functions()->find(id);
+  if (factory == scene_object_component_factory_functions()->end()) {
+    LogE("The scene object component '{}' was not registered!", id);
+  } else {
+    scene_object_component_factory_functions()->erase(factory);
+  }
+}
+
 std::map<std::string, Module::RenderPassFactoryFunction>* Module::render_pass_factory_functions() {
   static auto factory_functions = new std::map<std::string, RenderPassFactoryFunction>();
   return factory_functions;

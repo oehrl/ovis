@@ -47,6 +47,10 @@ class Module {
   void RegisterSceneObjectComponent(const std::string& id, const SceneObjectComponentFactoryFunction& factory_function);
   void RegisterFileLoader(const std::string& extension, const ResourceLoadingFunction& resource_loading_function);
 
+  void DeregisterRenderPass(const std::string& id);
+  void DeregisterSceneController(const std::string& id);
+  void DeregisterSceneObjectComponent(const std::string& id);
+
  private:
   std::string name_;
 
