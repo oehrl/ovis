@@ -15,11 +15,9 @@ class RenderPipeline;
 class GraphicsContext;
 class ResourceManager;
 class Scene;
-class Module;
 
 class RenderPass {
   friend class RenderPipeline;
-  friend class Module;
 
  public:
   RenderPass(const std::string& name);
@@ -43,8 +41,6 @@ class RenderPass {
   void RenderAfter(const std::string& renderer_name);
 
  private:
-  static std::unordered_map<std::string, Module*>* factories();
-
   RenderPipeline* render_pipeline_ = nullptr;
   GraphicsContext* graphics_context_ = nullptr;
   ResourceManager* resource_manager_ = nullptr;

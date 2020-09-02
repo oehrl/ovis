@@ -53,38 +53,13 @@ BaseModule::BaseModule() : Module("BaseModule") {
   io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
   io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
-  RegisterRenderPass("ImGui");
-  RegisterSceneController("ImGui");
-  RegisterSceneObjectComponent("Transform2D");
+  RegisterRenderPass("ImGui", [this](RenderPipeline*) { return std::make_unique<ImGuiRenderPass>(context_); });
+  RegisterSceneController("ImGui", [this](Scene*) { return std::make_unique<ImGuiSceneController>(context_); });
+  RegisterSceneObjectComponent("Transform2D", [](SceneObject*) { return std::make_unique<Transform2DComponent>(); });
 }
 
 BaseModule::~BaseModule() {
   ImGui::DestroyContext(context_);
-}
-
-std::unique_ptr<RenderPass> BaseModule::CreateRenderPass(const std::string& render_pass_id, RenderPipeline*) {
-  if (render_pass_id == "ImGui") {
-    return std::make_unique<ImGuiRenderPass>(context_);
-  } else {
-    return nullptr;
-  }
-}
-
-std::unique_ptr<SceneController> BaseModule::CreateSceneController(const std::string& scene_controller_id, Scene*) {
-  if (scene_controller_id == "ImGui") {
-    return std::make_unique<ImGuiSceneController>(context_);
-  } else {
-    return nullptr;
-  }
-}
-
-std::unique_ptr<SceneObjectComponent> BaseModule::CreateSceneObjectComponent(const std::string& component_id,
-                                                                             SceneObject* scene_object) {
-  if (component_id == "Transform2D") {
-    return std::make_unique<Transform2DComponent>();
-  } else {
-    return nullptr;
-  }
 }
 
 }  // namespace ovis

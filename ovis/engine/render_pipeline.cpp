@@ -16,8 +16,8 @@ RenderPipeline::RenderPipeline(GraphicsContext* graphics_context, ResourceManage
 }
 
 void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
-  const auto render_pass_factory = RenderPass::factories()->find(render_pass_id);
-  if (render_pass_factory == RenderPass::factories()->end()) {
+  const auto render_pass_factory = Module::render_pass_factory_functions()->find(render_pass_id);
+  if (render_pass_factory == Module::render_pass_factory_functions()->end()) {
     LogE("Cannot find render pass '{}'", render_pass_id);
     return;
   }
@@ -27,7 +27,7 @@ void RenderPipeline::AddRenderPass(const std::string& render_pass_id) {
     return;
   }
 
-  auto render_pass = render_pass_factory->second->CreateRenderPass(render_pass_id, this);
+  auto render_pass = render_pass_factory->second(this);
   if (render_pass == nullptr) {
     LogE("Failed to create render pass '{}'", render_pass_id);
     return;

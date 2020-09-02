@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <map>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -22,41 +23,36 @@ class SceneObjectComponent;
 class Module {
   MAKE_NON_COPY_OR_MOVABLE(Module);
 
+  friend class RenderPass;
+  friend class RenderPipeline;
+  friend class Scene;
+  friend class SceneController;
+  friend class SceneObject;
+  friend class SceneObjectComponent;
+
  public:
   Module(const std::string& name);
   virtual ~Module();
 
   inline std::string name() const { return name_; }
 
-  // virtual void BeforeEventProcessing() {}
-  // virtual void AfterEventProcessing() {}
-
-  // virtual void BeforeUpdate() {}
-  // virtual void AfterUpdate() {}
-
-  // virtual void BeforeRendering() {}
-  // virtual void AfterRendering() {}
-
-  virtual std::unique_ptr<RenderPass> CreateRenderPass(const std::string& id, RenderPipeline* render_pipeline) {
-    return nullptr;
-  }
-
-  virtual std::unique_ptr<SceneController> CreateSceneController(const std::string& id, Scene* scene) {
-    return nullptr;
-  }
-
-  virtual std::unique_ptr<SceneObjectComponent> CreateSceneObjectComponent(const std::string& id,
-                                                                           SceneObject* scene_object) {
-    return nullptr;
-  }
+  using RenderPassFactoryFunction = std::function<std::unique_ptr<RenderPass>(RenderPipeline*)>;
+  using SceneControllerFactoryFunction = std::function<std::unique_ptr<SceneController>(Scene*)>;
+  using SceneObjectComponentFactoryFunction = std::function<std::unique_ptr<SceneObjectComponent>(SceneObject*)>;
+  using ResourceLoadingFunction = std::function<std::unique_ptr<SceneObjectComponent>()>;
 
  protected:
-  void RegisterRenderPass(const std::string& id);
-  void RegisterSceneController(const std::string& id);
-  void RegisterSceneObjectComponent(const std::string& id);
+  void RegisterRenderPass(const std::string& id, const RenderPassFactoryFunction& factory_function);
+  void RegisterSceneController(const std::string& id, const SceneControllerFactoryFunction& factory_function);
+  void RegisterSceneObjectComponent(const std::string& id, const SceneObjectComponentFactoryFunction& factory_function);
+  void RegisterFileLoader(const std::string& extension, const ResourceLoadingFunction& resource_loading_function);
 
  private:
   std::string name_;
+
+  static std::map<std::string, RenderPassFactoryFunction>* render_pass_factory_functions();
+  static std::map<std::string, SceneControllerFactoryFunction>* scene_controller_factory_functions();
+  static std::map<std::string, SceneObjectComponentFactoryFunction>* scene_object_component_factory_functions();
 };
 
 }  // namespace ovis

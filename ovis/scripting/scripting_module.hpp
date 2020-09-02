@@ -11,7 +11,8 @@ class ScriptingModule final : public Module {
   ScriptingModule();
   ~ScriptingModule() override;
 
-  std::unique_ptr<SceneController> CreateSceneController(const std::string& scene_controller_id, Scene* scene) override;
+  // std::unique_ptr<SceneController> CreateSceneController(const std::string& scene_controller_id, Scene* scene)
+  // override;
 
  private:
   sol::state lua_;

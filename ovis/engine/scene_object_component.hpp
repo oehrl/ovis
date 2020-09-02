@@ -10,15 +10,11 @@
 #include <nlohmann/json.hh>
 
 #include <ovis/core/class.hpp>
-#include <ovis/engine/module.hpp>
 
 namespace ovis {
 
 class SceneObjectComponent {
   MAKE_NON_COPY_OR_MOVABLE(SceneObjectComponent);
-
-  friend class Module;
-  friend class SceneObject;
 
  public:
   SceneObjectComponent() = default;
@@ -48,9 +44,6 @@ class SceneObjectComponent {
   virtual bool DrawEditorForProperty(const std::string& property_name);
 
   static std::vector<std::string> GetRegisteredComponents();
-
- private:
-  static std::unordered_map<std::string, Module*>* factories();
 };
 
 }  // namespace ovis

@@ -16,12 +16,10 @@
 namespace ovis {
 
 class Scene;
-class Module;
 
 class SceneController {
   MAKE_NON_COPY_OR_MOVABLE(SceneController);
   friend class Scene;
-  friend class Module;
 
  public:
   SceneController(const std::string& name);
@@ -44,8 +42,6 @@ class SceneController {
   void UpdateAfter(const std::string& controller_name);
 
  private:
-  static std::unordered_map<std::string, Module*>* factories();
-
   Scene* m_scene;
   std::string m_name;
   std::set<std::string> update_before_list_;

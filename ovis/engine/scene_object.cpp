@@ -1,6 +1,7 @@
 #include <SDL2/SDL_assert.h>
 
 #include <ovis/core/log.hpp>
+#include <ovis/engine/module.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_object.hpp>
 
@@ -17,12 +18,12 @@ SceneObjectComponent* SceneObject::AddComponent(const std::string& component_id)
     LogE("Object '{}' already has the component '{}'.", name_, component_id);
     return nullptr;
   } else {
-    auto factory = SceneObjectComponent::factories()->find(component_id);
-    if (factory == SceneObjectComponent::factories()->end()) {
+    auto factory = Module::scene_object_component_factory_functions()->find(component_id);
+    if (factory == Module::scene_object_component_factory_functions()->end()) {
       LogE("Component not registered: '{}'", component_id);
       return nullptr;
     } else {
-      auto component = factory->second->CreateSceneObjectComponent(component_id, this);
+      auto component = factory->second(this);
       SDL_assert(component != nullptr);
       return components_.insert(std::make_pair(component_id, std::move(component))).first->second.get();
     }

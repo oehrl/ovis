@@ -21,8 +21,8 @@ Scene::Scene() : m_is_paused(true) {}
 Scene::~Scene() {}
 
 void Scene::AddController(const std::string& scene_controller_id) {
-  const auto controller_factory = SceneController::factories()->find(scene_controller_id);
-  if (controller_factory == SceneController::factories()->end()) {
+  const auto controller_factory = Module::scene_controller_factory_functions()->find(scene_controller_id);
+  if (controller_factory == Module::scene_controller_factory_functions()->end()) {
     LogE("Cannot find scene controller '{}'", scene_controller_id);
     return;
   }
@@ -32,7 +32,7 @@ void Scene::AddController(const std::string& scene_controller_id) {
     return;
   }
 
-  auto controller = controller_factory->second->CreateSceneController(scene_controller_id, this);
+  auto controller = controller_factory->second(this);
   if (controller == nullptr) {
     LogE("Failed to create scene controller '{}'", scene_controller_id);
     return;

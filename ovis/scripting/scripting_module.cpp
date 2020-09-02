@@ -27,13 +27,13 @@ ScriptingModule::ScriptingModule() : Module("ScriptingModule") {
 
 ScriptingModule::~ScriptingModule() {}
 
-std::unique_ptr<SceneController> ScriptingModule::CreateSceneController(const std::string& scene_controller_id,
-                                                                        Scene*) {
-  if (scene_controller_id == "ExampleController") {
-    return std::make_unique<ScriptSceneController>(scene_controller_id, &lua_);
-  } else {
-    return nullptr;
-  }
-}
+// std::unique_ptr<SceneController> ScriptingModule::CreateSceneController(const std::string& scene_controller_id,
+//                                                                         Scene*) {
+//   if (scene_controller_id == "ExampleController") {
+//     return std::make_unique<ScriptSceneController>(scene_controller_id, &lua_);
+//   } else {
+//     return nullptr;
+//   }
+// }
 
 }  // namespace ovis
