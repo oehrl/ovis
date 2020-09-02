@@ -4,6 +4,7 @@
 #endif
 #include <ovis/core/profiling.hpp>
 #include <ovis/engine/engine.hpp>
+#include <ovis/engine/module.hpp>
 #include <ovis/engine/window.hpp>
 
 namespace ovis {
@@ -56,7 +57,31 @@ void EmscriptenUpdate() {
 }
 #endif  // OVIS_EMSCRIPTEN
 
+static std::map<std::type_index, std::unique_ptr<Module>> loaded_modules;
+
 }  // namespace
+
+namespace detail {
+
+Module* AddModule(std::type_index type, std::unique_ptr<Module> module) {
+  const auto loaded_module = loaded_modules.insert(std::make_pair(type, std::move(module)));
+  if (!loaded_module.second) {
+    ovis::LogE("Module '{}' already loaded!", type.name());
+  }
+  return loaded_module.second ? loaded_module.first->second.get() : nullptr;
+}
+
+Module* GetModule(std::type_index type) {
+  const auto module = loaded_modules.find(type);
+  if (module == loaded_modules.end()) {
+    ovis::LogW("Module '{}' not loaded!", type.name());
+    return nullptr;
+  } else {
+    return module->second.get();
+  }
+}
+
+}  // namespace detail
 
 void Init() {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
