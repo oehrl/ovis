@@ -62,15 +62,18 @@ void SceneObject::RemoveComponent(const std::string& component_id) {
 json SceneObject::Serialize() const {
   json serialized_object = json::object();
   for (const auto& component : components_) {
-    serialized_object["components"][component.first] = json::object();
+    serialized_object["components"][component.first] = component.second->Serialize();
   }
   return serialized_object;
 }
 
 void SceneObject::Deserialize(const json& serialized_object) {
   SDL_assert(serialized_object.is_object());
-  for (const auto& component : serialized_object) {
-    SDL_assert(component.is_string());
+  for (const auto& component : serialized_object["components"].items()) {
+    SDL_assert(std::find(SceneObjectComponent::GetRegisteredComponents().begin(),
+                         SceneObjectComponent::GetRegisteredComponents().end(),
+                         component.key()) != SceneObjectComponent::GetRegisteredComponents().end());
+    AddComponent(component.key())->Deserialize(component.value());
   }
 }
 

@@ -38,6 +38,7 @@ class Scene {
 
   void AddController(const std::string& id);
   void RemoveController(const std::string& id);
+  void ClearControllers();
 
   template <typename ControllerType = SceneController>
   inline ControllerType* GetController(const std::string& controller_name) const {
@@ -48,6 +49,7 @@ class Scene {
   SceneObject* CreateObject(const std::string& object_name);
   SceneObject* CreateObject(const std::string& object_name, const json& serialized_object);
   void DeleteObject(const std::string& object_name);
+  void ClearObjects();
   SceneObject* GetObject(const std::string& object_name);
   bool ContainsObject(const std::string& object_name);
 

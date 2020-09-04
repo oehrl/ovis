@@ -54,6 +54,11 @@ void Scene::RemoveController(const std::string& id) {
   InvalidateControllerOrder();
 }
 
+void Scene::ClearControllers() {
+  controllers_.clear();
+  InvalidateControllerOrder();
+}
+
 SceneObject* Scene::CreateObject(const std::string& object_name) {
   auto result = objects_.insert(std::make_pair(object_name, std::make_unique<SceneObject>(this, object_name)));
   SDL_assert(result.second);
@@ -69,6 +74,10 @@ SceneObject* Scene::CreateObject(const std::string& object_name, const json& ser
 void Scene::DeleteObject(const std::string& object_name) {
   SDL_assert(objects_.count(object_name) == 1);
   objects_.erase(object_name);
+}
+
+void Scene::ClearObjects() {
+  objects_.clear();
 }
 
 SceneObject* Scene::GetObject(const std::string& object_name) {
@@ -159,10 +168,44 @@ void Scene::DrawImGui() {
 }
 
 json Scene::Serialize() const {
-  return {};
+  json serialized_object = {{"version", {"0.1"}}};
+  auto& controllers = serialized_object["controllers"] = json::object();
+  for (const auto& controller : controllers_) {
+    controllers[controller.first] = json::object();
+  }
+
+  auto& objects = serialized_object["objects"] = json::object();
+  for (const auto& object : objects_) {
+    objects[object.first] = object.second->Serialize();
+  }
+
+  return serialized_object;
 }
 
-void Scene::Deserialize(const json& serialized_object) {}
+void Scene::Deserialize(const json& serialized_object) {
+  if (!serialized_object.contains("version") || serialized_object["version"] == "0.1") {
+    ovis::LogE("Invalid scene object. Version must be 0.1!");
+    return;
+  }
+
+  ClearControllers();
+  ClearObjects();
+
+  if (serialized_object.contains("controllers") && serialized_object["controllers"].is_object()) {
+    for (const auto& controller : serialized_object["controllers"].items()) {
+      SDL_assert(std::find(SceneController::GetRegisteredControllers().begin(),
+                           SceneController::GetRegisteredControllers().end(),
+                           controller.key()) != SceneController::GetRegisteredControllers().end());
+      AddController(controller.key());
+    }
+  }
+
+  if (serialized_object.contains("objects") && serialized_object["objects"].is_object()) {
+    for (const auto& object : serialized_object["objects"].items()) {
+      CreateObject(object.key(), object.value());
+    }
+  }
+}
 
 void Scene::Resume() {
   if (m_is_paused) {
