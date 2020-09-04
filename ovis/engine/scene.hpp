@@ -78,6 +78,7 @@ class Scene {
   void DrawImGui();
 
  private:
+  void InvalidateControllerOrder();
   void SortControllers();
   SceneController* GetControllerInternal(const std::string& controller_name) const;
 

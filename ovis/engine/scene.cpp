@@ -41,17 +41,17 @@ void Scene::AddController(const std::string& scene_controller_id) {
   auto insert_return_value = controllers_.insert(std::make_pair(scene_controller_id, std::move(controller)));
   SDL_assert(insert_return_value.second);
   insert_return_value.first->second->m_scene = this;
-  controllers_sorted_ = false;
+  InvalidateControllerOrder();
 }
 
 void Scene::RemoveController(const std::string& id) {
   const auto scene_controller = controllers_.find(id);
   if (scene_controller == controllers_.end()) {
-    LogE("The scene coes not contain the controller '{}'", id);
+    LogE("The scene does not contain the controller '{}'", id);
   } else {
     controllers_.erase(scene_controller);
   }
-  controllers_sorted_ = false;
+  InvalidateControllerOrder();
 }
 
 SceneObject* Scene::CreateObject(const std::string& object_name) {
@@ -162,6 +162,11 @@ void Scene::Resume() {
   if (m_is_paused) {
     m_is_paused = false;
   }
+}
+
+void Scene::InvalidateControllerOrder() {
+  controller_order_.clear();
+  controllers_sorted_ = false;
 }
 
 void Scene::SortControllers() {
