@@ -8,9 +8,9 @@
 #include <SDL2/SDL_assert.h>
 #include <SDL2/SDL_events.h>
 #include <glm/vec2.hpp>
-#include <nlohmann/json.hh>
 
 #include <ovis/core/down_cast.hpp>
+#include <ovis/core/json.hpp>
 #include <ovis/engine/camera.hpp>
 #include <ovis/engine/scene_object.hpp>
 
@@ -46,7 +46,7 @@ class Scene {
   }
 
   SceneObject* CreateObject(const std::string& object_name);
-  SceneObject* CreateObject(const std::string& object_name, const nlohmann::json& serialized_object);
+  SceneObject* CreateObject(const std::string& object_name, const json& serialized_object);
   void DeleteObject(const std::string& object_name);
   SceneObject* GetObject(const std::string& object_name);
   bool ContainsObject(const std::string& object_name);
@@ -76,6 +76,9 @@ class Scene {
   bool ProcessEvent(const SDL_Event& event);
 
   void DrawImGui();
+
+  json Serialize() const;
+  void Deserialize(const json& serialized_object);
 
  private:
   void InvalidateControllerOrder();

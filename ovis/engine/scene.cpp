@@ -60,7 +60,7 @@ SceneObject* Scene::CreateObject(const std::string& object_name) {
   return result.first->second.get();
 }
 
-SceneObject* Scene::CreateObject(const std::string& object_name, const nlohmann::json& serialized_object) {
+SceneObject* Scene::CreateObject(const std::string& object_name, const json& serialized_object) {
   auto object = CreateObject(object_name);
   object->Deserialize(serialized_object);
   return object;
@@ -157,6 +157,12 @@ void Scene::DrawImGui() {
     controller->DrawImGui();
   }
 }
+
+json Scene::Serialize() const {
+  return {};
+}
+
+void Scene::Deserialize(const json& serialized_object) {}
 
 void Scene::Resume() {
   if (m_is_paused) {

@@ -59,15 +59,15 @@ void SceneObject::RemoveComponent(const std::string& component_id) {
   }
 }
 
-nlohmann::json SceneObject::Serialize() const {
-  nlohmann::json serialized_object = nlohmann::json::object();
+json SceneObject::Serialize() const {
+  json serialized_object = json::object();
   for (const auto& component : components_) {
-    serialized_object["components"][component.first] = nlohmann::json::object();
+    serialized_object["components"][component.first] = json::object();
   }
   return serialized_object;
 }
 
-void SceneObject::Deserialize(const nlohmann::json& serialized_object) {
+void SceneObject::Deserialize(const json& serialized_object) {
   SDL_assert(serialized_object.is_object());
   for (const auto& component : serialized_object) {
     SDL_assert(component.is_string());

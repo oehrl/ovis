@@ -4,9 +4,8 @@
 #include <typeindex>
 #include <unordered_map>
 
-#include <nlohmann/json.hh>
-
 #include <ovis/core/class.hpp>
+#include <ovis/core/json.hpp>
 #include <ovis/engine/scene_object_component.hpp>
 
 namespace ovis {
@@ -33,8 +32,8 @@ class SceneObject {
   }
   void RemoveComponent(const std::string& component_id);
 
-  nlohmann::json Serialize() const;
-  void Deserialize(const nlohmann::json& serialized_object);
+  json Serialize() const;
+  void Deserialize(const json& serialized_object);
 
  private:
   Scene* scene_;

@@ -128,8 +128,8 @@ void ShaderProgram::Bind() {
   m_uniform_buffer->Bind();
 }
 
-bool LoadShaderProgram(GraphicsContext* graphics_context, ResourceManager* resource_manager,
-                       const nlohmann::json& parameters, const std::string& id, const std::string& directory) {
+bool LoadShaderProgram(GraphicsContext* graphics_context, ResourceManager* resource_manager, const json& parameters,
+                       const std::string& id, const std::string& directory) {
   ShaderProgramDescription sp_desc;
 
   const auto vertex_shader_source =

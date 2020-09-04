@@ -107,7 +107,7 @@ void Cubemap::Bind(int texture_unit) {
   context()->BindTexture(GL_TEXTURE_CUBE_MAP, name(), texture_unit);
 }
 
-bool LoadCubemap(GraphicsContext* graphics_context, ResourceManager* resource_manager, const nlohmann::json& parameters,
+bool LoadCubemap(GraphicsContext* graphics_context, ResourceManager* resource_manager, const json& parameters,
                  const std::string& id, const std::string& directory) {
   CubemapDescription cubemap_desc;
   cubemap_desc.width = parameters["width"];

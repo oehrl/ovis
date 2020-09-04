@@ -4,8 +4,7 @@
 #include <memory>
 #include <string>
 
-#include <nlohmann/json.hh>
-
+#include <ovis/core/json.hpp>
 #include <ovis/graphics/texture.hpp>
 
 namespace ovis {
@@ -38,7 +37,7 @@ class Texture2D : public Texture {
   virtual void Bind(int texture_unit) override;
 };
 
-bool LoadTexture2D(GraphicsContext* graphics_context, ResourceManager* resource_manager,
-                   const nlohmann::json& parameters, const std::string& id, const std::string& directory);
+bool LoadTexture2D(GraphicsContext* graphics_context, ResourceManager* resource_manager, const json& parameters,
+                   const std::string& id, const std::string& directory);
 
 }  // namespace ovis

@@ -137,8 +137,8 @@ void Texture2D::Bind(int texture_unit) {
   context()->BindTexture(GL_TEXTURE_2D, name(), texture_unit);
 }
 
-bool LoadTexture2D(GraphicsContext* graphics_context, ResourceManager* resource_manager,
-                   const nlohmann::json& parameters, const std::string& id, const std::string& directory) {
+bool LoadTexture2D(GraphicsContext* graphics_context, ResourceManager* resource_manager, const json& parameters,
+                   const std::string& id, const std::string& directory) {
   Texture2DDescription texture2d_desc;
   texture2d_desc.width = parameters["width"];
   texture2d_desc.height = parameters["height"];

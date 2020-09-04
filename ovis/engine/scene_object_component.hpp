@@ -7,9 +7,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <nlohmann/json.hh>
 
 #include <ovis/core/class.hpp>
+#include <ovis/core/json.hpp>
 
 namespace ovis {
 
@@ -37,8 +37,8 @@ class SceneObjectComponent {
   virtual PropertyValue GetProperty(const std::string& property_name) const = 0;
   virtual void SetProperty(const std::string& property_name, const PropertyValue& value) = 0;
 
-  virtual nlohmann::json Serialize() const;
-  virtual void Deserialize(const nlohmann::json& data);
+  virtual json Serialize() const;
+  virtual void Deserialize(const json& data);
 
   virtual bool DrawEditorForProperties();
   virtual bool DrawEditorForProperty(const std::string& property_name);

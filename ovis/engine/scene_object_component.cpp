@@ -7,8 +7,8 @@
 
 namespace ovis {
 
-nlohmann::json SceneObjectComponent::Serialize() const {
-  nlohmann::json document = nlohmann::json::object();
+json SceneObjectComponent::Serialize() const {
+  json document = json::object();
 
   const auto property_names = GetPropertyNames();
   for (const auto& property_name : property_names) {
@@ -66,7 +66,7 @@ nlohmann::json SceneObjectComponent::Serialize() const {
   return document;
 }
 
-void SceneObjectComponent::Deserialize(const nlohmann::json& data) {
+void SceneObjectComponent::Deserialize(const json& data) {
   for (const auto& property_name : GetPropertyNames()) {
     auto type = GetPropertyType(property_name);
     SDL_assert(data.contains(property_name));
