@@ -41,7 +41,7 @@ void Transform2DComponent::SetProperty(const std::string& property_name, const P
     transform_.SetRotation(glm::quat(1.0f, 0.0f, 0.0f, std::get<float>(value)));
   } else if (property_name == "Scale") {
     SDL_assert(std::holds_alternative<glm::vec2>(value));
-    transform_.SetScale(glm::vec3(std::get<glm::vec2>(value), 0.0));
+    transform_.SetScale(glm::vec3(std::get<glm::vec2>(value), 1.0));
   }
 }
 
