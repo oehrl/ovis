@@ -29,6 +29,7 @@ class SceneObjectComponent {
     VECTOR2,
     VECTOR3,
     VECTOR4,
+    COLOR,
   };
   using PropertyValue = std::variant<std::monostate, bool, std::string, int, float, glm::vec2, glm::vec3, glm::vec4>;
 

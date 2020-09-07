@@ -49,7 +49,9 @@ json SceneObjectComponent::Serialize() const {
         break;
       }
 
-      case PropertyType::VECTOR4: {
+      case PropertyType::VECTOR4:
+        [[fallthrough]];
+      case PropertyType::COLOR: {
         SDL_assert(std::holds_alternative<glm::vec4>(GetProperty(property_name)));
         const auto value = std::get<glm::vec4>(GetProperty(property_name));
         document[property_name] = {value.x, value.y, value.z, value.w};
@@ -122,6 +124,8 @@ void SceneObjectComponent::Deserialize(const json& data) {
         break;
 
       case PropertyType::VECTOR4:
+        [[fallthrough]];
+      case PropertyType::COLOR:
         if (value.is_array() && value.size() == 4) {
           SetProperty(property_name, glm::vec4(value[0], value[1], value[2], value[3]));
         } else {
@@ -130,8 +134,6 @@ void SceneObjectComponent::Deserialize(const json& data) {
         break;
 
       case PropertyType::UNDEFINED:
-        [[fallthrough]];
-      default:
         break;
     }
   }
@@ -206,9 +208,18 @@ bool SceneObjectComponent::DrawEditorForProperty(const std::string& property_nam
       return false;
     }
 
+    case PropertyType::COLOR: {
+      glm::vec4 value = std::get<glm::vec4>(GetProperty(property_name));
+      if (ImGui::ColorEdit4(property_name.c_str(), glm::value_ptr(value),
+                            ImGuiColorEditFlags_Float | ImGuiColorEditFlags_AlphaBar |
+                                ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_PickerHueWheel)) {
+        SetProperty(property_name, value);
+        return true;
+      }
+      return false;
+    }
+
     case PropertyType::UNDEFINED:
-      [[fallthrough]];
-    default:
       ImGui::Text("%s", property_name.c_str());
       return false;
   }
