@@ -15,7 +15,7 @@ namespace ovis {
 
 class RenderPass;
 class SceneController;
-class RenderPipeline;
+class Viewport;
 class Scene;
 class SceneObject;
 class SceneObjectComponent;
@@ -24,7 +24,7 @@ class Module {
   MAKE_NON_COPY_OR_MOVABLE(Module);
 
   friend class RenderPass;
-  friend class RenderPipeline;
+  friend class Viewport;
   friend class Scene;
   friend class SceneController;
   friend class SceneObject;
@@ -36,7 +36,7 @@ class Module {
 
   inline std::string name() const { return name_; }
 
-  using RenderPassFactoryFunction = std::function<std::unique_ptr<RenderPass>(RenderPipeline*)>;
+  using RenderPassFactoryFunction = std::function<std::unique_ptr<RenderPass>(Viewport*)>;
   using SceneControllerFactoryFunction = std::function<std::unique_ptr<SceneController>(Scene*)>;
   using SceneObjectComponentFactoryFunction = std::function<std::unique_ptr<SceneObjectComponent>(SceneObject*)>;
   using ResourceLoadingFunction = std::function<std::unique_ptr<SceneObjectComponent>()>;

@@ -53,7 +53,7 @@ BaseModule::BaseModule() : Module("BaseModule") {
   io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
   io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
-  RegisterRenderPass("ImGui", [this](RenderPipeline*) { return std::make_unique<ImGuiRenderPass>(context_); });
+  RegisterRenderPass("ImGui", [this](Viewport*) { return std::make_unique<ImGuiRenderPass>(context_); });
   RegisterSceneController("ImGui", [this](Scene*) { return std::make_unique<ImGuiSceneController>(context_); });
   RegisterSceneObjectComponent("Transform2D", [](SceneObject*) { return std::make_unique<Transform2DComponent>(); });
 }

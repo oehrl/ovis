@@ -11,19 +11,19 @@
 
 namespace ovis {
 
-class RenderPipeline;
+class Viewport;
 class GraphicsContext;
 class ResourceManager;
 class Scene;
 
 class RenderPass {
-  friend class RenderPipeline;
+  friend class Viewport;
 
  public:
   RenderPass(const std::string& name);
   virtual ~RenderPass() = default;
 
-  inline RenderPipeline* render_pipeline() const { return render_pipeline_; }
+  inline Viewport* viewport() const { return viewport_; }
   inline std::string name() const { return name_; }
   inline GraphicsContext* context() const { return graphics_context_; }
   inline ResourceManager* resource_manager() const { return resource_manager_; }
@@ -41,7 +41,7 @@ class RenderPass {
   void RenderAfter(const std::string& renderer_name);
 
  private:
-  RenderPipeline* render_pipeline_ = nullptr;
+  Viewport* viewport_ = nullptr;
   GraphicsContext* graphics_context_ = nullptr;
   ResourceManager* resource_manager_ = nullptr;
   std::string name_;

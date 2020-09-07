@@ -1,6 +1,5 @@
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/render_pass.hpp>
-#include <ovis/engine/render_pipeline.hpp>
 
 namespace ovis {
 

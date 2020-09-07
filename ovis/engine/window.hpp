@@ -11,7 +11,6 @@
 #include <ovis/core/resource_manager.hpp>
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/engine/render_pass.hpp>
-#include <ovis/engine/render_pipeline.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_controller.hpp>
 #include <ovis/engine/viewport.hpp>
@@ -50,13 +49,16 @@ class Window : public Viewport {
   inline Uint32 id() const { return id_; }
   inline bool is_open() const { return is_open_; }
   inline GraphicsContext* context() { return &graphics_context_; }
+  inline ResourceManager* resource_manager() { return &resource_manager_; }
+
+  RenderTargetConfiguration* GetDefaultRenderTargetConfiguration() override;
 
   glm::ivec2 GetSize() override;
   void Resize(int width, int height);
 
   bool SendEvent(const SDL_Event& event);
   virtual void Update(std::chrono::microseconds delta_time);
-  void Render() override;
+  void Render(bool render_gui = true) override;
 
  private:
   static std::vector<Window*> all_windows_;

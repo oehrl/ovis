@@ -41,9 +41,10 @@ Window::Window(const WindowDescription& desc)
     scene_.AddController(controller);
   }
 
-  InitializeRenderPipeline(&graphics_context_, &resource_manager_);
+  SetResourceManager(&resource_manager_);
+  SetGraphicsContext(&graphics_context_);
   for (const auto& render_pass : desc.render_passes) {
-    render_pipeline_->AddRenderPass(render_pass);
+    AddRenderPass(render_pass);
   }
 
   SetScene(&scene_);
@@ -56,6 +57,10 @@ Window::~Window() {
   all_windows_.pop_back();
 
   SDL_DestroyWindow(sdl_window_);
+}
+
+RenderTargetConfiguration* Window::GetDefaultRenderTargetConfiguration() {
+  return graphics_context_.default_render_target_configuration();
 }
 
 glm::ivec2 Window::GetSize() {
@@ -86,8 +91,8 @@ void Window::Update(std::chrono::microseconds delta_time) {
   scene_.AfterUpdate();
 }
 
-void Window::Render() {
-  Viewport::Render();
+void Window::Render(bool render_gui) {
+  Viewport::Render(render_gui);
   SDL_GL_SwapWindow(sdl_window_);
 }
 
