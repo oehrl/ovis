@@ -7,11 +7,11 @@
 namespace ovis {
 
 template <typename DestType, typename SourceType>
-inline DestType* down_cast(SourceType* pointer) {
+inline DestType down_cast(SourceType pointer) {
 #if OVIS_USE_DYNAMIC_CAST
-  return dynamic_cast<DestType*>(pointer);
+  return dynamic_cast<DestType>(pointer);
 #else
-  return static_cast<DestType*>(pointer);
+  return static_cast<DestType>(pointer);
 #endif
 }
 

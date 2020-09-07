@@ -43,7 +43,7 @@ class Scene {
   template <typename ControllerType = SceneController>
   inline ControllerType* GetController(const std::string& controller_name) const {
     static_assert(std::is_base_of<SceneController, ControllerType>::value, "");
-    return down_cast<ControllerType>(GetControllerInternal(controller_name));
+    return down_cast<ControllerType*>(GetControllerInternal(controller_name));
   }
 
   SceneObject* CreateObject(const std::string& object_name);
