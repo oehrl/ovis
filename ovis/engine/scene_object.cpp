@@ -34,15 +34,6 @@ bool SceneObject::HasComponent(const std::string& component_id) const {
   return components_.count(component_id) != 0;
 }
 
-SceneObjectComponent* SceneObject::GetComponent(const std::string& component_id) {
-  auto component = components_.find(component_id);
-  if (component == components_.end()) {
-    return nullptr;
-  } else {
-    return component->second.get();
-  }
-}
-
 void SceneObject::GetComponentIds(std::vector<std::string>* component_ids) const {
   SDL_assert(component_ids != nullptr);
 

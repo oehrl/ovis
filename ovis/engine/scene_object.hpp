@@ -23,7 +23,17 @@ class SceneObject {
 
   SceneObjectComponent* AddComponent(const std::string& component_id);
   bool HasComponent(const std::string& component_id) const;
-  SceneObjectComponent* GetComponent(const std::string& component_id);
+
+  template <typename ComponentType = SceneObjectComponent>
+  ComponentType* GetComponent(const std::string& component_id) {
+    auto component = components_.find(component_id);
+    if (component == components_.end()) {
+      return nullptr;
+    } else {
+      return down_cast<ComponentType*>(component->second.get());
+    }
+  }
+
   void GetComponentIds(std::vector<std::string>* component_ids) const;
   inline std::vector<std::string> GetComponentIds() const {
     std::vector<std::string> component_ids;
