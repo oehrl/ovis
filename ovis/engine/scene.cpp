@@ -101,8 +101,8 @@ void Scene::GetObjects(std::vector<SceneObject*>* scene_objects, bool sort_by_na
   }
 }
 
-inline void Scene::GetSceneObjectsWithComponent(const std::string& component_id,
-                                                std::vector<SceneObject*>* scene_objects) const {
+void Scene::GetSceneObjectsWithComponent(const std::string& component_id,
+                                         std::vector<SceneObject*>* scene_objects) const {
   SDL_assert(scene_objects != nullptr);
   scene_objects->clear();
 
