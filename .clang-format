@@ -29,7 +29,7 @@ IncludeCategories:
     Priority:        3
     SortPriority:    7
 
-  - Regex:           '^<ovis\/scripting'
+  - Regex:           '^<ovis\/rendering2d'
     Priority:        3
     SortPriority:    8
 

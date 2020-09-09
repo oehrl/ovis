@@ -8,10 +8,12 @@ add_library(
   camera.hpp camera.cpp
   scene_object_component.hpp scene_object_component.cpp
   scene_controller.hpp scene_controller.cpp
+  script_scene_controller.hpp script_scene_controller.cpp
   scene_object.hpp scene_object.cpp
   scene.hpp scene.cpp
   module.hpp module.cpp
   render_pass.hpp render_pass.cpp
+  lua.hpp lua.cpp
 
   base/base_module.hpp base/base_module.cpp
   base/imgui_render_pass.hpp base/imgui_render_pass.cpp
@@ -24,7 +26,9 @@ target_link_libraries(
     OvisCore
     OvisMath
     OvisGraphics
-    DearImGui
+    DearImGui    Lua
+    sol2_single
+    middleclass
 )
 add_custom_command(
   TARGET OvisEngine

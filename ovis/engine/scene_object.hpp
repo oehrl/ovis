@@ -45,6 +45,8 @@ class SceneObject {
   json Serialize() const;
   void Deserialize(const json& serialized_object);
 
+  static void RegisterToLua();
+
  private:
   Scene* scene_;
   std::string name_;

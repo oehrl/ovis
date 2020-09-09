@@ -28,6 +28,8 @@ class SceneController {
   inline Scene* scene() const { return m_scene; }
   inline std::string name() const { return m_name; }
 
+  virtual void Play() {}
+  virtual void Stop() {}
   virtual void BeforeUpdate() {}
   virtual void AfterUpdate() {}
   virtual void Update(std::chrono::microseconds delta_time);

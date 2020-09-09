@@ -6,6 +6,7 @@
 #include <ovis/graphics/cubemap.hpp>
 #include <ovis/graphics/shader_program.hpp>
 #include <ovis/graphics/texture2d.hpp>
+#include <ovis/engine/lua.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -86,6 +87,9 @@ bool Window::SendEvent(const SDL_Event& event) {
 }
 
 void Window::Update(std::chrono::microseconds delta_time) {
+  if (!scene_.is_playing()) {
+    scene_.Play();
+  }
   scene_.BeforeUpdate();
   scene_.Update(delta_time);
   scene_.AfterUpdate();

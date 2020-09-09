@@ -4,6 +4,7 @@
 #endif
 #include <ovis/core/profiling.hpp>
 #include <ovis/engine/engine.hpp>
+#include <ovis/engine/lua.hpp>
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/window.hpp>
 
@@ -85,6 +86,7 @@ Module* GetModule(std::type_index type) {
 
 void Init() {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+  Lua::SetupEnvironment();
 }
 
 void Run() {

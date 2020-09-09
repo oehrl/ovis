@@ -9,7 +9,8 @@ namespace ovis {
 
 Rendering2DModule::Rendering2DModule() : Module("Rendering2D") {
   RegisterRenderPass("SpriteRenderer", [](Viewport*) { return std::make_unique<SpriteRenderer>(); });
-  RegisterSceneObjectComponent("Sprite", [](SceneObject*) { return std::make_unique<SpriteComponent>(); });
+  RegisterSceneObjectComponent<SpriteComponent>("Sprite",
+                                                [](SceneObject*) { return std::make_unique<SpriteComponent>(); });
 }
 
 Rendering2DModule::~Rendering2DModule() {}

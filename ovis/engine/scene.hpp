@@ -30,7 +30,7 @@ class Scene {
   Scene();
   virtual ~Scene();
 
-  inline bool is_paused() const { return m_is_paused; }
+  inline bool is_playing() const { return is_playing_; }
   inline Camera& camera() { return camera_; }
 
   inline ResourceManager* resource_manager() const { return resource_manager_; }
@@ -68,12 +68,12 @@ class Scene {
     return scene_objects;
   }
 
+  void Play();
+  void Stop();
+
   void BeforeUpdate();
   void AfterUpdate();
   void Update(std::chrono::microseconds delta_time);
-
-  void Resume();
-  void Pause();
 
   bool ProcessEvent(const SDL_Event& event);
 
@@ -97,7 +97,7 @@ class Scene {
   std::unordered_map<std::string, std::unique_ptr<SceneObject>> objects_;
   ResourceManager* resource_manager_;
   Camera camera_;
-  bool m_is_paused;
+  bool is_playing_ = false;
 };
 
 }  // namespace ovis

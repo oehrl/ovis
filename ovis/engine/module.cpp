@@ -12,6 +12,11 @@ Module::Module(const std::string& name) : name_(name) {}
 
 Module::~Module() {}
 
+void Module::RegisterToLua() {
+  sol::usertype<SceneObjectComponentsWrapper> lua_type =
+      Lua::state.new_usertype<SceneObjectComponentsWrapper>("SceneObjectComponentsWrapper");
+}
+
 void Module::RegisterRenderPass(const std::string& id, const RenderPassFactoryFunction& factory_function) {
   if (!render_pass_factory_functions()->insert(std::make_pair(id, factory_function)).second) {
     LogE("The render pass '{}' was already registered", id);
@@ -23,16 +28,6 @@ void Module::RegisterSceneController(const std::string& id, const SceneControlle
     LogE("The scene controller '{}' was already registered", id);
   }
 }
-
-void Module::RegisterSceneObjectComponent(const std::string& id,
-                                          const SceneObjectComponentFactoryFunction& factory_function) {
-  if (!scene_object_component_factory_functions()->insert(std::make_pair(id, factory_function)).second) {
-    LogE("The scene object component '{}' was already registered", id);
-  }
-}
-
-void Module::RegisterFileLoader(const std::string& extension,
-                                const ResourceLoadingFunction& resource_loading_function) {}
 
 void Module::DeregisterRenderPass(const std::string& id) {
   const auto factory = render_pass_factory_functions()->find(id);

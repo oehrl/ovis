@@ -1,6 +1,7 @@
 #include <SDL2/SDL_assert.h>
 
 #include <ovis/core/log.hpp>
+#include <ovis/engine/lua.hpp>
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_object.hpp>
@@ -72,6 +73,14 @@ void SceneObject::Deserialize(const json& serialized_object) {
   } else {
     ovis::LogV("SceneObject deserialization: no 'components' property available!");
   }
+}
+
+void SceneObject::RegisterToLua() {
+  sol::usertype<SceneObject> scene_object_type =
+      Lua::state.new_usertype<SceneObject>("SceneObject", "name", sol::property(&SceneObject::name), "components",
+                                           sol::property(&Module::SceneObjectComponentsWrapper::FromObject));
+  scene_object_type["AddComponent"] = &SceneObject::AddComponent;
+  scene_object_type["HasComponent"] = &SceneObject::AddComponent;
 }
 
 }  // namespace ovis

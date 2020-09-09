@@ -2,6 +2,7 @@
 #include <ovis/engine/base/imgui_render_pass.hpp>
 #include <ovis/engine/base/imgui_scene_controller.hpp>
 #include <ovis/engine/base/transform2d_component.hpp>
+#include <ovis/engine/lua.hpp>
 
 namespace ovis {
 
@@ -55,7 +56,18 @@ BaseModule::BaseModule() : Module("BaseModule") {
 
   RegisterRenderPass("ImGui", [this](Viewport*) { return std::make_unique<ImGuiRenderPass>(context_); });
   RegisterSceneController("ImGui", [this](Scene*) { return std::make_unique<ImGuiSceneController>(context_); });
-  RegisterSceneObjectComponent("Transform2D", [](SceneObject*) { return std::make_unique<Transform2DComponent>(); });
+  RegisterSceneObjectComponent<Transform2DComponent>(
+      "Transform2D", [](SceneObject*) { return std::make_unique<Transform2DComponent>(); });
+
+  sol::usertype<Transform2DComponent> transform2d_component_type =
+      Lua::state.new_usertype<Transform2DComponent>("Transform2D");
+  transform2d_component_type["position"] = sol::property(
+      [](const Transform2DComponent* transform_component) {
+        return glm::vec2(transform_component->transform()->translation());
+      },
+      [](Transform2DComponent* transform_component, glm::vec2 position) {
+        return transform_component->transform()->SetTranslation(glm::vec3(position, 0.0f));
+      });
 }
 
 BaseModule::~BaseModule() {

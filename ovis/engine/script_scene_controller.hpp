@@ -8,8 +8,10 @@ namespace ovis {
 
 class ScriptSceneController : public SceneController {
  public:
-  ScriptSceneController(const std::string& name, sol::state* lua);
+  ScriptSceneController(const std::string& name);
 
+  void Play() override;
+  void Stop() override;
   void Update(std::chrono::microseconds delta_time) override;
 
  private:

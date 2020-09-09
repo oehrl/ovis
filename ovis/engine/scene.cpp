@@ -16,7 +16,7 @@
 
 namespace ovis {
 
-Scene::Scene() : m_is_paused(true) {}
+Scene::Scene() {}
 
 Scene::~Scene() {}
 
@@ -114,7 +114,30 @@ void Scene::GetSceneObjectsWithComponent(const std::string& component_id,
   }
 }
 
+void Scene::Play() {
+  SDL_assert(!is_playing());
+  if (!controllers_sorted_) {
+    SortControllers();
+  }
+  for (const auto& controller : controller_order_) {
+    controller->Play();
+  }
+  is_playing_ = true;
+}
+
+void Scene::Stop() {
+  SDL_assert(is_playing());
+  if (!controllers_sorted_) {
+    SortControllers();
+  }
+  for (const auto& controller : controller_order_) {
+    controller->Stop();
+  }
+  is_playing_ = false;
+}
+
 void Scene::BeforeUpdate() {
+  SDL_assert(is_playing() && "Call Play() before calling Update().");
   if (!controllers_sorted_) {
     SortControllers();
   }
@@ -124,6 +147,7 @@ void Scene::BeforeUpdate() {
 }
 
 void Scene::AfterUpdate() {
+  SDL_assert(is_playing() && "Call Play() before calling Update().");
   if (!controllers_sorted_) {
     SortControllers();
   }
@@ -133,17 +157,12 @@ void Scene::AfterUpdate() {
 }
 
 void Scene::Update(std::chrono::microseconds delta_time) {
+  SDL_assert(is_playing() && "Call Play() before calling Update().");
   if (!controllers_sorted_) {
     SortControllers();
   }
   for (const auto& controller : controller_order_) {
     controller->UpdateWrapper(delta_time);
-  }
-}
-
-void Scene::Pause() {
-  if (!m_is_paused) {
-    m_is_paused = true;
   }
 }
 
@@ -204,12 +223,6 @@ void Scene::Deserialize(const json& serialized_object) {
     for (const auto& object : serialized_object["objects"].items()) {
       CreateObject(object.key(), object.value());
     }
-  }
-}
-
-void Scene::Resume() {
-  if (m_is_paused) {
-    m_is_paused = false;
   }
 }
 

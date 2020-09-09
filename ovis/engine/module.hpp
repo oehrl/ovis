@@ -10,6 +10,8 @@
 #include <SDL2/SDL_events.h>
 
 #include <ovis/core/class.hpp>
+#include <ovis/engine/lua.hpp>
+#include <ovis/engine/scene_object.hpp>
 
 namespace ovis {
 
@@ -29,6 +31,7 @@ class Module {
   friend class SceneController;
   friend class SceneObject;
   friend class SceneObjectComponent;
+  friend class Lua;
 
  public:
   Module(const std::string& name);
@@ -41,15 +44,19 @@ class Module {
   using SceneObjectComponentFactoryFunction = std::function<std::unique_ptr<SceneObjectComponent>(SceneObject*)>;
   using ResourceLoadingFunction = std::function<std::unique_ptr<SceneObjectComponent>()>;
 
- protected:
-  void RegisterRenderPass(const std::string& id, const RenderPassFactoryFunction& factory_function);
-  void RegisterSceneController(const std::string& id, const SceneControllerFactoryFunction& factory_function);
-  void RegisterSceneObjectComponent(const std::string& id, const SceneObjectComponentFactoryFunction& factory_function);
-  void RegisterFileLoader(const std::string& extension, const ResourceLoadingFunction& resource_loading_function);
+  static void RegisterToLua();
 
-  void DeregisterRenderPass(const std::string& id);
-  void DeregisterSceneController(const std::string& id);
-  void DeregisterSceneObjectComponent(const std::string& id);
+ protected:
+  static void RegisterRenderPass(const std::string& id, const RenderPassFactoryFunction& factory_function);
+  static void RegisterSceneController(const std::string& id, const SceneControllerFactoryFunction& factory_function);
+
+  template <typename T>
+  static void RegisterSceneObjectComponent(const std::string& id,
+                                           const SceneObjectComponentFactoryFunction& factory_function);
+
+  static void DeregisterRenderPass(const std::string& id);
+  static void DeregisterSceneController(const std::string& id);
+  static void DeregisterSceneObjectComponent(const std::string& id);
 
  private:
   std::string name_;
@@ -57,6 +64,25 @@ class Module {
   static std::map<std::string, RenderPassFactoryFunction>* render_pass_factory_functions();
   static std::map<std::string, SceneControllerFactoryFunction>* scene_controller_factory_functions();
   static std::map<std::string, SceneObjectComponentFactoryFunction>* scene_object_component_factory_functions();
+
+  // Wrapper object for Lua
+  struct SceneObjectComponentsWrapper {
+    SceneObject* object;
+
+    static SceneObjectComponentsWrapper FromObject(SceneObject* object) { return {object}; }
+  };
 };
+
+template <typename T>
+void Module::RegisterSceneObjectComponent(const std::string& id,
+                                          const SceneObjectComponentFactoryFunction& factory_function) {
+  if (!scene_object_component_factory_functions()->insert(std::make_pair(id, factory_function)).second) {
+    LogE("The scene object component '{}' was already registered", id);
+  } else {
+    sol::usertype<SceneObjectComponentsWrapper> lua_type = Lua::state["SceneObjectComponentsWrapper"];
+    lua_type[id] =
+        sol::property([id](SceneObjectComponentsWrapper components) { return components.object->GetComponent<T>(id); });
+  }
+}
 
 }  // namespace ovis
