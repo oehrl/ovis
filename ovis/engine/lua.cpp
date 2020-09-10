@@ -8,8 +8,10 @@
 
 namespace ovis {
 
+sol::state Lua::state;
+
 void Lua::SetupEnvironment() {
-  state.open_libraries(sol::lib::base, sol::lib::coroutine, sol::lib::string);
+  state.open_libraries(sol::lib::base, sol::lib::coroutine, sol::lib::string, sol::lib::math);
   state.require_script("class", middleclass::SOURCE);
 
   state["LogE"] = [](const std::string& message) { LogE("{}", message); };
@@ -45,7 +47,8 @@ void Lua::SetupEnvironment() {
   SceneObject::RegisterToLua();
 }
 
-sol::protected_function_result Lua::LoadSceneControllerScripte(const std::string& filename) {
+sol::protected_function_result Lua::LoadSceneControllerScript(const std::string& id, const std::string& filename) {
+  Module::RegisterSceneController(id, [id](Scene*) { return std::make_unique<ScriptSceneController>(id); });
   return state.script_file(filename);
 }
 
