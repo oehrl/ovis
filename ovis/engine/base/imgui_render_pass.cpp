@@ -5,6 +5,8 @@
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/engine/base/imgui_render_pass.hpp>
 #include <ovis/engine/scene.hpp>
+#include <ovis/engine/asset_library.hpp>
+#include <ovis/engine/engine.hpp>
 
 namespace ovis {
 
@@ -13,7 +15,12 @@ ImGuiRenderPass::ImGuiRenderPass(ImGuiContext* context) : ovis::RenderPass("ImGu
 ImGuiRenderPass::~ImGuiRenderPass() {}
 
 void ImGuiRenderPass::CreateResources() {
-  shader_program_ = resource_manager()->Load<ovis::ShaderProgram>("ui.shader");
+  SDL_assert(GetEngineAssetLibrary() != nullptr);
+
+  ShaderProgramDescription shader_program_desc;
+  shader_program_desc.vertex_shader_source = *GetEngineAssetLibrary()->LoadAssetTextFile("ui", "vert");
+  shader_program_desc.fragment_shader_source = *GetEngineAssetLibrary()->LoadAssetTextFile("ui", "frag");
+  shader_program_ = std::make_unique<ShaderProgram>(context(), shader_program_desc);
 
   unsigned char* pixels;
   int width;

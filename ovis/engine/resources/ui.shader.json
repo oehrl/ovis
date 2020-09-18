@@ -1,4 +1,0 @@
-{
-    "vertex_shader_source": "ui.vert",
-    "fragment_shader_source": "ui.frag"
-}

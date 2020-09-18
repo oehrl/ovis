@@ -1,20 +1,23 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/transform.hpp>
-#include <ovis/rendering2d/sprite_component.hpp>
-#include <ovis/rendering2d/sprite_renderer.hpp>
 
 #include <ovis/graphics/graphics_context.hpp>
 #include <ovis/graphics/render_target_configuration.hpp>
-#include <ovis/graphics/shader_program.hpp>
+#include <ovis/engine/asset_library.hpp>
 #include <ovis/engine/base/transform2d_component.hpp>
 #include <ovis/engine/viewport.hpp>
+#include <ovis/rendering2d/sprite_component.hpp>
+#include <ovis/rendering2d/sprite_renderer.hpp>
 
 namespace ovis {
 
 SpriteRenderer::SpriteRenderer() : RenderPass("SpriteRenderer") {}
 
 void SpriteRenderer::CreateResources() {
-  shader_program_ = resource_manager()->Load<ovis::ShaderProgram>("sprite.shader");
+  ShaderProgramDescription shader_program_desc;
+  shader_program_desc.vertex_shader_source = *GetEngineAssetLibrary()->LoadAssetTextFile("sprite", "vert");
+  shader_program_desc.fragment_shader_source = *GetEngineAssetLibrary()->LoadAssetTextFile("sprite", "frag");
+  shader_program_ = std::make_unique<ShaderProgram>(context(), shader_program_desc);
 
   struct Vertex {
     glm::vec2 position;

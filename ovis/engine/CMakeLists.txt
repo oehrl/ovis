@@ -1,6 +1,7 @@
 add_library(
   OvisEngine
   
+  asset_library.hpp asset_library.cpp
   engine.hpp engine.cpp
   viewport.hpp viewport.cpp
   window.hpp window.cpp
@@ -33,10 +34,10 @@ target_link_libraries(
 add_custom_command(
   TARGET OvisEngine
   PRE_LINK
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/resources
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/assets
 )
 target_link_options(
  OvisEngine
  PUBLIC
-  --preload-file ${CMAKE_BINARY_DIR}/resources@/resources
+  --preload-file ${CMAKE_BINARY_DIR}/assets@/ovis_assets
 )
