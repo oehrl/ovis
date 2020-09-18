@@ -47,9 +47,9 @@ void Lua::SetupEnvironment() {
   SceneObject::RegisterToLua();
 }
 
-sol::protected_function_result Lua::LoadSceneControllerScript(const std::string& id, const std::string& filename) {
+sol::protected_function_result Lua::AddSceneController(const std::string& code, const std::string& id) {
   Module::RegisterSceneController(id, [id](Scene*) { return std::make_unique<ScriptSceneController>(id); });
-  return state.script_file(filename);
+  return state.script(code);
 }
 
 // bool LoadScript(ResourceManager* resource_manager, const json& parameters, const std::string& id,

@@ -14,8 +14,8 @@ class Lua {
   static sol::state state;
 
   static void SetupEnvironment();
-  static sol::protected_function_result LoadSceneControllerScript(const std::string& id, const std::string& filename);
-  static sol::protected_function_result RunFile(const std::string& filename);
+  static sol::protected_function_result Execute(const std::string& code);
+  static sol::protected_function_result AddSceneController(const std::string& code, const std::string& id);
 };
 
 // sol::state& lua();

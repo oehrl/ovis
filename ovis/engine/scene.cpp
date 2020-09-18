@@ -9,6 +9,8 @@
 
 #include <ovis/core/log.hpp>
 #include <ovis/core/utf8.hpp>
+#include <ovis/engine/asset_library.hpp>
+#include <ovis/engine/lua.hpp>
 #include <ovis/engine/module.hpp>
 #include <ovis/engine/scene.hpp>
 #include <ovis/engine/scene_controller.hpp>
@@ -21,15 +23,29 @@ Scene::Scene() {}
 Scene::~Scene() {}
 
 void Scene::AddController(const std::string& scene_controller_id) {
-  const auto controller_factory = Module::scene_controller_factory_functions()->find(scene_controller_id);
-  if (controller_factory == Module::scene_controller_factory_functions()->end()) {
-    LogE("Cannot find scene controller '{}'", scene_controller_id);
-    return;
-  }
-
   if (controllers_.count(scene_controller_id) != 0) {
     LogE("Scene controller '{}' already added", scene_controller_id);
     return;
+  }
+
+  auto controller_factory = Module::scene_controller_factory_functions()->find(scene_controller_id);
+  if (controller_factory == Module::scene_controller_factory_functions()->end()) {
+    if (GetApplicationAssetLibrary() != nullptr && GetApplicationAssetLibrary()->Contains(scene_controller_id) &&
+        GetApplicationAssetLibrary()->GetAssetType(scene_controller_id) == "scene_controller") {
+      std::optional<std::string> code = GetApplicationAssetLibrary()->LoadAssetTextFile(scene_controller_id, "lua");
+
+      if (code) {
+        Lua::AddSceneController(*code, scene_controller_id);
+        controller_factory = Module::scene_controller_factory_functions()->find(scene_controller_id);
+        SDL_assert(controller_factory != Module::scene_controller_factory_functions()->end());
+      } else {
+        LogE("Failed to loead scene controller '{}'", scene_controller_id);
+        return;
+      }
+    } else {
+      LogE("Cannot find scene controller '{}'", scene_controller_id);
+      return;
+    }
   }
 
   auto controller = controller_factory->second(this);
@@ -187,7 +203,7 @@ void Scene::DrawImGui() {
 }
 
 json Scene::Serialize() const {
-  json serialized_object = {{"version", {"0.1"}}};
+  json serialized_object = {{"version", "0.1"}};
   auto& controllers = serialized_object["controllers"] = json::object();
   for (const auto& controller : controllers_) {
     controllers[controller.first] = json::object();
@@ -202,7 +218,7 @@ json Scene::Serialize() const {
 }
 
 void Scene::Deserialize(const json& serialized_object) {
-  if (!serialized_object.contains("version") || serialized_object["version"] == "0.1") {
+  if (!serialized_object.contains("version") || serialized_object["version"] != "0.1") {
     ovis::LogE("Invalid scene object. Version must be 0.1!");
     return;
   }
@@ -212,9 +228,10 @@ void Scene::Deserialize(const json& serialized_object) {
 
   if (serialized_object.contains("controllers") && serialized_object["controllers"].is_object()) {
     for (const auto& controller : serialized_object["controllers"].items()) {
-      SDL_assert(std::find(SceneController::GetRegisteredControllers().begin(),
-                           SceneController::GetRegisteredControllers().end(),
-                           controller.key()) != SceneController::GetRegisteredControllers().end());
+      // SDL_assert(std::find(SceneController::GetRegisteredControllers().begin(),
+      //                      SceneController::GetRegisteredControllers().end(),
+      //                      controller.key()) != SceneController::GetRegisteredControllers().end());
+      LogV("Adding controller '{}'", controller.key());
       AddController(controller.key());
     }
   }
