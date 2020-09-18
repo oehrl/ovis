@@ -43,4 +43,26 @@ std::optional<Blob> LoadBinaryFile(const std::string& filename) {
   }
 }
 
+bool WriteTextFile(const std::string& filename, const std::string& content) {
+  std::ofstream file(filename);
+
+  if (!file.is_open()) {
+    return false;
+  } else {
+    file.write(content.data(), content.size());
+    return true;
+  }
+}
+
+bool WriteBinaryFile(const std::string& filename, const Blob& content) {
+  std::ofstream file(filename, std::ios::binary | std::ios::trunc);
+
+  if (!file.is_open()) {
+    return false;
+  } else {
+    file.write(reinterpret_cast<const char*>(content.data()), content.size());
+    return true;
+  }
+}
+
 }  // namespace ovis
