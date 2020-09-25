@@ -20,6 +20,7 @@ void Viewport::Render(bool render_gui) {
     ImGui::GetIO().DisplaySize.y = viewport_size.y;
 
     ImGui::NewFrame();
+    DrawImGui();
     if (scene_ != nullptr) {
       scene_->DrawImGui();
     }
