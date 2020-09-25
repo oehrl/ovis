@@ -36,6 +36,7 @@ class Viewport {
   std::unique_ptr<RenderTargetConfiguration> CreateRenderTargetConfiguration(
       std::vector<std::string> color_render_target_ids, std::string depth_render_target_id = "");
 
+  virtual void DrawImGui() {}
   virtual void Render(bool render_gui = true);
 
  protected:
