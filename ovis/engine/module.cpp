@@ -71,6 +71,18 @@ std::map<std::string, Module::SceneObjectComponentFactoryFunction>* Module::scen
   return factory_functions;
 }
 
+bool Module::IsRenderPassRegistered(const std::string& id) {
+  return render_pass_factory_functions()->find(id) != render_pass_factory_functions()->end();
+}
+
+bool Module::IsSceneControllerRegistered(const std::string& id) {
+  return scene_controller_factory_functions()->find(id) != scene_controller_factory_functions()->end();
+}
+
+bool Module::IsSceneObjectComponentRegistered(const std::string& id) {
+  return scene_object_component_factory_functions()->find(id) != scene_object_component_factory_functions()->end();
+}
+
 // void Module::RegisterRenderPass(const std::string& id) {
 //   if (!RenderPass::factories()->insert(std::make_pair(id, this)).second) {
 //     LogE("The render pass '{}' was already registered", id);

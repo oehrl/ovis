@@ -58,6 +58,10 @@ class Module {
   static void DeregisterSceneController(const std::string& id);
   static void DeregisterSceneObjectComponent(const std::string& id);
 
+  static bool IsRenderPassRegistered(const std::string& id);
+  static bool IsSceneControllerRegistered(const std::string& id);
+  static bool IsSceneObjectComponentRegistered(const std::string& id);
+
  private:
   std::string name_;
 
