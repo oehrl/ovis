@@ -9,6 +9,7 @@
 namespace ovis {
 
 sol::state Lua::state;
+Event<void(const std::string&)> Lua::on_error;
 
 void Lua::SetupEnvironment() {
   state.open_libraries(sol::lib::base, sol::lib::coroutine, sol::lib::string, sol::lib::math);
@@ -19,6 +20,9 @@ void Lua::SetupEnvironment() {
   state["LogI"] = [](const std::string& message) { LogI("{}", message); };
   state["LogD"] = [](const std::string& message) { LogD("{}", message); };
   state["LogV"] = [](const std::string& message) { LogV("{}", message); };
+
+  state["OvisErrorHandler"] = [](const std::string& message) { on_error.Invoke(message); };
+  sol::protected_function::set_default_handler(state["OvisErrorHandler"]);
 
   sol::usertype<glm::vec2> vector2_type =
       state.new_usertype<glm::vec2>("Vector2", sol::constructors<glm::vec2(), glm::vec2(float, float)>());
@@ -48,8 +52,11 @@ void Lua::SetupEnvironment() {
 }
 
 sol::protected_function_result Lua::AddSceneController(const std::string& code, const std::string& id) {
+  if (Module::IsSceneControllerRegistered(id)) {
+    Module::DeregisterSceneController(id);
+  }
   Module::RegisterSceneController(id, [id](Scene*) { return std::make_unique<ScriptSceneController>(id); });
-  return state.script(code);
+  return state.do_string(code, "=" + id);
 }
 
 // bool LoadScript(ResourceManager* resource_manager, const json& parameters, const std::string& id,

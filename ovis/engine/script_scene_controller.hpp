@@ -16,6 +16,7 @@ class ScriptSceneController : public SceneController {
 
  private:
   sol::table instance_;
+  sol::protected_function update_function_;
 };
 
 }  // namespace ovis
