@@ -3,6 +3,28 @@
 #include <type_traits>
 #include <utility>
 
+namespace ovis {
+
+template <typename BeginIteratorType, typename EndIteratorType = BeginIteratorType>
+class Range {
+ public:
+  inline Range(BeginIteratorType&& begin, EndIteratorType&& end)
+      : begin_(std::forward<BeginIteratorType>(begin)), end_(std::forward<EndIteratorType>(end)) {}
+
+  inline BeginIteratorType begin() const { return begin_; }
+  inline EndIteratorType end() const { return end_; }
+
+ private:
+  BeginIteratorType begin_;
+  EndIteratorType end_;
+};
+
+template <typename BeginIteratorType, typename EndIteratorType = BeginIteratorType>
+Range<BeginIteratorType, EndIteratorType> make_range(BeginIteratorType&& begin, EndIteratorType&& end) {
+  return Range<BeginIteratorType, EndIteratorType>(std::forward<BeginIteratorType>(begin),
+                                                   std::forward<EndIteratorType>(end));
+}
+
 template <typename T>
 class IntegralRange {
   static_assert(std::is_integral<T>::value, "T must be an integral type");
@@ -141,3 +163,5 @@ template <typename I = std::size_t, typename C, typename T = decltype(std::declv
 IndexedRange<T, I> IndexRange(C&& container) {
   return {container.begin(), container.end()};
 }
+
+}  // namespace ovis
